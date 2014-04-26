@@ -3,6 +3,7 @@ package com.bruteforce;
 public class IntSplit {
 
 	
+	@SuppressWarnings("unused")
 	private static String getDigits(int source) {
 		
 		String intString = Integer.toString(source);
@@ -11,6 +12,7 @@ public class IntSplit {
 	}
 	
 	
+	@SuppressWarnings("unused")
 	private static int getSplitResult(String digits, String binary) {
 		
 		int sum = 0;
