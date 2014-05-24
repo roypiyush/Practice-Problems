@@ -1,4 +1,4 @@
-package com.personal.algorithms.topcoder;
+package com.bruteforce;
 
 
 
