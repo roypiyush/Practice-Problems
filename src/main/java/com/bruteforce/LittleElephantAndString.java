@@ -23,19 +23,14 @@ public class LittleElephantAndString {
 		int count = target.length() - 1;
 		
 		StringBuffer stringBuffer = new StringBuffer(source);
-		StringBuffer matched = new StringBuffer();
 
 		for (int i = source.length() - 1; i >= 0; i--) {
 			if(stringBuffer.charAt(i) == target.charAt(count)) {
-				matched.append(stringBuffer.charAt(i));
 				count--;
 			}
 		}
 		
-		System.out.println(matched.reverse());
-		
 		return count + 1;
-		
 	}
 	
 
