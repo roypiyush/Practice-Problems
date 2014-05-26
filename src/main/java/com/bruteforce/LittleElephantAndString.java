@@ -20,15 +20,24 @@ public class LittleElephantAndString {
 
 	private int transform(String source, String target) {
 		
-		int last = target.length() - 1;
-	    
-	    for (int end = source.length() - 1; end >= 0; end--)
-	      if (source.charAt(end) == target.charAt(last))
-	        last--;
-	 
-	    return last+1;
+		int count = target.length() - 1;
+		
+		StringBuffer stringBuffer = new StringBuffer(source);
+		StringBuffer matched = new StringBuffer();
+
+		for (int i = source.length() - 1; i >= 0; i--) {
+			if(stringBuffer.charAt(i) == target.charAt(count)) {
+				matched.append(stringBuffer.charAt(i));
+				count--;
+			}
+		}
+		
+		System.out.println(matched.reverse());
+		
+		return count + 1;
 		
 	}
+	
 
 	public static void main(String[] args) {
 
@@ -36,7 +45,7 @@ public class LittleElephantAndString {
 
 		String source = "IUTGZPQALYMYNSMKPPMNUVEKNPLXHSECDWEROVASCGFMZKJGIP";
 		String target = "PZSQMETOGEPSPXNVJIUPALYYNMKMNUVKLHSECDWRACGFMZKGIP";
-
+	
 		if (!les.isTransformable(source, target)) {
 			System.out.println("-1");
 			return;
