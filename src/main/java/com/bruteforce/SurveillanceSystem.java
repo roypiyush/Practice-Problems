@@ -1,9 +1,7 @@
 package com.bruteforce;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -56,34 +54,43 @@ public class SurveillanceSystem {
 		
 		for(Entry<Integer, Integer> reportCount : requiredContainersToSegmentMap.entrySet()) {
 
-			Map<Integer, Float> sectors = new HashMap<Integer, Float>();
+			Map<Integer, Integer> sectors = new HashMap<Integer, Integer>();
 			List<Integer> list = containerTosegments.get(reportCount.getKey());
-			Float max = new Float(1);
+			Integer max = new Integer(1);
 			for (int i = 0; i < list.size(); i++) {
+
 				for (int j = 0; j < L; j++) {
 					
 					Integer sector = list.get(i) + j;
-					Float sectorRepitition = sectors.get(sector);
+					Integer sectorRepitition = sectors.get(sector);
 					if(sectorRepitition == null) {
-						sectors.put(sector, new Float(1));
+						sectors.put(sector, new Integer(1));
 					}
 					else {
-						Float value = sectors.get(sector);
+						Integer value = sectors.get(sector);
 						value = value + 1;
 						if(value > max)
 							max = value;
 						sectors.put(sector, value);
+					}				
+				}
+				
+				
+			}
+			
+			for(Entry<Integer, Integer> entry : sectors.entrySet()) {
+				
+				if(sectorInfo.charAt(entry.getKey()) != '+') {
+					int remaining = containerTosegments.get(reportCount.getKey()).size() - reportCount.getValue();
+					if(remaining == 0) {
+						sectorInfo.setCharAt(entry.getKey(), '+');
+					}
+					else if(remaining > 0) {
+						sectorInfo.setCharAt(entry.getKey(), sectors.get(entry.getKey()).intValue() > remaining ? '+' : '?');
 					}
 					
 				}
-			}
-			
-//			int factor = list.size() / reportCount.getValue();
-			for(Entry<Integer, Float> entry : sectors.entrySet()) {
-				sectors.put(entry.getKey(), entry.getValue() / list.size());
 				
-				if(sectorInfo.charAt(entry.getKey()) != '+')
-					sectorInfo.setCharAt(entry.getKey(), sectors.get(entry.getKey()) >= 1 ? '+' : '?');
 			}
 			
 			
@@ -96,9 +103,9 @@ public class SurveillanceSystem {
 
 	public static void main(String[] args) {
 
-		String containers = "-XXXXX---X--";
-		int[] reports = {2, 1, 0, 1};
-		int L = 3;
+		String containers = "-X-XXX-X-XXXX--XX-XX-X---XX----XX---X-XX--X-X-X-";
+		int[] reports = {11, 9};
+		int L = 18;
 
 		System.out.println(new SurveillanceSystem().getContainerInfo(
 				containers, reports, L));
