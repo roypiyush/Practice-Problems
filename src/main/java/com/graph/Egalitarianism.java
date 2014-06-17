@@ -5,6 +5,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/*
+ * TopCoder Problem statement
+ * ==========================
+ * 
+ * A kingdom has n citizens. Each one has some amount of money, a number of dollars denoted by a non-negative integer. 
+ * Citizens are numbered from 0 to n-1. Some citizens have friends. Their friendship network is described by a String[] 
+ * called isFriend, such that if isFriend[i][j] == 'Y', the citizens numbered i and j are friends, and if isFriend[i][j] == 'N',
+ * these citizens are not friends. 
+ * 
+ * The king decrees the following:
+ * Each citizen's amount of money must be within d dollars of the amount of money belonging to any of his friends. In other words,
+ * a citizen with x dollars must not have any friends with less than x-d dollars or more than x+d dollars.
+ * 
+ * Given the number of citizens and their friendship network, what is the greatest possible money difference between any two people 
+ * (not necessarily friends) in this kingdom? If there is a finite answer, return it. Otherwise, return -1.
+ */
+
 public class Egalitarianism {
 
 	int maxDifference(String[] isFriend, int d) {

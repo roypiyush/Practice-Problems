@@ -1,6 +1,7 @@
 package com.greedy;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /*
@@ -81,136 +82,121 @@ public class BallsSeparating {
 		if(red.length < 3)
 			return -1;
 		
-		LinkedList<Item> redBalls = new LinkedList<Item>();
-		LinkedList<Item> greenBalls = new LinkedList<Item>();
-		LinkedList<Item> blueBalls = new LinkedList<Item>();
+		
+		LinkedList<Item> balls = new LinkedList<Item>();
 		
 		for (int i = 0; i < blue.length; i++) {
-			
-			redBalls.add(new Item(i, red[i], 0));
-			greenBalls.add(new Item(i, green[i], 1));
-			blueBalls.add(new Item(i, blue[i], 2));
-			
+			balls.add(new Item(i, red[i], 0));
+			balls.add(new Item(i, green[i], 1));
+			balls.add(new Item(i, blue[i], 2));
 		}
 		
-		Collections.sort(redBalls);
-		Collections.sort(greenBalls);
-		Collections.sort(blueBalls);
+		Item r = null;
+		Item g = null;
+		Item b = null;
 		
-		Item baseRed = redBalls.peekLast();
-		Item baseGreen = greenBalls.peekLast();
-		Item baseBlue = blueBalls.peekLast();
+		Collections.sort(balls);
 		
-		while (baseRed.getIndex() == baseGreen.getIndex() || baseGreen.getIndex() == baseBlue.getIndex() || baseBlue.getIndex() == baseRed.getIndex()) {
-			if (baseRed.getIndex() == baseGreen.getIndex()) {
-
-				if (greenBalls.peekLast().getValue() <= redBalls.peekLast()
-						.getValue()) {
-					baseGreen = greenBalls.get(greenBalls
-							.lastIndexOf(baseGreen) - 1);
-				} else {
-					baseRed = redBalls.get(redBalls.lastIndexOf(baseRed) - 1);
+		
+		
+		
+		int j = balls.size() - 1;
+		do {
+			
+			Item x = balls.get(j);
+			
+			if(x.getColor() == 0 && r == null) {
+				if((g != null && g.getIndex() != x.getIndex())
+						&& (b != null && b.getIndex() != x.getIndex())
+						) {
+					r = balls.remove(j);
+				}
+				else if(g == null && (b != null && b.getIndex() != x.getIndex())) {
+					r = balls.remove(j);
+				}
+				else if((g != null && g.getIndex() != x.getIndex()) && (b == null) ) {
+					r = balls.remove(j);
+				}
+				else if(g == null && b == null) {
+					r = balls.remove(j);
 				}
 			}
-			else if (baseGreen.getIndex() == baseBlue.getIndex()) {
-
-				if (greenBalls.peekLast().getValue() <= blueBalls.peekLast()
-						.getValue()) {
-					baseGreen = greenBalls.get(greenBalls
-							.lastIndexOf(baseGreen) - 1);
-				} else {
-					baseBlue = blueBalls
-							.get(blueBalls.lastIndexOf(baseBlue) - 1);
+			else if(x.getColor() == 1 && g == null) {
+				if((r != null && r.getIndex() != x.getIndex())
+						&& (b != null && b.getIndex() != x.getIndex())
+						) {
+					g = balls.remove(j);
 				}
-
-			}
-			else if (baseBlue.getIndex() == baseRed.getIndex()) {
-
-				if (redBalls.peekLast().getValue() <= blueBalls.peekLast()
-						.getValue()) {
-					baseRed = redBalls.get(redBalls.lastIndexOf(baseRed) - 1);
-				} else {
-					baseBlue = blueBalls
-							.get(blueBalls.lastIndexOf(baseBlue) - 1);
+				else if(r == null && (b != null && b.getIndex() != x.getIndex())) {
+					g = balls.remove(j);
 				}
-
+				else if((r != null && r.getIndex() != x.getIndex()) && (b == null) ) {
+					g = balls.remove(j);
+				}
+				else if(r == null && b == null) {
+					g = balls.remove(j);
+				}
 			}
-		}
+			else if(x.getColor() == 2 && b == null) {
+				if((g != null && g.getIndex() != x.getIndex())
+						&& (r!= null && r.getIndex() != x.getIndex())
+						) {
+					b = balls.remove(j);
+				}
+				else if(g == null && (r != null && r.getIndex() != x.getIndex())) {
+					b = balls.remove(j);
+				}
+				else if((g != null && g.getIndex() != x.getIndex()) && (r == null) ) {
+					b = balls.remove(j);
+				}
+				else if(g == null && r == null) {
+					b = balls.remove(j);
+				}
+			}
+			
+			j--;
+			
+		} while(j >= 0 && (r == null || g == null || b == null));
 		
-		redBalls.remove(baseRed);
-		greenBalls.remove(baseGreen);
-		blueBalls.remove(baseBlue);
-
+		
 		int movement = 0;
-		while(!redBalls.isEmpty() && !greenBalls.isEmpty() && !blueBalls.isEmpty()) {
+		for(int i = 0; i < balls.size(); i++) {
 			
-			LinkedList<Item> removals = new LinkedList<Item>();
-			removals.add(redBalls.poll());
-			removals.add(greenBalls.poll());
-			removals.add(blueBalls.poll());
+			Item item = balls.get(i);
 			
-			Collections.sort(removals);
-			
-			printArray(red);
-			printArray(green);
-			printArray(blue);
-			System.out.println(removals);
-			
-
-			while (!removals.isEmpty()) {
-				Item item = removals.poll();
-				if(item.getColor() == 0) {
-					if(green[item.getIndex()] > 0 || blue[item.getIndex()] > 0) {
-						movement = movement + red[item.getIndex()];
-						red[baseRed.getIndex()] = red[baseRed.getIndex()] + red[item.getIndex()];
-						red[item.getIndex()] = 0;
-					}
-				}
-				else if(item.getColor() == 1) {
-					if(red[item.getIndex()] > 0 || blue[item.getIndex()] > 0) {
-						movement = movement + green[item.getIndex()];
-						green[baseGreen.getIndex()] = green[baseGreen.getIndex()] + green[item.getIndex()];
-						green[item.getIndex()] = 0;
-					}
-				}
-				else {
-					if(red[item.getIndex()] > 0 || green[item.getIndex()] > 0) {
-						movement = movement + blue[item.getIndex()];
-						blue[baseBlue.getIndex()] = blue[baseBlue.getIndex()] + blue[item.getIndex()];
-						blue[item.getIndex()] = 0;
-					}
-				}
+			if(item.getColor() == 0 && (green[item.getIndex()] > 0 || blue[item.getIndex()] > 0)) {
+				movement = movement + red[item.getIndex()];
+				red[item.getIndex()] = 0;
 			}
-		
+			else if(item.getColor() == 1 && (red[item.getIndex()] > 0 || blue[item.getIndex()] > 0)) {
+				movement = movement + green[item.getIndex()];
+				green[item.getIndex()] = 0;
+			}
+			else if(item.getColor() == 2 && (red[item.getIndex()] > 0 || green[item.getIndex()] > 0)) {
+				movement = movement + blue[item.getIndex()];
+				blue[item.getIndex()] = 0;
+			}
 		}
-		
-		printArray(red);
-		printArray(green);
-		printArray(blue);
-		
 		
 		return movement;
 	}
-	
-	private void printArray(int[] array) {
-		for (int i = 0; i < array.length; i++) {
-			System.out.print(String.format("%08d ", array[i]));
-		}
-		System.out.println();
-	}
 
 	public static void main(String[] args) {
-//		int   red[] = {1, 1, 1};
-//		int green[] = {1, 1, 1};
-//		int  blue[] = {1, 1, 1};
+		int   red[] = {1, 1, 1};
+		int green[] = {1, 1, 1};
+		int  blue[] = {1, 1, 1};
 		
-		
+//		int   red[] = {4, 6, 5, 7};
+//		int green[] = {7, 4, 6, 3};
+//		int  blue[] = {6, 5, 3, 8};
+				
+//		int   red[] = {7, 12, 9, 9, 7};
+//		int green[] = {7, 10, 8, 8, 9};
+//		int  blue[] = {8, 9, 5, 6, 13};
 			
-			
-			
-		int   red[] = {842398, 491273, 958925, 849859, 771363, 67803, 184892, 391907, 256150, 75799};
-		int green[] = {268944, 342402, 894352, 228640, 903885, 908656, 414271, 292588, 852057, 889141};
-		int  blue[] = {662939, 340220, 600081, 390298, 376707, 372199, 435097, 40266, 145590, 505103};
+//		int   red[] = {842398, 491273, 958925, 849859, 771363, 67803, 184892, 391907, 256150, 75799};
+//		int green[] = {268944, 342402, 894352, 228640, 903885, 908656, 414271, 292588, 852057, 889141};
+//		int  blue[] = {662939, 340220, 600081, 390298, 376707, 372199, 435097, 40266, 145590, 505103};
 		
 		System.out.println(new BallsSeparating().minOperations(red, green, blue));
 
