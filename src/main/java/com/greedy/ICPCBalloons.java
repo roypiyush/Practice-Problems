@@ -116,62 +116,33 @@ public class ICPCBalloons {
 		maxAccepted = integers.toArray(new Integer[integers.size()]);
 	
 		
-		int totalRequired = 0; // find sum of remaining winners to keep track if at the end condition is satisfied 
-		
+		int totalWinners = 0; // find sum of remaining winners to keep track if at the end condition is satisfied 
 		for (int i = 0; i < maxAccepted.length; i++) {
-			totalRequired += maxAccepted[i];
+			totalWinners += maxAccepted[i];
 		}
 		
-		
-		for (int i = 0; i < maxAccepted.length; i++) {
-			totalRequired += maxAccepted[i];
+		int totalBalloons = 0;
+		for (int i = 0; i < balloonCount.length; i++) {
+			totalBalloons += balloonCount[i];
 		}
 		
+		if(totalBalloons < totalWinners)
+			return -1;
 		
-		HashSet<Integer> colorUsed = new HashSet<Integer>();
-		
-		
-		for (int i = 0; i < maxAccepted.length;) {
+		int k = 0;
+		for (int j = 0; j < balloonCount.length && k < maxAccepted.length; j++) {
+			int min = Math.min(balloonCount[j], maxAccepted[k]);
+			totalWinners -= min;
+			maxAccepted[k] -= min;
+			totalBalloons -= min;
 			
-			int prizeWinners = maxAccepted[i];
-			
-			for (int j = 0; j < balloonCount.length && i < maxAccepted.length && balloonCount[j] > 0; j++) {
-				
-				if(balloonCount[j] >= maxAccepted[i]) {
-					totalRequired -= maxAccepted[i];
-					balloonCount[j] = balloonCount[j] - maxAccepted[i];
-					
-					if(colorUsed.contains(j)) {
-						minPaint += maxAccepted[i];
-					}
-					
-					maxAccepted[i] = 0;
-					i++;
-				}
-				else {
-					maxAccepted[i] -= balloonCount[j];
-					totalRequired -= balloonCount[j];
-					
-					if(colorUsed.contains(j)) {
-						minPaint += balloonCount[j];
-					}
-					else if(prizeWinners > maxAccepted[i] + balloonCount[j]) {
-						minPaint += balloonCount[j];
-					}
-					
-					balloonCount[j] = 0;
-				}
-				
-				colorUsed.add(j);
-			}
-			
-			integers = Arrays.asList(balloonCount);
-			Collections.sort(integers);
-			Collections.reverse(integers);
-			balloonCount = integers.toArray(new Integer[integers.size()]);
-			
+			if(maxAccepted[k] == 0)
+				k++;
 		}
+
 		
+		if(totalBalloons >= totalWinners)
+			minPaint = totalWinners;
 		
 		return minPaint;
 		
