@@ -60,6 +60,15 @@ class WinnerOfProblem implements Comparable<WinnerOfProblem>{
 		this.colorAssigned = colorAssigned;
 	}
 
+	
+	@Override
+	public String toString() {
+		return "WinnerOfProblem [size=" + size + ", currentCount="
+				+ currentCount + ", totalCount=" + totalCount
+				+ ", colorChanged=" + colorChanged + ", colorAssigned="
+				+ colorAssigned + "]";
+	}
+
 	/**
 	 * Cannot add balloons greater than totalCount
 	 * @param balloons
@@ -68,7 +77,7 @@ class WinnerOfProblem implements Comparable<WinnerOfProblem>{
 		
 		if(currentCount + balloons <= totalCount) {
 		
-			if(colorAssigned != -1) {
+			if(colorAssigned == -1) {
 				colorAssigned = color;
 				currentCount += balloons;
 			} 
@@ -108,48 +117,59 @@ public class ICPCBalloons {
 	
 		
 		int totalRequired = 0; // find sum of remaining winners to keep track if at the end condition is satisfied 
-		WinnerOfProblem[] winnerOfProblems = new WinnerOfProblem[maxAccepted.length];
-		for (int i = 0; i < winnerOfProblems.length; i++) {
-			WinnerOfProblem wop = new WinnerOfProblem();
-			wop.setTotalCount(maxAccepted[i]);
-			winnerOfProblems[i] = wop;
+		
+		for (int i = 0; i < maxAccepted.length; i++) {
 			totalRequired += maxAccepted[i];
 		}
 		
-		int balloonIndex = 0;
 		
-
-		for (int i = 0; i < winnerOfProblems.length; i++) {
+		for (int i = 0; i < maxAccepted.length; i++) {
+			totalRequired += maxAccepted[i];
+		}
+		
+		
+		HashSet<Integer> colorUsed = new HashSet<Integer>();
+		
+		
+		for (int i = 0; i < maxAccepted.length;) {
 			
-			for (int j = 0; j < balloonCount.length; j++) {
+			int prizeWinners = maxAccepted[i];
+			
+			for (int j = 0; j < balloonCount.length && i < maxAccepted.length && balloonCount[j] > 0; j++) {
 				
-				WinnerOfProblem wop = winnerOfProblems[i];
-				
-				if(wop.getCurrentCount() == wop.getTotalCount()) {
-					i++;
-					continue;
-				}
-				
-				int remaining = wop.getTotalCount() - wop.getCurrentCount();
-				
-				if(balloonCount[balloonIndex] >= remaining) {
+				if(balloonCount[j] >= maxAccepted[i]) {
+					totalRequired -= maxAccepted[i];
+					balloonCount[j] = balloonCount[j] - maxAccepted[i];
 					
-					if(wop.getColor() != -1) {
-						// TODO
-					}
-					else {
-						// TODO
+					if(colorUsed.contains(j)) {
+						minPaint += maxAccepted[i];
 					}
 					
-					wop.addBalloons(remaining, balloonIndex);
-					balloonCount[balloonIndex] = balloonCount[balloonIndex] - remaining;
+					maxAccepted[i] = 0;
 					i++;
 				}
 				else {
-					wop.addBalloons(balloonCount[balloonIndex], balloonIndex);
-					balloonCount[balloonIndex] = 0;
+					maxAccepted[i] -= balloonCount[j];
+					totalRequired -= balloonCount[j];
+					
+					if(colorUsed.contains(j)) {
+						minPaint += balloonCount[j];
+					}
+					else if(prizeWinners > maxAccepted[i] + balloonCount[j]) {
+						minPaint += balloonCount[j];
+					}
+					
+					balloonCount[j] = 0;
 				}
+				
+				colorUsed.add(j);
 			}
+			
+			integers = Arrays.asList(balloonCount);
+			Collections.sort(integers);
+			Collections.reverse(integers);
+			balloonCount = integers.toArray(new Integer[integers.size()]);
+			
 		}
 		
 		
@@ -160,9 +180,9 @@ public class ICPCBalloons {
 	
 	public static void main(String[] args) {
 		
-		Integer[] balloonCount  = {100};
+		Integer[] balloonCount  = {100, 3};
 		String balloonSize = 	"L";
-		Integer[] maxAccepted = {1,2,3,4,5,6};
+		Integer[] maxAccepted = {1,2,3,4,5};
 		
 		System.out.println(new ICPCBalloons().minRepaintings(balloonCount, balloonSize, maxAccepted));
 
