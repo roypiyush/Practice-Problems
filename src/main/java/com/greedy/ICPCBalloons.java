@@ -3,157 +3,132 @@ package com.greedy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-
-
-class WinnerOfProblem implements Comparable<WinnerOfProblem>{
-	private char size;
-	private int currentCount;
-	private int totalCount;
-	
-	/**
-	 * Holds change in balloons color
-	 */
-	private int colorChanged = 0;
-	private int colorAssigned = -1;
-	
-	
-
-	public int getCurrentCount() {
-		return currentCount;
-	}
-
-	public void setCurrentCount(int currentCount) {
-		this.currentCount = currentCount;
-	}
-	
-	public char getSize() {
-		return size;
-	}
-
-	public void setSize(char size) {
-		this.size = size;
-	}
-
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}
-	
-	public int getTotalCount() {
-		return totalCount;
-	}
-
-	public void setColorChanged(int colorChanged) {
-		this.colorChanged = colorChanged;
-	}
-
-	public int getColorChanged() {
-		return colorChanged;
-	}
-
-	public int getColor() {
-		return colorAssigned;
-	}
-	
-	public void setColor(int colorAssigned) {
-		this.colorAssigned = colorAssigned;
-	}
-
-	
-	@Override
-	public String toString() {
-		return "WinnerOfProblem [size=" + size + ", currentCount="
-				+ currentCount + ", totalCount=" + totalCount
-				+ ", colorChanged=" + colorChanged + ", colorAssigned="
-				+ colorAssigned + "]";
-	}
-
-	/**
-	 * Cannot add balloons greater than totalCount
-	 * @param balloons
-	 */
-	public boolean addBalloons(int balloons, int color) {
-		
-		if(currentCount + balloons <= totalCount) {
-		
-			if(colorAssigned == -1) {
-				colorAssigned = color;
-				currentCount += balloons;
-			} 
-			else { // Color Change will only happen on old assignment
-				int c = Math.min(getCurrentCount(), balloons);
-				currentCount += c;
-				colorChanged += c;
-			}
-			return true;
-		}
-		return false;
-	}
-	
-	public int compareTo(WinnerOfProblem wop) {
-		return this.totalCount - wop.getTotalCount();
-	}
-	
-}
 
 
 public class ICPCBalloons {
 	
-	private int minRepaintings(Integer[] balloonCount, String balloonSize, Integer[] maxAccepted) {
-		int minPaint = 0;
-		
-		// Rearrange balloonCount
-		List<Integer> integers = Arrays.asList(balloonCount);
-		Collections.sort(integers);
-		Collections.reverse(integers);
-		balloonCount = integers.toArray(new Integer[integers.size()]);
-		
-		// Rearrange maxAccepted
-		integers = Arrays.asList(maxAccepted);
-		Collections.sort(integers);
-		Collections.reverse(integers);
-		maxAccepted = integers.toArray(new Integer[integers.size()]);
 	
+	int solve(Integer bc[], Integer ma[], int totalBalloons, int totalWinners) {
 		
-		int totalWinners = 0; // find sum of remaining winners to keep track if at the end condition is satisfied 
-		for (int i = 0; i < maxAccepted.length; i++) {
-			totalWinners += maxAccepted[i];
+		// find sum of remaining winners to keep track if at the end condition is satisfied
+		if(totalWinners == 0)
+		for (int i = 0; i < ma.length; i++) {
+			totalWinners += ma[i];
 		}
 		
-		int totalBalloons = 0;
-		for (int i = 0; i < balloonCount.length; i++) {
-			totalBalloons += balloonCount[i];
+		if(totalBalloons == 0)
+		for (int i = 0; i < bc.length; i++) {
+			totalBalloons += bc[i];
 		}
 		
 		if(totalBalloons < totalWinners)
 			return -1;
 		
-		int k = 0;
-		for (int j = 0; j < balloonCount.length && k < maxAccepted.length; j++) {
-			int min = Math.min(balloonCount[j], maxAccepted[k]);
+		
+		for (int j = 0; j < Math.min(bc.length, ma.length); j++) {
+			int min = Math.min(bc[j], ma[j]);
 			totalWinners -= min;
-			maxAccepted[k] -= min;
+			ma[j] -= min;
 			totalBalloons -= min;
+			bc[j] -= min;
 			
-			if(maxAccepted[k] == 0)
-				k++;
 		}
-
 		
 		if(totalBalloons >= totalWinners)
-			minPaint = totalWinners;
+			return totalWinners;
+		else
+			return -1;
+	}
+	
+	private int minRepaintings(Integer[] balloonCount, String balloonSize, Integer[] maxAccepted) {
 		
-		return minPaint;
+		Collections.sort(Arrays.asList(maxAccepted), Collections.reverseOrder());
+
+		ArrayList<Integer> mb = new ArrayList<Integer>();
+		ArrayList<Integer> lb = new ArrayList<Integer>();
 		
+		int mCount = 0, lCount = 0;
+		for (int i = 0; i < balloonCount.length; i++) {
+			if(balloonSize.charAt(i) == 'M') {
+				mCount += balloonCount[i];
+				mb.add(balloonCount[i]);
+			}
+			else {
+				lCount +=  balloonCount[i];
+				lb.add(balloonCount[i]);
+			}
+		}
 		
+		Collections.sort(mb, Collections.reverseOrder());
+		Collections.sort(lb, Collections.reverseOrder());
+		
+		ArrayList<Integer> mma = new ArrayList<Integer>();
+		ArrayList<Integer> lma = new ArrayList<Integer>();
+		
+		int min = Integer.MAX_VALUE;
+		for(int i = 0; i < 1 << maxAccepted.length; i++) {
+			String binary = "";
+			if((maxAccepted.length - Integer.toBinaryString(i).length()) > 0) {
+				binary = String.format("%0" + (maxAccepted.length - Integer.toBinaryString(i).length()) + "d%s", 0, Integer.toBinaryString(i));
+			}
+			else {
+				binary = String.format("%s",Integer.toBinaryString(i));
+			}
+			
+			int mmaCount = 0;
+			int lmaCount = 0;
+			mma.clear();lma.clear();
+			
+			
+			for (int j = 0; j < binary.length(); j++) {
+				
+				if(binary.charAt(j) == '1') {
+					mma.add(maxAccepted[j]);
+					mmaCount += maxAccepted[j];
+				}
+				else {
+					lma.add(maxAccepted[j]);
+					lmaCount += maxAccepted[j];
+				}
+			}
+//			if(mmaCount > 0 || lmaCount > 0) {
+//				
+//			}
+				
+			if(mb.size() > 0 && lb.size() > 0) {
+				
+				int ans1 = -1, ans2 = -1;
+				if(mCount >= mmaCount && lCount >= lmaCount && mmaCount > 0 && lmaCount > 0) {
+					ans1 = solve(mb.toArray(new Integer[mb.size()]), mma.toArray(new Integer[mma.size()]), mCount, mmaCount);
+					ans2 = solve(lb.toArray(new Integer[lb.size()]), lma.toArray(new Integer[lma.size()]), lCount, lmaCount);
+				}
+				
+				if((ans1 == -1 || ans2 == -1)) {
+//					min = -1;
+				}
+				else {
+					min = Math.min(ans1 + ans2, min);
+				}
+				
+			}
+			else if(mCount > 0) {
+				return solve(mb.toArray(new Integer[mb.size()]), maxAccepted, mCount, mmaCount);
+			}
+			else if(lCount > 0) {
+				return solve(lb.toArray(new Integer[lb.size()]), maxAccepted, lCount, lmaCount);
+			}
+			
+			
+		}
+		
+		return min == Integer.MAX_VALUE ? -1 : min;
 	}
 	
 	public static void main(String[] args) {
 		
-		Integer[] balloonCount  = {100, 3};
-		String balloonSize = 	"L";
-		Integer[] maxAccepted = {1,2,3,4,5};
+		Integer[] balloonCount  = {62, 15, 56, 65, 10, 10, 61, 23};
+		String balloonSize = 	"LLLLLLLL";
+		Integer[] maxAccepted = {21, 1, 17, 7, 20, 8, 7, 19, 11, 21, 13, 12, 17, 15, 27};
 		
 		System.out.println(new ICPCBalloons().minRepaintings(balloonCount, balloonSize, maxAccepted));
 
