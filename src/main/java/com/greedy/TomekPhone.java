@@ -43,10 +43,7 @@ public class TomekPhone {
 				continue;
 			}
 
-			if(position <= keySizes[i]) {
-				// that letter can be assigned this position
-				numberOfTyping += frequencies[j] * position;
-			}
+			numberOfTyping += frequencies[j] * position;
 			i++;
 			
 		}
