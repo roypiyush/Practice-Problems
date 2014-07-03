@@ -8,6 +8,12 @@ package com.dp;
 
 public class Stamp {
 
+	int getMaxLengthStamp(String desiredColor) {
+		int maxLength = 1;
+		
+		return maxLength;
+	}
+	
 	int getMinimumCost(String desiredColor, int stampCost, int pushCost) {
 		return 0;
 	}

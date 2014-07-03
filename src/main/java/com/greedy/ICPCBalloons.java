@@ -79,7 +79,9 @@ public class ICPCBalloons {
 			int lmaCount = 0;
 			mma.clear();lma.clear();
 			
-			
+			/*
+			 * Dividing the balloons in two arrays with different sizes
+			 */
 			for (int j = 0; j < binary.length(); j++) {
 				
 				if(binary.charAt(j) == '1') {
@@ -91,10 +93,10 @@ public class ICPCBalloons {
 					lmaCount += maxAccepted[j];
 				}
 			}
-//			if(mmaCount > 0 || lmaCount > 0) {
-//				
-//			}
-				
+			
+			/*
+			 * Solve each separate size arrays 
+			 */
 			if(mb.size() > 0 && lb.size() > 0) {
 				
 				int ans1 = -1, ans2 = -1;
@@ -103,10 +105,7 @@ public class ICPCBalloons {
 					ans2 = solve(lb.toArray(new Integer[lb.size()]), lma.toArray(new Integer[lma.size()]), lCount, lmaCount);
 				}
 				
-				if((ans1 == -1 || ans2 == -1)) {
-//					min = -1;
-				}
-				else {
+				if((ans1 != -1 && ans2 != -1)) {
 					min = Math.min(ans1 + ans2, min);
 				}
 				
