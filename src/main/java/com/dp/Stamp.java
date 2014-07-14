@@ -1,5 +1,8 @@
 package com.dp;
 
+import java.util.LinkedList;
+import java.util.List;
+
 
 /* Problem Statement
  * 
@@ -50,14 +53,63 @@ public class Stamp {
 		return length;
 	}
 	
+	/**
+	 * 
+	 * @param desiredColor
+	 * @param start => 0 based
+	 * @param end   => 1 based
+	 * @param stampingLength
+	 * @return
+	 */
+	int getPushCount(String desiredColor, int start, int end, int stampingLength) {
+		if(end - start < stampingLength)
+			return -1;
+		
+		char a = '\0';
+		for (int i = start; i < end; i++) {
+			if(a == '\0'  && desiredColor.charAt(i) != '*') 
+				a = desiredColor.charAt(i);
+			else {
+				a = desiredColor.charAt(i);
+			}
+			
+		}
+		return 0;
+	}
+	
+	/**
+	 * @param desiredColor
+	 * @return Position based integers
+	 */
+	List<Integer> getCuttingPoints(String desiredColor) {
+		List<Integer> integers = new LinkedList<Integer>();
+		
+		char p = desiredColor.charAt(0);
+		for (int i = 1; i < desiredColor.length(); i++) {
+			if(desiredColor.charAt(i) == '*') {
+				integers.add(i);
+			}
+			else {
+				if(desiredColor.charAt(i) != p) {
+					integers.add(i);
+				}
+					
+			}
+			p = desiredColor.charAt(i);
+		}
+		
+		return integers;
+	}
+	
 	int getMinimumCost(String desiredColor, int stampCost, int pushCost) {
 		return 0;
 	}
 	
 	public static void main(String[] args) {
-		String desiredColor = "R**GBB";
+		String desiredColor = "R**GBBR";
 		int stampCost = 1;
 		int pushCost = 1;
+		
 		
 		System.out.println(new Stamp().getMinimumCost(desiredColor, stampCost, pushCost));
 		
