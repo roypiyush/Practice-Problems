@@ -123,7 +123,12 @@ public class Stamp {
 		return new LinkedList<>(integers);
 	}
 	
-	int findMinimumStampCount(String desiredColor, int start, int end) {
+	int findMinimumStampCount(String desiredColor, int start, int end, int length, List<Integer> cuttingPoints) {
+		
+		for(int p = 0; p < cuttingPoints.size(); p++) {
+			calculatePushCount(desiredColor, cuttingPoints.get(p), cuttingPoints.get(p + 1), length);
+		}
+		
 		return 0;
 	}
 	
@@ -131,6 +136,7 @@ public class Stamp {
 		return 0;
 	}
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		String desiredColor = "R**GBB";
 		int stampCost = 1;
