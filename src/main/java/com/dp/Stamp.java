@@ -1,7 +1,10 @@
 package com.dp;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 /* Problem Statement
@@ -61,27 +64,31 @@ public class Stamp {
 	 * @param stampingLength
 	 * @return
 	 */
-	int getPushCount(String desiredColor, int start, int end, int stampingLength) {
+	int calculatePushCount(String desiredColor, int start, int end, int stampingLength) {
 		if(end - start < stampingLength)
 			return -1;
 		
 		char a = '\0';
+		// Performing validation if it is of same color
 		for (int i = start; i < end; i++) {
-			if(a == '\0'  && desiredColor.charAt(i) != '*') 
+			if(desiredColor.charAt(i) == '*') 
+				continue;
+			else if(a == '\0') 
 				a = desiredColor.charAt(i);
-			else {
-				a = desiredColor.charAt(i);
-			}
-			
+			else if (desiredColor.charAt(i) != a)
+				return -1;			
 		}
-		return 0;
+		if(a == '\0')
+			return -1;
+		
+		return (end - start)/stampingLength + ((end - start) % stampingLength > 0 ? 1 : 0);
 	}
 	
 	/**
 	 * @param desiredColor
 	 * @return Position based integers
 	 */
-	List<Integer> getCuttingPoints(String desiredColor) {
+	List<Integer> calculateCuttingPoints(String desiredColor) {
 		List<Integer> integers = new LinkedList<Integer>();
 		
 		char p = desiredColor.charAt(0);
@@ -101,19 +108,36 @@ public class Stamp {
 		return integers;
 	}
 	
+	
+	List<Integer> acceptableLength(List<Integer> points) {
+		Collections.sort(points);
+		
+		Set<Integer> integers = new HashSet<>();
+		
+		for (int i = 0; i < points.size() - 1; i++) {
+			for (int j = i + 1; j < points.size(); j++) {
+				integers.add(points.get(j) - points.get(i));
+			}
+		}
+		
+		return new LinkedList<>(integers);
+	}
+	
+	int findMinimumStampCount(String desiredColor, int start, int end) {
+		return 0;
+	}
+	
 	int getMinimumCost(String desiredColor, int stampCost, int pushCost) {
 		return 0;
 	}
 	
 	public static void main(String[] args) {
-		String desiredColor = "R**GBBR";
+		String desiredColor = "R**GBB";
 		int stampCost = 1;
 		int pushCost = 1;
 		
-		
-		System.out.println(new Stamp().getMinimumCost(desiredColor, stampCost, pushCost));
-		
-
+		Stamp stamp = new Stamp();
+		System.out.println(stamp.acceptableLength(stamp.calculateCuttingPoints(desiredColor)));
 	}
 
 }
