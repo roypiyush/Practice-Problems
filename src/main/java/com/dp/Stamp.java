@@ -1,12 +1,5 @@
 package com.dp;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-
 /* Problem Statement
  * 
  Little Fox Jiro has a rectangular board. On the board there is a row of N unit cells. The cells are numbered 0 through N-1 
@@ -46,15 +39,6 @@ import java.util.Set;
 
 public class Stamp {
 
-	int getLengthOfStamp(String desiredColor, int i, int j) {
-		int length = 1;
-		
-		if(i >= j)
-			return Integer.MAX_VALUE;
-		
-		
-		return length;
-	}
 	
 	/**
 	 * 
@@ -62,82 +46,91 @@ public class Stamp {
 	 * @param start => 0 based
 	 * @param end   => 1 based
 	 * @param stampingLength
-	 * @return
+	 * @return -1 when not possible to calculate count
 	 */
 	int calculatePushCount(String desiredColor, int start, int end, int stampingLength) {
+		return (end - start)/stampingLength + ((end - start) % stampingLength > 0 ? 1 : 0);
+	}
+
+
+	private boolean validateColor(String desiredColor, int start, int end,
+			int stampingLength) {
 		if(end - start < stampingLength)
-			return -1;
+			return false;
 		
 		char a = '\0';
 		// Performing validation if it is of same color
 		for (int i = start; i < end; i++) {
 			if(desiredColor.charAt(i) == '*') 
 				continue;
-			else if(a == '\0') 
+			
+			if(a == '\0') 
 				a = desiredColor.charAt(i);
 			else if (desiredColor.charAt(i) != a)
-				return -1;			
+				return false;			
 		}
 		if(a == '\0')
-			return -1;
+			return false;
 		
-		return (end - start)/stampingLength + ((end - start) % stampingLength > 0 ? 1 : 0);
+		return true;
 	}
 	
-	/**
-	 * @param desiredColor
-	 * @return Position based integers
-	 */
-	List<Integer> calculateCuttingPoints(String desiredColor) {
-		List<Integer> integers = new LinkedList<Integer>();
+	
+	int findMinimumStampCount(String desiredColor, int start, int end, int length, String loop) {
 		
-		char p = desiredColor.charAt(0);
-		for (int i = 1; i < desiredColor.length(); i++) {
-			if(desiredColor.charAt(i) == '*') {
-				integers.add(i);
-			}
-			else {
-				if(desiredColor.charAt(i) != p) {
-					integers.add(i);
-				}
-					
-			}
-			p = desiredColor.charAt(i);
+		System.out.println(String.format(loop + "Looping with %d and %d with length %d", start, end, length));
+		
+		if(start == end)
+			return 0;
+		
+		System.out.println(String.format(loop + "Considering colors %s", desiredColor.substring(start, end)));
+		
+		boolean isValid = validateColor(desiredColor, start, end, length);
+		
+		
+		
+		
+		
+		if(isValid)
+			return calculatePushCount(desiredColor, start,
+					end, length) + findMinimumStampCount(desiredColor, end, desiredColor.length(), length, loop + " ") ;
+		else {
+			int r1 = findMinimumStampCount(desiredColor, start, end - 1, length, loop + " ");
+//			int r2 = findMinimumStampCount(desiredColor, end - 1, desiredColor.length(), length, loop + " ") ;
+			return r1;
 		}
 		
-		return integers;
-	}
-	
-	
-	List<Integer> acceptableLength(List<Integer> points) {
-		Collections.sort(points);
-		
-		Set<Integer> integers = new HashSet<>();
-		
-		for (int i = 0; i < points.size() - 1; i++) {
-			for (int j = i + 1; j < points.size(); j++) {
-				integers.add(points.get(j) - points.get(i));
-			}
-		}
-		
-		return new LinkedList<>(integers);
-	}
-	
-	int findMinimumStampCount(String desiredColor, int start, int end) {
-		return 0;
 	}
 	
 	int getMinimumCost(String desiredColor, int stampCost, int pushCost) {
+		
+		int stampCount = Integer.MAX_VALUE;
+		int stampLength = -1;
+		
+		for (int i = 1; i <= desiredColor.length(); i++) {
+			int t = findMinimumStampCount(desiredColor, 0, desiredColor.length(), i, "");
+			
+			if(stampCount > t) {
+				stampLength = i;
+				stampCount = t;
+			}
+			
+		}
+		
+		System.out.println(stampCount + " " + stampLength);
+		
+		
 		return 0;
 	}
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		String desiredColor = "R**GBB";
 		int stampCost = 1;
 		int pushCost = 1;
 		
 		Stamp stamp = new Stamp();
-		System.out.println(stamp.acceptableLength(stamp.calculateCuttingPoints(desiredColor)));
+		System.out.println(stamp.getMinimumCost(desiredColor, 0, 0));
 	}
 
 }
