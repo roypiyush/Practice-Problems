@@ -99,9 +99,8 @@ public class Stamp {
 //			int r2 = findMinimumStampCount(desiredColor, end - 1, desiredColor.length(), length, loop + " ") ;
 			return r1;
 		}
-		
 	}
-	
+		
 	int getMinimumCost(String desiredColor, int stampCost, int pushCost) {
 		
 		int stampCount = Integer.MAX_VALUE;
