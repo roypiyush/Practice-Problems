@@ -39,25 +39,10 @@ package com.dp;
 
 public class Stamp {
 
-	
-	/**
-	 * 
-	 * @param desiredColor
-	 * @param start => 0 based
-	 * @param end   => 1 based
-	 * @param stampingLength
-	 * @return -1 when not possible to calculate count
-	 */
-	int calculatePushCount(String desiredColor, int start, int end, int stampingLength) {
-		return (end - start)/stampingLength + ((end - start) % stampingLength > 0 ? 1 : 0);
-	}
-
-
-	private boolean validateColor(String desiredColor, int start, int end,
-			int stampingLength) {
-		if(end - start < stampingLength)
-			return false;
+	private boolean validateColor(String desiredColor, int start, int end) {
 		
+		if(desiredColor.length() < end)
+			return false;
 		char a = '\0';
 		// Performing validation if it is of same color
 		for (int i = start; i < end; i++) {
@@ -69,68 +54,90 @@ public class Stamp {
 			else if (desiredColor.charAt(i) != a)
 				return false;			
 		}
-		if(a == '\0')
-			return false;
+//		if(a == '\0')
+//			return false;
 		
 		return true;
 	}
 	
-	
-	int findMinimumStampCount(String desiredColor, int start, int end, int length, String loop) {
+	/**
+	 * 
+	 * @param desiredColor
+	 * @param start => 0 based
+	 * @param end   => 1 based
+	 * @param stampingLength
+	 * @return pushCount
+	 */
+	int calculatePushCount(String desiredColor, int start, int end, int stampingLength) {
+		return (end - start)/stampingLength + ((end - start) % stampingLength > 0 ? 1 : 0);
+	}
+
+	/**
+	 * Find stamping count for a given <em>stampingLength</em>
+	 * 
+	 * @param desiredColor
+	 * @param start
+	 * @param end
+	 * @param stampingLength
+	 * @return
+	 */
+	int findMinimumStampCount(String desiredColor, int start, int end, int stampingLength) {
 		
-		System.out.println(String.format(loop + "Looping with %d and %d with length %d", start, end, length));
+//		System.out.println(String.format("Looping with %d and %d with length %d", start, end, stampingLength));
 		
-		if(start == end)
+		if(start >= end)
 			return 0;
 		
-		System.out.println(String.format(loop + "Considering colors %s", desiredColor.substring(start, end)));
+		int min = Integer.MAX_VALUE;
 		
-		boolean isValid = validateColor(desiredColor, start, end, length);
+//		System.out.println(String.format("Considering colors %s", desiredColor.substring(start, end)));
 		
-		
-		
-		
-		
-		if(isValid)
-			return calculatePushCount(desiredColor, start,
-					end, length) + findMinimumStampCount(desiredColor, end, desiredColor.length(), length, loop + " ") ;
-		else {
-			int r1 = findMinimumStampCount(desiredColor, start, end - 1, length, loop + " ");
-//			int r2 = findMinimumStampCount(desiredColor, end - 1, desiredColor.length(), length, loop + " ") ;
-			return r1;
+		for (int i = start; i < start + stampingLength && i < end; i++) {
+			boolean isValid = validateColor(desiredColor, start, start + stampingLength);
+			
+			if(isValid) {
+				// Break and calculate
+				int pc = calculatePushCount(desiredColor, start, i + 1, stampingLength);
+				int fmsc = findMinimumStampCount(desiredColor, i + 1, end, stampingLength);
+				min = Math.min(min, pc + fmsc);
+			}
+			else {
+				// No further checking required, You can break the loop
+				return Integer.MAX_VALUE;
+			}
 		}
-		
-	}
-	
+			
+		return min;
+}
+
 	int getMinimumCost(String desiredColor, int stampCost, int pushCost) {
 		
-		int stampCount = Integer.MAX_VALUE;
+		int pushCount = Integer.MAX_VALUE;
 		int stampLength = -1;
 		
 		for (int i = 1; i <= desiredColor.length(); i++) {
-			int t = findMinimumStampCount(desiredColor, 0, desiredColor.length(), i, "");
+			int t = findMinimumStampCount(desiredColor, 0, desiredColor.length(), i);
 			
-			if(stampCount > t) {
+			if(t < pushCount) {
 				stampLength = i;
-				stampCount = t;
+				pushCount = t;
 			}
 			
 		}
 		
-		System.out.println(stampCount + " " + stampLength);
+		System.out.println(pushCount + " " + stampLength);
 		
 		
-		return 0;
+		return stampLength * stampCost + pushCount * pushCost;
 	}
 	
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		String desiredColor = "R**GBB";
+		String desiredColor = "RRGGBB";
 		int stampCost = 1;
 		int pushCost = 1;
 		
 		Stamp stamp = new Stamp();
-		System.out.println(stamp.getMinimumCost(desiredColor, 0, 0));
+		System.out.println(stamp.getMinimumCost(desiredColor, stampCost, pushCost));
 	}
 
 }
