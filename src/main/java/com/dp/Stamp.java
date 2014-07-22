@@ -39,12 +39,25 @@ package com.dp;
 
 public class Stamp {
 
-	private boolean validateColor(String desiredColor, int start, int end) {
+	
+	private boolean validateLength(String desiredColor, int start, int end, int stampingLength) {
 		
-		if(desiredColor.length() < end)
+		if(start >= desiredColor.length() || end >= desiredColor.length())
 			return false;
-		char a = '\0';
+		
+		if(start > end)
+			return false;
+		
+		if (start + stampingLength <= end + 1)
+			return true;
+		
+		return false;
+	}
+	
+	private boolean validateColor(String desiredColor, int start, int end, int stampingLength) {
+
 		// Performing validation if it is of same color
+		char a = '\0';
 		for (int i = start; i < end; i++) {
 			if(desiredColor.charAt(i) == '*') 
 				continue;
@@ -54,9 +67,11 @@ public class Stamp {
 			else if (desiredColor.charAt(i) != a)
 				return false;			
 		}
-//		if(a == '\0')
-//			return false;
 		
+		return true;
+	}
+	
+	private boolean isBreakable(String desiredColor, int start, int end) {
 		return true;
 	}
 	
@@ -69,44 +84,54 @@ public class Stamp {
 	 * @return pushCount
 	 */
 	int calculatePushCount(String desiredColor, int start, int end, int stampingLength) {
-		return (end - start)/stampingLength + ((end - start) % stampingLength > 0 ? 1 : 0);
+		return (end - start + 1)/stampingLength + ((end - start + 1) % stampingLength > 0 ? 1 : 0);
 	}
 
 	/**
 	 * Find stamping count for a given <em>stampingLength</em>
 	 * 
 	 * @param desiredColor
-	 * @param start
-	 * @param end
+	 * @param start = index based
+	 * @param end = index based
 	 * @param stampingLength
 	 * @return
 	 */
-	int findMinimumStampCount(String desiredColor, int start, int end, int stampingLength) {
+	int findMinimumPushCount(String desiredColor, int start, int end, int stampingLength) {
 		
-//		System.out.println(String.format("Looping with %d and %d with length %d", start, end, stampingLength));
-		
-		if(start >= end)
+		if(start > end)
 			return 0;
+		else if(start >= desiredColor.length() || end >= desiredColor.length()) {
+			return 0;
+		}
 		
-		int min = Integer.MAX_VALUE;
+		int min = -1;
 		
-//		System.out.println(String.format("Considering colors %s", desiredColor.substring(start, end)));
-		
-		for (int i = start; i < start + stampingLength && i < end; i++) {
-			boolean isValid = validateColor(desiredColor, start, start + stampingLength);
+		for (int i = start; i <= end; i++) {
+			
+			if(!validateLength(desiredColor, start, i, stampingLength))
+				continue;
+			
+			boolean isValid = validateColor(desiredColor, start, i, stampingLength);
 			
 			if(isValid) {
+				
 				// Break and calculate
-				int pc = calculatePushCount(desiredColor, start, i + 1, stampingLength);
-				int fmsc = findMinimumStampCount(desiredColor, i + 1, end, stampingLength);
-				min = Math.min(min, pc + fmsc);
+				int pc =  calculatePushCount(desiredColor, start, i, stampingLength);
+				
+				// This will calculate from next index position
+				int fmpc = findMinimumPushCount(desiredColor, i + 1, end, stampingLength);
+				
+				if(min == -1)
+					min = pc + fmpc;
+				else 
+					min = Math.min(min, pc + fmpc);
 			}
 			else {
 				// No further checking required, You can break the loop
 				return Integer.MAX_VALUE;
 			}
 		}
-			
+		
 		return min;
 }
 
@@ -115,24 +140,24 @@ public class Stamp {
 		int pushCount = Integer.MAX_VALUE;
 		int stampLength = -1;
 		
-		for (int i = 1; i <= desiredColor.length(); i++) {
-			int t = findMinimumStampCount(desiredColor, 0, desiredColor.length(), i);
+		for (int i = 2; i <= 2; i++) {
+			int t = findMinimumPushCount(desiredColor, 0, desiredColor.length() - 1, i);
+			
+			System.out.println(i + " " + t);
 			
 			if(t < pushCount) {
 				stampLength = i;
 				pushCount = t;
 			}
-			
 		}
 		
-		System.out.println(pushCount + " " + stampLength);
-		
+//		System.out.println(stampLength + " " + pushCount);
 		
 		return stampLength * stampCost + pushCount * pushCost;
 	}
 	
 	public static void main(String[] args) {
-		String desiredColor = "RRGGBB";
+		String desiredColor = "GGRR*RR";
 		int stampCost = 1;
 		int pushCost = 1;
 		
