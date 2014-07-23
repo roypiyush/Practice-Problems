@@ -37,7 +37,7 @@ package com.dp;
  * 
  */
 
-public class Stamp {
+public class Stamp2 {
 
 	
 	private boolean validateLength(String desiredColor, int start, int end, int stampingLength) {
@@ -96,10 +96,28 @@ public class Stamp {
 		
 		int min = desiredColor.length();
 		
+		char a = desiredColor.charAt(start);
 		for (int i = start; i <= end; i++) {
 			
-			boolean isValid = validateLength(desiredColor, start, i, stampingLength)
-					& validateColor(desiredColor, start, i, stampingLength);
+//			boolean isValidLength = validateLength(desiredColor, start, i, stampingLength);
+//			
+//
+//			boolean isValidColor = isValidLength;
+//			
+//			if(desiredColor.charAt(i) == '*')
+//				isValidColor = true;
+//			else {
+//					if(a == '*') {
+//						a = desiredColor.charAt(i);
+//						isValidColor = true;
+//					}
+//					else
+//						isValidColor = false;
+//			}
+//			
+//			boolean isValid = isValidLength && isValidColor;
+			
+			boolean isValid = validateLength(desiredColor, start, i, stampingLength) & validateColor(desiredColor, start, i, stampingLength);
 			
 			if(isValid) {
 				
@@ -111,6 +129,7 @@ public class Stamp {
 				
 				min = Math.min(min, pc + fmpc);
 			}
+			
 
 		}
 		
@@ -125,6 +144,7 @@ public class Stamp {
 			
 			int pushCount = findMinimumPushCount(desiredColor, 0, desiredColor.length() - 1, i);
 			
+			System.out.println(i + " " + pushCount);
 			cost = Math.min(cost, i * stampCost + pushCount * pushCost);
 		}
 		
@@ -138,7 +158,7 @@ public class Stamp {
 		int stampCost = 7;
 		int pushCost = 1;
 		
-		Stamp stamp = new Stamp();
+		Stamp2 stamp = new Stamp2();
 		System.out.println(stamp.getMinimumCost(desiredColor, stampCost, pushCost));
 	}
 
