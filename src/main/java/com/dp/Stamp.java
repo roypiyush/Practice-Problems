@@ -50,8 +50,6 @@ public class Stamp {
 	
 	private boolean validateColor(String desiredColor, int start, int end, int stampingLength) {
 
-		
-		
 		// Performing validation if it is of same color
 		char a = '\0';
 		for (int i = start; i <= end; i++) {
