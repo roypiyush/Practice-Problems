@@ -84,9 +84,10 @@ public class Stamp {
 	 * @param start = index based
 	 * @param end = index based
 	 * @param stampingLength
+	 * @param result 
 	 * @return
 	 */
-	int findMinimumPushCount(String desiredColor, int start, int end, int stampingLength) {
+	int findMinimumPushCount(String desiredColor, int start, int end, int stampingLength, int[][] result) {
 		
 		if(start > end)
 			return 0;
@@ -94,12 +95,14 @@ public class Stamp {
 			return 0;
 		}
 		
+		if(result[start][end] > 0)
+			return result[start][end];
+			
 		int min = desiredColor.length();
 		
 		for (int i = start; i <= end; i++) {
 			
-			boolean isValid = validateLength(desiredColor, start, i, stampingLength)
-					& validateColor(desiredColor, start, i, stampingLength);
+			boolean isValid = validateLength(desiredColor, start, i, stampingLength) & validateColor(desiredColor, start, i, stampingLength);
 			
 			if(isValid) {
 				
@@ -107,11 +110,14 @@ public class Stamp {
 				int pc =  calculatePushCount(desiredColor, start, i, stampingLength);
 				
 				// This will calculate from next index position
-				int fmpc = findMinimumPushCount(desiredColor, i + 1, end, stampingLength);
+				int fmpc = findMinimumPushCount(desiredColor, i + 1, end, stampingLength, result);
 				
-				min = Math.min(min, pc + fmpc);
+				if(pc + fmpc < min) {
+					result[start][end] = pc + fmpc;
+					min = pc + fmpc;
+				}
+				
 			}
-
 		}
 		
 		return min;
@@ -119,11 +125,17 @@ public class Stamp {
 
 	int getMinimumCost(String desiredColor, int stampCost, int pushCost) {
 		
-		
 		int cost = 1 * stampCost + desiredColor.length() * pushCost; 
 		for (int i = 1; i <= desiredColor.length(); i++) {
 			
-			int pushCount = findMinimumPushCount(desiredColor, 0, desiredColor.length() - 1, i);
+			int[][] result = new int[desiredColor.length()][desiredColor.length()];
+			for (int k = 0; k < result.length; k++) {
+				for (int j = 0; j < result.length; j++) {
+					result[k][j] = -1;
+				}
+			}
+			
+			int pushCount = findMinimumPushCount(desiredColor, 0, desiredColor.length() - 1, i, result);
 			
 			cost = Math.min(cost, i * stampCost + pushCount * pushCost);
 		}
@@ -132,11 +144,10 @@ public class Stamp {
 	}
 	
 	public static void main(String[] args) {
-		String desiredColor = "*R*RG*G*GR*RGG*G*GGR***RR*GG";
+		String desiredColor = "RR*GG*BB*RR*GG*BB*RR*GG*BB*RR*GG*BB*RR*GG*BB*RR*GG";
 		
-		
-		int stampCost = 7;
-		int pushCost = 1;
+		int stampCost = 1;
+		int pushCost = 100000;
 		
 		Stamp stamp = new Stamp();
 		System.out.println(stamp.getMinimumCost(desiredColor, stampCost, pushCost));
