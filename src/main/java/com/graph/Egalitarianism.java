@@ -2,7 +2,7 @@ package com.graph;
 
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 /*
@@ -41,7 +41,8 @@ public class Egalitarianism {
 	}
 	
 	private int getMaxDistanceWithSource(String[] adjMatrix, int s) {
-		List<Integer> queue = new LinkedList<Integer>();
+		Queue<Integer> queue = new LinkedList<Integer>();
+				
 		Set<Integer> connected = new HashSet<Integer>();
 		
 		int[] colors = new int[adjMatrix.length];
@@ -53,7 +54,7 @@ public class Egalitarianism {
 		int maxD = 0;
 		while(!queue.isEmpty()) {
 			
-			int vertex = queue.remove(0);
+			int vertex = queue.poll();
 			String adjList = adjMatrix[vertex];
 			
 			for(int i = 0; i < adjList.length(); i++) {
