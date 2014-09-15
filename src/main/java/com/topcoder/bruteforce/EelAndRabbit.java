@@ -1,4 +1,4 @@
-package com.bruteforce;
+package com.topcoder.bruteforce;
 
 import java.util.Comparator;
 import java.util.HashSet;

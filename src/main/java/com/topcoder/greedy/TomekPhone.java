@@ -1,4 +1,4 @@
-package com.greedy;
+package com.topcoder.greedy;
 
 import java.util.Arrays;
 import java.util.Collections;

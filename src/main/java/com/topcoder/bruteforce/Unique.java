@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.bruteforce;
+package com.topcoder.bruteforce;
 
 /**
  * @author piyush

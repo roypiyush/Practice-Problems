@@ -1,4 +1,4 @@
-package com.greedy;
+package com.topcoder.greedy;
 
 import java.util.Collections;
 import java.util.LinkedList;

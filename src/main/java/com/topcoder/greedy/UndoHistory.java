@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.greedy;
+package com.topcoder.greedy;
 
 /**
  * @author piyush

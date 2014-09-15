@@ -1,4 +1,4 @@
-package com.dp;
+package com.topcoder.dp;
 
 /* Problem Statement
  * 

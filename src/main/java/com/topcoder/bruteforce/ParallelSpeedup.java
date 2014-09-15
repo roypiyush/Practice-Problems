@@ -1,4 +1,4 @@
-package com.bruteforce;
+package com.topcoder.bruteforce;
 
 public class ParallelSpeedup {
 	

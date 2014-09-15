@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.graph;
+package com.topcoder.graph;
 
 import java.util.LinkedList;
 
