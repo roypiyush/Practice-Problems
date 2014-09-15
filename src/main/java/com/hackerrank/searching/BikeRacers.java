@@ -49,8 +49,9 @@ class Point {
 		return "Point [x=" + x + ", y=" + y + "]";
 	}
 }
-
+@SuppressWarnings("unused")
 class BikerBikeInfo implements Comparable<BikerBikeInfo>{
+	
 	private Point biker;
 	private Point bike;
 	private int distance;
@@ -80,6 +81,7 @@ class BikerBikeInfo implements Comparable<BikerBikeInfo>{
 
 public class BikeRacers {
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Scanner scanner = null;
 		try {
