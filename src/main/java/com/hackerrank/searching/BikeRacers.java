@@ -1,12 +1,17 @@
 package com.hackerrank.searching;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
-class Point {
+
+class Vertex {
+	
+	private int id;
 	private int x;
 	private int y;
-	public Point(int x, int y) {
+	public Vertex(int id, int x, int y) {
 		super();
+		this.id = id;
 		this.x = x;
 		this.y = y;
 	}
@@ -18,70 +23,46 @@ class Point {
 	public int getY() {
 		return y;
 	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Point other = (Point) obj;
-		if (x != other.x)
-			return false;
-		if (y != other.y)
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Point [x=" + x + ", y=" + y + "]";
-	}
-}
-@SuppressWarnings("unused")
-class BikerBikeInfo implements Comparable<BikerBikeInfo>{
-	
-	private Point biker;
-	private Point bike;
-	private int distance;
-	
-	public BikerBikeInfo(Point biker, Point bike) {
-		super();
-		this.biker = biker;
-		this.bike = bike;
-		int disX = biker.getX() - bike.getX();
-		int disY = biker.getY() - bike.getY();
-		distance = (disX * disX) + (disY * disY);
-	}
-
-	public int getDistance() {
-		return distance;
-	}
-
-	@Override
-	public int compareTo(BikerBikeInfo o) {
-		if(distance == o.getDistance()) {
-			
-		}
-		return distance - o.getDistance();
+	public int getId() {
+		return id;
 	}
 	
 }
+
 
 public class BikeRacers {
 	
-	@SuppressWarnings("unused")
+	
+	/**
+	 * Do a DFS for specified vertex v
+	 * 
+	 * @param adjMatrix
+	 * @param v
+	 * @param start
+	 */
+	static long findClosestBike(long[][] adjMatrix, Vertex v, HashSet<Integer> ignoreBike, int start, long diff) {
+		
+		long min = Long.MAX_VALUE;
+		for (int i = start; i < adjMatrix.length; i++) {
+
+			if(ignoreBike.contains(i))
+				continue;
+			
+			if(adjMatrix[v.getId()][i] > 0) {
+				adjMatrix[v.getId()][i] = adjMatrix[v.getId()][i] - diff;
+				
+				if(adjMatrix[v.getId()][i] == 0)
+					ignoreBike.add(i);
+				
+				if(adjMatrix[v.getId()][i] < min) {
+					min = adjMatrix[v.getId()][i];
+				}
+			}
+		}
+		return min;
+	}
+	
 	public static void main(String[] args) {
 		Scanner scanner = null;
 		try {
@@ -91,25 +72,68 @@ public class BikeRacers {
 			int K = scanner.nextInt();
 			scanner.nextLine();
 			
-			HashMap<Integer, Point> bikers = new HashMap<Integer, Point>(N);
+			int vertexId = 0;
+			ArrayList<Vertex> bikers = new ArrayList<>(N);
 			for (int i = 0; i < N; i++) {
 				int x = scanner.nextInt();
 				int y = scanner.nextInt();
-				Point p = new Point(x, y);
-				bikers.put(i, p);
+				Vertex p = new Vertex(vertexId++, x, y);
+				bikers.add(p);
 				scanner.nextLine();
 			}
 			
-			HashMap<Integer, Point> bikes = new HashMap<Integer, Point>(N);
+			// Start of vertexId for Bikes
+			int start = vertexId;
+			ArrayList<Vertex> bikes = new ArrayList<>(M);
 			for (int i = 0; i < M; i++) {
 				int x = scanner.nextInt();
 				int y = scanner.nextInt();
-				Point p = new Point(x, y);
-				bikes.put(i, p);
-				scanner.nextLine();
+				Vertex p = new Vertex(vertexId++, x, y);
+				bikes.add(p);
 			}
-           
-//			System.out.println(result == 0 ? "impossible" : result);
+			
+			long[][] adjMatrix = new long[N + M][N + M];
+			for (int i = 0; i < start; i++) {
+				for (int j = start; j < adjMatrix.length; j++) {
+					Vertex biker = bikers.get(i);
+					Vertex bike = bikes.get(j - start);
+					
+					int X = biker.getX() - bike.getX();
+					int Y = biker.getY() - bike.getY();
+					
+					adjMatrix[i][j] = X*X + Y*Y;
+					
+				}
+			}
+			
+			long sum = 0;
+			HashSet<Integer> ignoreBiker = new HashSet<>();
+			HashSet<Integer> ignoreBike = new HashSet<>();
+			
+			long nearest = 0;
+			for (int k = 0; k < K; k++) {
+				
+				long min = Long.MAX_VALUE;
+				for (int i = 0; i < bikers.size(); i++) {
+					
+					if(ignoreBiker.contains(i))
+						continue;
+					
+					long distance = findClosestBike(adjMatrix, bikers.get(i), ignoreBike, start, nearest);
+					
+					if(distance < min) {
+						if(distance == 0)
+							ignoreBiker.add(bikers.get(i).getId());
+						else
+							min = distance;
+					}
+				}
+				nearest = min;
+				sum += min;
+				
+			}
+			
+			System.out.println(sum);
 			
 		} catch (Exception e) {
 		} finally {
