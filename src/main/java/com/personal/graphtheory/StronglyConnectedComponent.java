@@ -1,4 +1,4 @@
-package com.personal.algo.graphtheory;
+package com.personal.graphtheory;
 
 import java.util.Collections;
 import java.util.Comparator;

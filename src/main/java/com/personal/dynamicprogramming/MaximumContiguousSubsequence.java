@@ -1,4 +1,4 @@
-package com.personal.algo.dynamicprogramming;
+package com.personal.dynamicprogramming;
 
 public class MaximumContiguousSubsequence {
 

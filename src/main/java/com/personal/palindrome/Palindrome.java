@@ -1,4 +1,4 @@
-package com.personal.algo.palindrome;
+package com.personal.palindrome;
 
 interface Processor {
 	void process();

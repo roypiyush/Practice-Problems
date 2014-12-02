@@ -1,4 +1,4 @@
-package com.personal.algo.backtracking;
+package com.personal.backtracking;
 
 import java.util.Arrays;
 import java.util.HashMap;

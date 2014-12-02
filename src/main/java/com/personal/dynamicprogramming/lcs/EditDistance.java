@@ -1,4 +1,4 @@
-package com.personal.algo.dynamicprogramming.lcs;
+package com.personal.dynamicprogramming.lcs;
 
 public class EditDistance {
 

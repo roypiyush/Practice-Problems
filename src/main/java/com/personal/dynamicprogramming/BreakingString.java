@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.personal.algo.dynamicprogramming;
+package com.personal.dynamicprogramming;
 
 /**
  * @author piyush

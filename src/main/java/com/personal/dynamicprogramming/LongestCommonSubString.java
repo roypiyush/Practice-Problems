@@ -1,6 +1,6 @@
-package com.personal.algo.dynamicprogramming;
+package com.personal.dynamicprogramming;
 
-import com.personal.algo.dynamicprogramming.lcs.MatrixPrint;
+import com.personal.dynamicprogramming.lcs.MatrixPrint;
 
 public class LongestCommonSubString {
 
