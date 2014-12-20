@@ -2,15 +2,11 @@ package com.hackerearth;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Earthland {
-
+	
 	public static void main(String[] args) {
 		
 		Scanner sc = null;
@@ -19,32 +15,40 @@ public class Earthland {
 			br = new BufferedInputStream(System.in);
 			sc = new Scanner(br);
 			
-			
 			int T = sc.nextInt();
 			
 			while(T-- > 0) {
 				int numberOfRooms = sc.nextInt();
 				int numberOfEdges = sc.nextInt();
 				
-				int graph[][] = new int[numberOfRooms][numberOfRooms];
-				Set<Integer> traversingPoints = new HashSet<Integer>();
-				for (int i = 0; i < numberOfEdges; i++) {
-					int v1 = sc.nextInt();
-					int v2 = sc.nextInt();
-					
-					traversingPoints.add(v1 - 1);
-					graph[v1 - 1][v2 - 1] = 1;
-					
-				}
+				boolean graph[][] = new boolean[numberOfRooms][numberOfRooms];
 				
-				calculateRequiredFriends(graph, traversingPoints);
+				for (int i = 0; i < numberOfEdges; i++) {
+					int v1 = sc.nextInt() - 1;
+					int v2 = sc.nextInt() - 1;
+				
+					
+ 					graph[v1][v2] = true;
+				}
+
+				int[] parent = new int[numberOfRooms];
+				boolean[] visited = new boolean[numberOfRooms];
+				
+				Arrays.fill(parent, -1);
+				int count = 0;
+				for (int i = 0; i < parent.length; i++) {
+					visited = new boolean[numberOfRooms];
+					if(!checkPath(graph, parent, visited, i)) {
+						count++;
+					}
+				}
+				System.out.println(count - 1);
 				
 			}
 			
 
 		} catch (Exception e) {
-			System.out
-					.println(String.format("Error due to %s", e.getMessage()));
+			e.printStackTrace();
 		} finally {
 			if (br != null)
 				try {
@@ -58,64 +62,48 @@ public class Earthland {
 		}
 
 	}
-
-	private static void calculateRequiredFriends(int[][] graph,
-			Set<Integer> traversingPoints) {
-		
-		int count = 0;
-		do {
-//			System.out.println(depthFirstSearch(graph, traversingPoints));
-			depthFirstSearch(graph, traversingPoints);
-			count++;
-		} while(traversingPoints.size() > 0);
-		
-		System.out.println(count - 1);
-	}
 	
-	static int depthFirstSearch(int[][] adjMatrix, Set<Integer> traversingPoints) {
-		
-		int longestPath = 0;
-		
-		List<Integer> lp = new LinkedList<Integer>();
-		
-		for (Iterator<Integer> iterator = traversingPoints.iterator(); iterator.hasNext();) {
-			Integer vertex = iterator.next();
-			
-			List<Integer> lpt = longestPathFromGivenVertex(adjMatrix, vertex);
-			
-//			System.out.println(String.format("Longest Path for vertex = %s is %s", vertex, lpt));
-			if(lpt.size() > lp.size())
-				lp = lpt;
-			
-		}
-		
-		traversingPoints.removeAll(lp);
-		
-		return longestPath;
-	}
 
-	static private List<Integer> longestPathFromGivenVertex(int[][] adjMatrix,
-			Integer vertex) {
+	static boolean checkPath(boolean graph[][], int[] parent, boolean[] visited, int v) {
 		
-		int[] adjacencyList = adjMatrix[vertex];
-		List<Integer> existingPath = new LinkedList<Integer>();
-		existingPath.add(vertex);
-		
-		List<Integer> lp = new LinkedList<Integer>();
-		
-		for (int i = 0; i < adjacencyList.length; i++) {
-			if(adjacencyList[i] == 1) {
-
-				List<Integer> lpTemp = longestPathFromGivenVertex(adjMatrix, i);
-				if(lpTemp.size() > lp.size()) {
-					lp = lpTemp;
+		boolean[] adjList = graph[v];
+		for (int u = 0; u < adjList.length; u++) {
+			if(adjList[u]) {
+				if(!visited[u]) {
+					visited[u] = true;
+					if (parent[u] < 0 || checkPath(graph, parent, visited, parent[u])) {
+						parent[u] = v;
+						return true;
+					}
 				}
 			}
+			
 		}
-		
-		existingPath.addAll(lp);
-		return existingPath;
+		return false;
 		
 	}
 
 }
+
+/*
+2
+9 11
+1 2
+1 3
+1 6
+2 8
+2 9
+6 7
+3 4
+3 5
+3 7
+4 5
+5 2
+6 6
+1 2
+1 3
+3 4
+4 5
+5 6
+2 5
+ */

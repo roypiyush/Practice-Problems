@@ -109,13 +109,8 @@ public class StronglyConnectedComponent {
 		
 		scc.depthFirstSearch(graph, adjMatrix, false);
 		
-//		for (int i = 0; i < adjMatrix.length; i++) {
-//			System.out.println(adjMatrix[i]);
-//		}
 		scc.transpose(adjMatrix);
-//		System.out.println("---------------");
 		for (int i = 0; i < adjMatrix.length; i++) {
-//			System.out.println(adjMatrix[i]);
 			graph.getV().get(i).setColor(Color.WHITE);
 		}
 		
