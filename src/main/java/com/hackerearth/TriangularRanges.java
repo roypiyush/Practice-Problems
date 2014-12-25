@@ -19,7 +19,7 @@ public class TriangularRanges {
 			
 			ArrayList<Long> arrayList = new ArrayList<Long>();
 			
-			for (long i = 0, p = 1;i < 1000000000000L; p++) {
+			for (long i = 0, p = 1; i <= 1000000000000L; p++) {
 				i += p;
 				arrayList.add(i);
 			}
@@ -29,13 +29,11 @@ public class TriangularRanges {
 				long L = sc.nextLong();
 				long R = sc.nextLong();
 				
-				int count = 0, i = 0, j = arrayList.size() - 1;
+				int i = 0, j = arrayList.size() - 1;
+				long count = 0L;
 					
 				while(arrayList.get(i) < R) {
-					
-					if(2 * arrayList.get(i) > R)
-						break;
-					
+									
 					int lb = -1;
 					int rb = -1;
 					
@@ -76,7 +74,7 @@ public class TriangularRanges {
 						
 						if(start == mid && start == end)
 							break;
-						if(sum > L && (mid - 1 >= 0 && arrayList.get(mid - 1) + arrayList.get(i) > L))
+						if(sum > L && (mid - 1 >= 0 && arrayList.get(mid - 1) + arrayList.get(i) < L))
 							break;
 						if(sum < L) {
 							start = mid + 1;
@@ -99,19 +97,6 @@ public class TriangularRanges {
 					i++;
 					
 				}
-					
-				
-				
-//				for (;(arrayList.get(i) + arrayList.get(j) < R);) {
-//					for(; arrayList.get(i) + arrayList.get(j) <= R; j++) {
-//						if((arrayList.get(i) + arrayList.get(j) >= L) && (arrayList.get(i) + arrayList.get(j) <= R))
-//							count++;
-//					}
-//					i++;
-//					j = i;
-//				}
-				
-				
 				
 				System.out.println(count);
 				
@@ -133,9 +118,4 @@ public class TriangularRanges {
 		
 	}
 	
-	static long getTriangularNumber(long n) {
-		return (n * (n + 1)) / 2;
-	}
-	
-
 }
