@@ -20,6 +20,7 @@ public class AshishAndBinaryMatrix {
 			while(T-- > 0) {
 				
 				int n = sc.nextInt(); // row
+				sc.nextInt(); // col
 				
 				String matrix[] = new String[n];
 				sc.nextLine().trim();
