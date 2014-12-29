@@ -11,7 +11,7 @@ public class Vertex {
 	private int startTime;
 	private int endTime;
 	private int key;
-	private int parent; // another id
+	private int parent = -1; // another id
 	
 	public int getId() {
 		return id;
@@ -61,7 +61,9 @@ public class Vertex {
 	@Override
 	public String toString() {
 		return "Vertex [id=" + id + ", color=" + color + ", startTime="
-				+ startTime + ", endTime=" + endTime + ", key=" + key + "]";
+				+ startTime + ", endTime=" + endTime + ", key=" + key
+				+ ", parent=" + parent + "]";
 	}
+	
 	
 }
