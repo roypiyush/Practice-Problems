@@ -85,14 +85,22 @@ public class Prims {
 				{0,0,2,0,7},
 				{1,4,6,7,0}
 		};
+		Prims prims = new Prims();
+		HashMap<Integer, Vertex> hashMap = prims.primsAlgo(adjMatrix);
 		
+		// hashmap holds the tree
+		System.out.println(hashMap);
 		
+	}
+
+	public HashMap<Integer, Vertex> primsAlgo(int[][] adjMatrix) {
 		PQ priorityQueue = new PQ();
 		
+		// Initialize with default values
 		for (int i = 0; i < adjMatrix.length; i++) {
 			Vertex vertex = new Vertex();
 			vertex.setId(i);
-			if(i == 0)
+			if(i == 0) // Setting on vertex to be minimum key to let algo take over
 				vertex.setKey(0);
 			else
 				vertex.setKey(Integer.MAX_VALUE);
@@ -116,10 +124,7 @@ public class Prims {
 			}
 			priorityQueue.buildMaxHeap();
 		}
-		
-		// hashmap holds the tree
-		System.out.println(hashMap);
-		
+		return hashMap;
 	}
 
 }
