@@ -51,7 +51,7 @@ public class Dijkstra {
 	
 	public static void main(String[] args) {
 		
-		int[][] adjMatrix = {
+		int[][] adjMatrix1 = {
 				{0,7,9,0,0,14},
 				{7,0,10,15,0,0},
 				{9,10,0,11,0,2},
@@ -59,10 +59,21 @@ public class Dijkstra {
 				{0,0,0,6,0,9},
 				{14,0,2,0,9,0}
 		};
+		
+		int[][] adjMatrix2 = {{0, 4, 0, 0, 0, 0, 0, 8, 0},
+                {4, 0, 8, 0, 0, 0, 0, 11, 0},
+                {0, 8, 0, 7, 0, 4, 0, 0, 2},
+                {0, 0, 7, 0, 9, 14, 0, 0, 0},
+                {0, 0, 0, 9, 0, 10, 0, 0, 0},
+                {0, 0, 4, 0, 10, 0, 2, 0, 0},
+                {0, 0, 0, 14, 0, 2, 0, 1, 6},
+                {8, 11, 0, 0, 0, 0, 1, 0, 7},
+                {0, 0, 2, 0, 0, 0, 6, 7, 0}
+               };
 
 		Dijkstra dijkstra = new Dijkstra();
-		HashMap<Integer, Vertex> hashMap = dijkstra.dijkstraAlgo(adjMatrix);
-		System.out.println(hashMap);
+		HashMap<Integer, Vertex> hashMap = dijkstra.dijkstraAlgo(adjMatrix1);
+//		System.out.println(hashMap);
 		// Trace Vertex 0 to 4
 		int d = 4;
 		Vertex b = hashMap.get(d);
@@ -78,6 +89,11 @@ public class Dijkstra {
 			System.out.print((u.getId() + 1) + (trace.isEmpty() ? "\n" : " -> "));
 		}
 		System.out.printf("Path length = %s", pathLength);
+		hashMap = dijkstra.dijkstraAlgo(adjMatrix2);
+		System.out.println("\nVertex   Distance from Source");
+		for (int i = 0; i < adjMatrix2.length; i++) {
+			System.out.printf("  %s		%s \n", i, hashMap.get(i).getKey());
+		}
 	}
 
 }
