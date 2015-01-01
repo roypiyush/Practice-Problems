@@ -1,79 +1,6 @@
 package com.personal.graphtheory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
-class PQ {
-	private ArrayList<Vertex> vertexs;
-	
-	public PQ() {
-		vertexs = new ArrayList<Vertex>();
-	}
-	public void add(Vertex v) {
-		vertexs.add(v);
-		vertexs.trimToSize();
-		if(vertexs.size() > 1) {
-			buildMaxHeap();
-		}
-	}
-	public Vertex poll() {
-		if(vertexs.size() <= 0)
-			throw new RuntimeException("No items to be removed");
-		
-		Vertex t = vertexs.remove(0);
-		buildMaxHeap();
-		return t;
-	}
-	public void buildMaxHeap() {
-		int size = vertexs.size();
-		for(int i = size/2 - 1; i >= 0; i--) {
-			maxHeapify(i);
-		}
-	}
-	public Vertex getElementById(int id) {
-		for (Vertex vertex : vertexs) {
-			if(vertex.getId() == id)
-				return vertex;
-		}
-		return null;
-	}
-	public int size() {
-		return vertexs.size();
-	}
-	public boolean isEmpty() {
-		return vertexs.size() == 0;
-	}
-	private void maxHeapify(int k) {
-		int lowest = k;
-		int l = left(k);
-		int r = right(k);
-		int size = vertexs.size();
-		if(l < size && vertexs.get(l).getKey() < vertexs.get(k).getKey())
-			lowest = l;
-		if(r < size && vertexs.get(r).getKey() < vertexs.get(lowest).getKey())
-			lowest = r;
-		if(lowest != k) {
-			Vertex t = vertexs.get(lowest);
-			vertexs.set(lowest, vertexs.get(k));
-			vertexs.set(k, t);
-			maxHeapify(lowest);
-		}
-			
-	}
-	public boolean contains(Vertex v) {
-		return vertexs.contains(v);
-	}
-	private int left(int i) {
-		return 2*i;
-	}
-	private int right(int i) {
-		return 2*i + 1;
-	}
-	public String toString() {
-		return vertexs.toString();
-	}
-	
-}
 
 public class Prims {
 
@@ -94,7 +21,7 @@ public class Prims {
 	}
 
 	public HashMap<Integer, Vertex> primsAlgo(int[][] adjMatrix) {
-		PQ priorityQueue = new PQ();
+		PriorityQueueForGraph priorityQueue = new PriorityQueueForGraph();
 		
 		// Initialize with default values
 		for (int i = 0; i < adjMatrix.length; i++) {
@@ -119,10 +46,11 @@ public class Prims {
 					if(v != null &&	adjMatrix[u.getId()][i] < v.getKey() ) {
 						v.setParent(u.getId());
 						v.setKey(adjMatrix[u.getId()][i]);
+						// If using PQ, then you need to find index of v in PQ
 					}
 				}
 			}
-			priorityQueue.buildMaxHeap();
+			priorityQueue.buildMinHeap();
 		}
 		return hashMap;
 	}
