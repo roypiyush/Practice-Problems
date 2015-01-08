@@ -15,7 +15,6 @@ public class PalindromeIndex {
 				System.out.println(getPalindromeIndex(str));
 			}
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -26,21 +25,47 @@ public class PalindromeIndex {
 	}
 
 	private static int getPalindromeIndex(String str) {
-		int size = str.length();
-		
-		String s1 = str.substring(1, size);
-		if(s1.equals(new StringBuilder(s1).reverse().toString()))
-			return 0;
-		
-		s1 = str.substring(0, size - 1);
-		if(s1.equals(new StringBuilder(s1).reverse().toString()))
-			return size - 1;
-		
-		for (int i = 1; i < size - 1; i++) {
-			String str1 = str.substring(0, i);
-			String str2 = str.substring(i + 1, size);
-			if(str1.equals(str2))
-				return i;
+		int i = 0;
+		int j = str.length() - 1;
+
+		while (i <= j) {
+			if (str.charAt(i) == str.charAt(j)) {
+			} else {
+
+				int k1 = i + 1;
+				int k2 = j;
+				// Check if we can find palindrome
+				boolean f1 = true;
+				while (k1 <= k2) {
+					if (str.charAt(k1) == str.charAt(k2)) {
+						f1 = f1 && true;
+					} else {
+						f1 = f1 && false;
+					}
+					k1++;
+					k2--;
+				}
+
+				if (f1)
+					return i;
+
+				k1 = i;
+				k2 = j - 1;
+				boolean f2 = true;
+				while (k1 <= k2) {
+					if (str.charAt(k1) == str.charAt(k2)) {
+						f2 = f2 && true;
+					} else {
+						f2 = f2 && false;
+					}
+					k1++;
+					k2--;
+				}
+				if (f2)
+					return j;
+			}
+			i++;
+			j--;
 		}
 		return -1;
 	}
