@@ -9,8 +9,7 @@ import java.util.Set;
 
 public class SimilarPair {
 
-	
-	public static void main(String[] args) {
+public static void main(String[] args) {
 		
 		Set<Integer> parents = new HashSet<>();
 		HashMap<Integer, List<Integer>> node = new HashMap<>();
@@ -78,37 +77,12 @@ public class SimilarPair {
 		int count = (Math.abs(currentNode - p) <= t) ? 1 : 0;
 		
 		List<Integer> children = node.get(currentNode);
-		for (int i = 0; children != null && i < children.size(); i++)
+		for (int i = 0; children != null && i < children.size(); i++) {
+
 			count += dfsVisit(node, p, children.get(i), t);
+		}
+		
 		return count;
-	}
-	
-	/**
-	 * Perform DFS with binary search in sorted parent list to get count of satisfying pairs
-	 */
-	static int dfsVisitWithBinarySearch(HashMap<Integer, List<Integer>> node,
-			LinkedList<Integer> sortedParents, Integer currentNode, int t) {
-		
-		
-		return 0;
-	}
-	
-	/**
-	 * Put new item in place using insertion
-	 */
-	static void putItem(LinkedList<Integer> sortedParents, Integer currentNode) {
-		if(sortedParents.size() == 0) {
-			sortedParents.add(currentNode);
-			return;
-		}
-		
-		for (int i = 0; i < sortedParents.size(); i++) {
-			if(sortedParents.get(i) > currentNode) {
-				sortedParents.add(i, currentNode);
-				return;
-			}
-		}
-		
 	}
 
 }
