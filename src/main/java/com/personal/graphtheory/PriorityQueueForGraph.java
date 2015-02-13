@@ -15,7 +15,7 @@ public class PriorityQueueForGraph {
 		vertexs.trimToSize();
 		if (vertexs.size() > 1) {
 			// buildMinHeap();
-			heapDecreaseKey(vertexs.size() - 1, v);
+			heapDecreaseKey(vertexs.size(), v);
 		}
 	}
 
@@ -36,7 +36,10 @@ public class PriorityQueueForGraph {
 	}
 
 	public void heapDecreaseKey(int i, Vertex v) {
-		vertexs.set(i, v);
+		if(vertexs.size() == i)
+			vertexs.add(v);
+		else
+			vertexs.set(i, v);
 
 		Vertex t = vertexs.get(i);
 		while (i > 0 && t.getKey() < vertexs.get(parent(i)).getKey()) {
