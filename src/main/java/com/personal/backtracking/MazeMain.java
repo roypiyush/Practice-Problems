@@ -99,11 +99,11 @@ public class MazeMain {
 		}
 		
 		int dist = Integer.MAX_VALUE;
-		if(right < left) {
+		if(right < dist) {
 			dist = right;
 			p.setChild(r);
 		}
-		else if(left < right){
+		if(left < dist){
 			dist = left;
 			p.setChild(l);
 		}
