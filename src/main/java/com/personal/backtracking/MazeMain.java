@@ -1,9 +1,5 @@
 package com.personal.backtracking;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 enum Direction {
 	RIGHT,
 	LEFT,
@@ -14,6 +10,8 @@ enum Direction {
 class Point {
 	private int x; 
 	private int y;
+	private Point child;
+	private int distance = Integer.MAX_VALUE;
 	
 	public Point(int x, int y) {
 		super();
@@ -36,126 +34,121 @@ class Point {
 	public void setY(int y) {
 		this.y = y;
 	}
-	
-	
-}
 
+	public int getDistance() {
+		return distance;
+	}
+
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
+
+	public Point getChild() {
+		return child;
+	}
+
+	public void setChild(Point child) {
+		this.child = child;
+	}
+}
 
 
 public class MazeMain {
 
-	int move(int[][] maze, int sx, int sy, int dx, int dy, int distance, Direction fromDirection, List<Point> path) {
+	Point move(int[][] maze, int sx, int sy, int dx, int dy, int distance, Direction fromDirection) {
+		
+		Point p = new Point(sx, sy);
+		p.setDistance(distance);
 		
 		// Found destination
 		if(sx == dx && sy == dy) {
-			return distance;
+			return p;
 		}
+		
+		Point r = null;
+		Point l = null;
+		Point d = null;
+		Point u = null;
 		
 		// Right
 		int right = Integer.MAX_VALUE;
 		if(sy + 1 < maze[sx].length && maze[sx][sy + 1] == 0 && (fromDirection == null || fromDirection != Direction.LEFT)) {
-			right = move(maze, sx, sy + 1, dx, dy, distance + 1, Direction.RIGHT, path);
+			r = move(maze, sx, sy + 1, dx, dy, distance + 1, Direction.RIGHT);
+			right = r.getDistance();
 		}
 		
 		// Left
 		int left = Integer.MAX_VALUE;
 		if(sy - 1 >= 0 && maze[sx][sy - 1] == 0 && (fromDirection == null || fromDirection != Direction.RIGHT)) {
-			left = move(maze, sx, sy - 1, dx, dy, distance + 1, Direction.LEFT, path);
+			l = move(maze, sx, sy - 1, dx, dy, distance + 1, Direction.LEFT);
+			left = l.getDistance();
 		}
 		
 		// Down
 		int down = Integer.MAX_VALUE;
 		if(sx + 1 < maze.length && maze[sx + 1][sy] == 0 && (fromDirection == null || fromDirection != Direction.UP)) {
-			down = move(maze, sx + 1, sy, dx, dy, distance + 1, Direction.DOWN, path);
+			d = move(maze, sx + 1, sy, dx, dy, distance + 1, Direction.DOWN);
+			down = d.getDistance();
 		}
 		
 		// Up
 		int up = Integer.MAX_VALUE;
 		if(sx - 1 >= 0 && maze[sx - 1][sy] == 0 && (fromDirection == null || fromDirection != Direction.DOWN)) {
-			up = move(maze, sx - 1, sy, dx, dy, distance + 1, Direction.UP, path);
+			u = move(maze, sx - 1, sy, dx, dy, distance + 1, Direction.UP);
+			up = u.getDistance();
 		}
 		
-		Direction direction = null;
-		int d = Integer.MAX_VALUE;
+		int dist = Integer.MAX_VALUE;
 		if(right < left) {
-			direction = Direction.RIGHT;
-			d = right;
+			dist = right;
+			p.setChild(r);
 		}
 		else if(left < right){
-			direction = Direction.LEFT;
-			d = left;
+			dist = left;
+			p.setChild(l);
 		}
-		if(down < d) {
-			direction = Direction.DOWN;
-			d = down;
+		if(down < dist) {
+			dist = down;
+			p.setChild(d);
+		}
+		if(up < dist) {
+			dist = up;
+			p.setChild(u);
 		}
 		
-		if(up < d) {
-			direction = Direction.UP;
-			d = up;
-		}
-		
-		
-		tracePath(sx, sy, direction, path);
-		
-		return d;
+		return p;
 	}
 	
-	
-	private void tracePath(int sx, int sy, Direction direction, List<Point> path) {
-		if(direction == null)
-			return;
-		
-		switch (direction) {
-		case RIGHT:
-			path.add(new Point(sx, sy + 1));
-			break;
-		case LEFT:
-			path.add(new Point(sx, sy - 1));
-			break;
-		case DOWN:
-			path.add(new Point(sx + 1, sy));
-			break;
-		case UP:
-			path.add(new Point(sx - 1, sy));
-			break;
-		
-		}
-		
-
-	}
 	
 	public static void main(String[] args) {
 		
+//		int[][] maze = {
+//					{1, 0, 1, 1, 1},
+//					{1, 0, 1, 0, 0},
+//					{1, 0, 0, 0, 1},
+//					{1, 0, 1, 1, 1},
+//					{0, 1, 1, 1, 1}
+//				};
+		
 		int[][] maze = {
-					{1, 0, 1, 1, 1},
-					{1, 0, 1, 0, 0},
-					{1, 0, 0, 0, 1},
-					{1, 0, 1, 1, 1},
-					{0, 1, 1, 1, 1}
-				};
+				{1, 0, 1, 1, 1},
+				{1, 0, 1, 0, 0},
+				{1, 0, 0, 0, 1},
+				{1, 0, 1, 0, 1},
+				{0, 0, 0, 0, 1}
+			};
 		
 		MazeMain main = new MazeMain();
 		
 		int sx = 0;	int sy = 1;
 		int dx = 2;	int dy = 3;
 		
-		List<Point> path = new ArrayList<Point>();
-		main.move(maze, sx, sy, dx, dy, 0, null, path);
-		if(path.isEmpty()) {
-			System.out.println("No path exists.");
-		}
-		else {
-			
-			String printFormat = "%d, %d; ";
-			
-			System.out.printf(printFormat, sx, sy);
-			for (int i = path.size() - 1; i >= 0; i--) {
-				Point point = path.get(i);
-				System.out.printf(printFormat, point.getX(), point.getY());
-			}
+		Point path = main.move(maze, sx, sy, dx, dy, 0, null);
+		Point p = path;
+		while(p != null) {
+			System.out.print(p.getX() + "," + p.getY() + "; ");
+			p = p.getChild();
 		}
 
 	}
-
 }
