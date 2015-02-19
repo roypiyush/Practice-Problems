@@ -1,5 +1,6 @@
 package com.personal.backtracking;
 
+
 enum Direction {
 	RIGHT,
 	LEFT,
@@ -55,7 +56,13 @@ class Point {
 
 public class MazeMain {
 
-	Point move(int[][] maze, int sx, int sy, int dx, int dy, int distance, Direction fromDirection) {
+	Point findPath(int[][] maze, int sx, int sy, int dx, int dy, int row, int column) {
+		int[][] auxMaze = new int[row][column];
+		
+		return move(maze, sx, sy, dx, dy, 0, null, auxMaze);
+	}
+	
+	Point move(int[][] maze, int sx, int sy, int dx, int dy, int distance, Direction fromDirection, int[][] auxMaze) {
 		
 		Point p = new Point(sx, sy);
 		p.setDistance(distance);
@@ -73,29 +80,52 @@ public class MazeMain {
 		// Right
 		int right = Integer.MAX_VALUE;
 		if(sy + 1 < maze[sx].length && maze[sx][sy + 1] == 0 && (fromDirection == null || fromDirection != Direction.LEFT)) {
-			r = move(maze, sx, sy + 1, dx, dy, distance + 1, Direction.RIGHT);
-			right = r.getDistance();
+			
+			if(auxMaze[sx][sy + 1] == 0 || auxMaze[sx][sy + 1] > distance + 1) {
+				
+				auxMaze[sx][sy + 1] = distance + 1;
+				r = move(maze, sx, sy + 1, dx, dy, distance + 1, Direction.RIGHT, auxMaze);
+				right = r.getDistance();
+				
+			}
+			
 		}
 		
 		// Left
 		int left = Integer.MAX_VALUE;
 		if(sy - 1 >= 0 && maze[sx][sy - 1] == 0 && (fromDirection == null || fromDirection != Direction.RIGHT)) {
-			l = move(maze, sx, sy - 1, dx, dy, distance + 1, Direction.LEFT);
-			left = l.getDistance();
+			
+			if(auxMaze[sx][sy - 1] == 0 || auxMaze[sx][sy - 1] > distance + 1) {
+				
+				auxMaze[sx][sy - 1] = distance + 1;
+				l = move(maze, sx, sy - 1, dx, dy, distance + 1, Direction.LEFT, auxMaze);
+				left = l.getDistance();
+			}
 		}
 		
 		// Down
 		int down = Integer.MAX_VALUE;
 		if(sx + 1 < maze.length && maze[sx + 1][sy] == 0 && (fromDirection == null || fromDirection != Direction.UP)) {
-			d = move(maze, sx + 1, sy, dx, dy, distance + 1, Direction.DOWN);
-			down = d.getDistance();
+			
+			if(auxMaze[sx + 1][sy] == 0 || auxMaze[sx + 1][sy] > distance + 1) {
+				
+				auxMaze[sx + 1][sy] = distance + 1;
+				d = move(maze, sx + 1, sy, dx, dy, distance + 1, Direction.DOWN, auxMaze);
+				down = d.getDistance();
+			}
 		}
 		
 		// Up
 		int up = Integer.MAX_VALUE;
 		if(sx - 1 >= 0 && maze[sx - 1][sy] == 0 && (fromDirection == null || fromDirection != Direction.DOWN)) {
-			u = move(maze, sx - 1, sy, dx, dy, distance + 1, Direction.UP);
-			up = u.getDistance();
+			
+			if(auxMaze[sx - 1][sy] == 0 || auxMaze[sx - 1][sy] > distance + 1) {
+				
+				
+				auxMaze[sx - 1][sy] = distance + 1;
+				u = move(maze, sx - 1, sy, dx, dy, distance + 1, Direction.UP, auxMaze);
+				up = u.getDistance();
+			}
 		}
 		
 		int dist = Integer.MAX_VALUE;
@@ -122,31 +152,42 @@ public class MazeMain {
 	
 	public static void main(String[] args) {
 		
-//		int[][] maze = {
-//					{1, 0, 1, 1, 1},
-//					{1, 0, 1, 0, 0},
-//					{1, 0, 0, 0, 1},
-//					{1, 0, 1, 1, 1},
-//					{0, 1, 1, 1, 1}
-//				};
-		
+		// SAMPLE PROVIDED IN PROBLEM STATEMENT
+		int row = 5, column = 5;
 		int[][] maze = {
-				{1, 0, 1, 1, 1},
-				{1, 0, 1, 0, 0},
-				{1, 0, 0, 0, 1},
-				{1, 0, 1, 0, 1},
-				{0, 0, 0, 0, 1}
-			};
+					{1, 0, 1, 1, 1},
+					{1, 0, 1, 0, 0},
+					{1, 0, 0, 0, 1},
+					{1, 0, 0, 0, 1},
+					{0, 1, 1, 1, 1}
+				};
+		
+		// ANOTHER TEST CASE
+//		int row = 6, column = 8;
+//		int[][] maze = {
+//				{1, 0, 1, 1, 1, 1, 1},
+//				{1, 0, 1, 0, 0, 0, 0},
+//				{1, 0, 0, 0, 1, 1, 0},
+//				{1, 0, 1, 1, 0, 1, 0},
+//				{0, 1, 1, 1, 0, 0, 0}
+//			};
+		
+		
 		
 		MazeMain main = new MazeMain();
 		
 		int sx = 0;	int sy = 1;
 		int dx = 2;	int dy = 3;
 		
-		Point path = main.move(maze, sx, sy, dx, dy, 0, null);
+		Point path = main.findPath(maze, sx, sy, dx, dy, row, column);
 		Point p = path;
+		String mazepoint = "";
 		while(p != null) {
-			System.out.print(p.getX() + "," + p.getY() + "; ");
+			mazepoint += p.getX() + "," + p.getY() + "; ";
+			if(p.getChild() == null) {
+				System.out.print(p.getX() == dx && p.getY() == dy ? mazepoint : "No path exists.");
+			}
+			
 			p = p.getChild();
 		}
 
