@@ -232,6 +232,18 @@ public:
 
     }
 
+    void inorderTraverseK(BinaryTree *node, int* k, int K) {
+
+        if(node == NULL)
+            return;
+        inorderTraverseK(node->left, k, K);
+        (*k)++;
+        if((*k) == K)
+        cout<<node->getValue()<<"\n";
+        inorderTraverseK(node->right, k, K);
+    }
+
+
 }*Root;
 
 
@@ -243,6 +255,11 @@ int main(int argc, char *argv[]) {
     Root->insert(11);
     Root->insert(40);
     Root->insert(35);
+
+    cout<<"Kth inorder ";
+    int K = 3;
+    int cur = 0;
+    Root->inorderTraverseK(Root, &cur, K);
 
     printf("Inorder   Traverse   ");
     Root->inorderTraverse(Root);
