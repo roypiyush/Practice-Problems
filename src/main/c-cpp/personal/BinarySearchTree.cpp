@@ -11,6 +11,8 @@ private:
     BinaryTree *right = NULL;
     BinaryTree *parent = NULL;
 
+    int k;
+
 public:
     BinaryTree(int value) {
         this->value = value;
@@ -230,8 +232,8 @@ public:
 
     }
 
-
 }*Root;
+
 
 int main(int argc, char *argv[]) {
 
