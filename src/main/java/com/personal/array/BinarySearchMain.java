@@ -19,11 +19,11 @@ public class BinarySearchMain {
 
 		int mid = (min + max) >> 1;
 
-		if (key < arr[mid]) {
+		if (key < arr[mid])
 			return binarySearch(arr, min, mid - 1, key);
-		} else if (key > arr[mid]) {
+		else if (key > arr[mid])
 			return binarySearch(arr, mid + 1, max, key);
-		} else
+		else
 			return mid;
 
 	}
@@ -39,6 +39,8 @@ public class BinarySearchMain {
 		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 10)) != -1 ? "Element found at " + index : "Element not Found!");
 		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 100)) != -1 ? "Element found at " + index : "Element not Found!");
 		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 0)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 1)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 20)) != -1 ? "Element found at " + index : "Element not Found!");
 	}
 
 }
