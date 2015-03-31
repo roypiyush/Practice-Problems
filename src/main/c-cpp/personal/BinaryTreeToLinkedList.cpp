@@ -95,6 +95,23 @@ void printList(node *node)
     }
 }
 
+/*
+* This is amazon's question
+*/
+void printEnlightenedNodes(node *node, int depth, int* depthSoFar) {
+	if(node == NULL)
+		return;
+	
+	if(depth > (*depthSoFar)) {
+		//printf("depth: %d, depthSoFar: %d\n", depth, (*depthSoFar));
+		(*depthSoFar) = depth;
+		printf("%d ", node->data);
+	}
+	
+	printEnlightenedNodes(node->right, depth + 1, depthSoFar);
+	printEnlightenedNodes(node->left, depth + 1, depthSoFar);
+}
+
 /* Driver program to test above functions*/
 int main()
 {
@@ -103,14 +120,24 @@ int main()
     root->left        = newNode(12);
     root->right       = newNode(15);
     root->left->left  = newNode(25);
+    root->left->left->right  = newNode(41);
+    root->left->left->right->left  = newNode(42);
     root->left->right = newNode(30);
+    root->left->right->left = newNode(40);
     root->right->left = newNode(36);
+
+	printf("Print Enlightened Nodes -> ");
+	int depthSoFar = 0;
+	int depth = 1;
+	printEnlightenedNodes(root, depth, &depthSoFar);
+	printf("\n");
 
     // Convert to DLL
     node *head = bintree2list(root);
 
     // Print the converted list
-    printList(head);
+    printf("Print DoublyLinked List -> ");
+    printList(head);printf("\n");
 
     return 0;
 }
