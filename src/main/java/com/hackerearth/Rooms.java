@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/*
+ * Algorithm is correct. Should work in cpp
+ * 
+ */
 public class Rooms {
 
 	public static void main(String[] args) {
