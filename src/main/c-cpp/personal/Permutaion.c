@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 void swap (char *x, char *y)
 {
@@ -32,8 +33,10 @@ void permute(char *a, int i, int n)
 /* Driver program to test above functions */
 int main()
 {
-   char a[] = "ABCDE"; 
-   permute(a, 0, 5);
-   getchar();
+    
+   char a[] = "cdefghmnopqrstuvw";
+   int len = strlen(a);
+   printf("%d", len);
+   permute(a, 0, len - 1);
    return 0;
 }
