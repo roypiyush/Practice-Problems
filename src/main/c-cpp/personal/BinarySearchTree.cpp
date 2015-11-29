@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdio>
+#include <list>
 
 using namespace std;
 
@@ -239,10 +240,50 @@ public:
         inorderTraverseK(node->left, k, K);
         (*k)++;
         if((*k) == K)
-        cout<<node->getValue()<<"\n";
+            cout<<node->getValue()<<"\n";
         inorderTraverseK(node->right, k, K);
     }
 
+    void serialize(BinaryTree *node, list<int> &v) {
+        if(node == NULL)
+            return;
+        v.push_back(node->value);
+        serialize(node->left, v);
+        serialize(node->right, v);
+    }
+
+    void deserialize(list<int> &v, BinaryTree *parent) {
+        if(v.size() == 0) {
+            return;
+        }
+        BinaryTree *node;
+        int i = v.front();
+        if(i < parent->value) {
+            node = new BinaryTree(i);
+            parent->left = node;
+            node->parent = parent;
+        }
+        else {
+            BinaryTree *p, *y;
+            p = parent;
+            y = p->parent;
+            while(y->value < i) {
+                p = y;
+                if(y->parent != NULL)
+                    y = y->parent;
+                else
+                    break;
+
+
+            }
+            node = new BinaryTree(i);
+            p->right = node;
+            node->parent = p;
+
+        }
+        v.pop_front();
+        deserialize(v, node);
+    }
 
 }*Root;
 
@@ -288,6 +329,24 @@ int main(int argc, char *argv[]) {
     }
     cout<<endl;
 
+    cout<<"Calling serialize"<<endl;
+    list<int> v;
+    Root->serialize(Root, v);
+    for (list<int>::iterator it = v.begin() ; it != v.end(); ++it)
+        cout<<*it<<' ';
+    cout<<endl;
+
+    /* */
+    BinaryTree *newBt = NULL;
+    newBt = new BinaryTree(v.front());
+    v.pop_front();
+    cout<<"Calling deserialize"<<endl;
+    Root->deserialize(v, newBt);
+    cout<<"Printing binary tree after deserialize"<<endl;
+    Root->inorderTraverse(newBt);
+    /* */
+
+    cout<<"\nDeleting node "<<nodeToDelete->getValue()<<endl;
     Root->deleteNode(nodeToDelete);
     printf("Inorder   Traverse   ");
     Root->inorderTraverse(Root);
