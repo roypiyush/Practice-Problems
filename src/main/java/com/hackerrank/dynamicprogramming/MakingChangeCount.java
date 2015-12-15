@@ -36,32 +36,30 @@ public class MakingChangeCount {
 	}
 
 	private static int countMaxPossibleChange(int sum, int[] denominations) {
-		int[] result = new int[sum + 1];
-		for (int i = 0; i < result.length; i++) result[i] = -1;
+		int[][] result = new int[sum + 1][denominations.length + 1];
 		
 		int internalCountMaxPossibleChange = internalCountMaxPossibleChange(sum, denominations, result, denominations.length);
+		
 		return internalCountMaxPossibleChange;
 	}
 	
-	private static int internalCountMaxPossibleChange(int sum, int[] denominations, int[] result, int index) {
+	private static int internalCountMaxPossibleChange(int sum, int[] denominations, int[][] result, int index) {
 		
 		
-		if(sum < 0)
+		if(sum < 0 || index <= 0)
 			return 0;
 		if(sum == 0)
 			return 1;
-		if(index <= 0 && sum >= 1) {
-			result[sum] = 0;
-			return result[sum];
-		}
-		if(result[sum] >= 0)
-			return result[sum];
+
+		if(result[sum][index] > 0)
+			return result[sum][index];
 		
 		int x = internalCountMaxPossibleChange(sum, denominations, result, index - 1);
 		int y = internalCountMaxPossibleChange(sum - denominations[index - 1], denominations, result, index);
+		
 		int res = x + y;
-		result[sum] = result[sum] > 0 ? result[sum] : res;
-		return result[sum];
+		result[sum][index] = res;
+		return result[sum][index];
 	}
 
 }
