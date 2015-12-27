@@ -12,10 +12,6 @@ import java.util.Scanner;
 public class StockMaximize {
 
 	
-	private static void findSolution(int[] arr) {
-		
-	}
-	
 	public static void main(String[] args) {
 		
 		try(Scanner s = new Scanner(System.in)) {
@@ -28,9 +24,14 @@ public class StockMaximize {
                 for(int i = 0; i < size; i++)
                     arr[i] = s.nextInt();
                 
-                // find solution
-                findSolution(arr);
-                    
+                int maxFuture = 0;
+                int profit = 0;
+                for (int i = 0; i < arr.length; i++) {
+                	maxFuture = Math.max(maxFuture, arr[i]);
+					profit += maxFuture - arr[i];
+				}
+                
+                System.out.println(profit);
             }
             
             
