@@ -26,9 +26,9 @@ public class StockMaximize {
                 
                 int maxFuture = 0;
                 int profit = 0;
-                for (int i = 0; i < arr.length; i++) {
+                for (int i = size - 1 ; i >= 0; i--) {
                 	maxFuture = Math.max(maxFuture, arr[i]);
-					profit += maxFuture - arr[i];
+					profit += (long)(maxFuture - arr[i]);
 				}
                 
                 System.out.println(profit);

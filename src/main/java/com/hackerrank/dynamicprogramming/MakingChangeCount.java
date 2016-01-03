@@ -35,15 +35,15 @@ public class MakingChangeCount {
 
 	}
 
-	private static int countMaxPossibleChange(int sum, int[] denominations) {
-		int[][] result = new int[sum + 1][denominations.length + 1];
+	private static long countMaxPossibleChange(int sum, int[] denominations) {
+		long[][] result = new long[sum + 1][denominations.length + 1];
 		
-		int internalCountMaxPossibleChange = internalCountMaxPossibleChange(sum, denominations, result, denominations.length);
+		long internalCountMaxPossibleChange = internalCountMaxPossibleChange(sum, denominations, result, denominations.length);
 		
 		return internalCountMaxPossibleChange;
 	}
 	
-	private static int internalCountMaxPossibleChange(int sum, int[] denominations, int[][] result, int index) {
+	private static long internalCountMaxPossibleChange(int sum, int[] denominations, long[][] result, int index) {
 		
 		
 		if(sum < 0 || index <= 0)
@@ -54,10 +54,10 @@ public class MakingChangeCount {
 		if(result[sum][index] > 0)
 			return result[sum][index];
 		
-		int x = internalCountMaxPossibleChange(sum, denominations, result, index - 1);
-		int y = internalCountMaxPossibleChange(sum - denominations[index - 1], denominations, result, index);
+		long x = internalCountMaxPossibleChange(sum, denominations, result, index - 1);
+		long y = internalCountMaxPossibleChange(sum - denominations[index - 1], denominations, result, index);
 		
-		int res = x + y;
+		long res = x + y;
 		result[sum][index] = res;
 		return result[sum][index];
 	}
