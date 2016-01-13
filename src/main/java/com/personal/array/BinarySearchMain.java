@@ -91,6 +91,16 @@ public class BinarySearchMain {
 		int lowerBound = 13;
 		index = main.lowerBound(arr, lowerBound);
 		System.out.println(String.format("Lower bound found for key:%d at index:%d element:%d", lowerBound, index, arr[index]));
+		
+		
+		lowerBound = -1;
+		index = main.lowerBound(arr, lowerBound);
+		System.out.println(String.format("Lower bound found for key [which does not exist]:%d at index:%d element:%d", lowerBound, index, arr[index]));
+		
+		lowerBound =  100;
+		index = main.lowerBound(arr, lowerBound);
+		System.out.println(String.format("Lower bound found for key [which does not exist]:%d at index:%d element:%d", lowerBound, index, arr[index]));
+		
 	}
 
 }
