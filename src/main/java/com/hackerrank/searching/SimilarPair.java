@@ -1,17 +1,15 @@
 package com.hackerrank.searching;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 public class SimilarPair {
 
-public static void main(String[] args) {
+	public static void main(String[] args) {
 		
-		Set<Integer> parents = new HashSet<>();
+		HashMap<Integer, Integer> parents = new HashMap<>();
 		HashMap<Integer, List<Integer>> node = new HashMap<>();
 		
 		Scanner scanner = null;
@@ -19,11 +17,16 @@ public static void main(String[] args) {
 			scanner = new Scanner(System.in);
 			int n = scanner.nextInt();
 			int T = scanner.nextInt();
+			int root = 0;
 			
 			for (int i = 1; i < n; i++) {
 				int s = scanner.nextInt();
+				if(i == 1)
+					root = s;
+				
 				int e = scanner.nextInt();
-				parents.add(s);
+				
+				parents.put(e, s);
 				
 				if(node.get(s) == null) {
 					List<Integer> children = new LinkedList<Integer>();
@@ -37,9 +40,7 @@ public static void main(String[] args) {
 			}
 
 			int pairs = 0;
-			for(Integer p : parents) {
-				pairs += findSimilarPairs(node, p, T);
-			}
+				pairs += findSimilarPairs(node, root, T, parents);
 			System.out.println(pairs);
             
 			
@@ -60,26 +61,31 @@ public static void main(String[] args) {
 	 * @return
 	 */
 	private static int findSimilarPairs(HashMap<Integer, List<Integer>> node,
-			Integer p, int t) {
+			Integer p, int t, HashMap<Integer, Integer> parents) {
 		
 		int count = 0;
 		List<Integer> children = node.get(p);
 		for (int i = 0; children != null && i < children.size(); i++) {
 
-			count += dfsVisit(node, p, children.get(i), t);
+			count += dfsVisit(node, p, children.get(i), t, parents);
 		}
 		return count;
 	}
 	
 	private static int dfsVisit(HashMap<Integer, List<Integer>> node,
-			Integer p, Integer currentNode, int t) {
-		
-		int count = (Math.abs(currentNode - p) <= t) ? 1 : 0;
+			Integer p, Integer currentNode, int t, HashMap<Integer, Integer> parents) {
+
+		int count = 0;
+		Integer parentNode = parents.get(currentNode);
+		while (parentNode != null) {
+			count += (Math.abs(currentNode - parentNode) <= t) ? 1 : 0;
+			parentNode = parents.get(parentNode);;
+		}
 		
 		List<Integer> children = node.get(currentNode);
 		for (int i = 0; children != null && i < children.size(); i++) {
 
-			count += dfsVisit(node, p, children.get(i), t);
+			count += dfsVisit(node, p, children.get(i), t, parents);
 		}
 		
 		return count;

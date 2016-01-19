@@ -42,7 +42,7 @@ public class LongestCommonSubString {
 		}
 		
 		MatrixPrint.print(c);
-		System.out.println(String.format("max=%d, maxi=%d, max, maxi"));
+		System.out.println(String.format("max=%d, maxi=%d,", max, maxi));
 		
 		printSubString(X, maxi, max);
 		
