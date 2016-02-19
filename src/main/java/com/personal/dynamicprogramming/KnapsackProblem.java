@@ -12,7 +12,7 @@ public class KnapsackProblem {
 		int value = knapsack(val, wt, W);
 		long end = System.nanoTime();
 
-		System.out.println(String.format("Max Value = %d    Running time: %d",
+		System.out.println(String.format("Knapsack without DP Max Value = %d    Running time: %d",
 				value, end - start));
 
 		int R[] = new int[W + 1];
@@ -27,7 +27,7 @@ public class KnapsackProblem {
 		value = knapsackWithDP(val, wt, W, R);
 		end = System.nanoTime();
 
-		System.out.println(String.format("Max Value = %d    Running time: %d",
+		System.out.println(String.format("Knapsack with DP Max Value = %d    Running time: %d",
 				value, end - start));
 
 	}
