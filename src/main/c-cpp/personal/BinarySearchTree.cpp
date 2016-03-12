@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <list>
+#include <climits>
 
 using namespace std;
 
@@ -179,13 +180,14 @@ public:
             //Root = v;
             return;
         }
-
+	// This is parent to child link up
         up = u->parent;
         if(u == up->left)
             up->left = v;
         else
             up->right = v;
 
+	// This is child to parent link up
         if(v != NULL) {
             v->parent = u->parent;
 
@@ -219,7 +221,8 @@ public:
         else if(z->right == NULL) {
             transplant(z, z->left);
         }
-        else {
+	else {
+	    // Successor of node z
             BinaryTree* y = treeMinimum(z->right);
             if(y->parent != NULL) {
                 transplant(y, y->right);
@@ -240,8 +243,60 @@ public:
         inorderTraverseK(node->left, k, K);
         (*k)++;
         if((*k) == K)
-            cout<<node->getValue()<<"\n";
+            printf("%d th element in Binary Tree is %d\n", K, node->getValue());
         inorderTraverseK(node->right, k, K);
+    }
+    
+    
+    bool isBst(BinaryTree *node) {
+    
+    	if(node == NULL)
+    	    return true;
+
+	if(node->left != NULL && node->left->getValue() > node->getValue()) {
+	    return false;
+	}
+	if(node->right != NULL && node->right->getValue() < node->getValue()) {
+	    return false;
+	}
+	if(!isBst(node->left) || !isBst(node->right)) {
+	    return false;
+	}
+	return true;
+    }
+    
+    BinaryTree* findLca(BinaryTree* node, int i, int j) {
+    	
+    	if(i == j) {
+    	    return searchNode(i);
+    	}
+    	if(node->getValue() >= i && node->getValue() < j) {
+    	    return node;
+    	}
+    	else if(node->getValue() > i && node->getValue() > j) {
+    	    return findLca(node->left, i , j);
+    	}
+    	else if(node->getValue() < i && node->getValue() < j) {
+    	    return findLca(node->right, i, j);
+    	}
+    	else {
+    	    return NULL;
+    	}
+    }
+
+    void printValuesInRange(BinaryTree* node, int i, int j) {
+    	
+    	if(node == NULL)
+    	    return;
+    	
+    	if(node->getValue() > i)
+	    printValuesInRange(node->left, i , j);
+
+	if(node->getValue() >= i && node->getValue() <= j)
+	   cout<<node->getValue()<<" ";
+    	
+	if(node->getValue() < j)
+	    printValuesInRange(node->right, i, j);
     }
 
     void serialize(BinaryTree *node, list<int> &v) {
@@ -284,6 +339,29 @@ public:
         v.pop_front();
         deserialize(v, node);
     }
+    
+    BinaryTree* des(list<int> &v, int min, int max) {
+    
+        if(v.size() == 0) {
+            return NULL;
+        }
+
+        BinaryTree *root = NULL;
+	int key = v.front();
+		
+	if(key < min || key > max)
+	    return NULL;
+		
+	root = new BinaryTree(key);
+	v.pop_front();
+	
+	if(key >= min && key <= max) {
+	    root->left = des(v, min, key);
+	    root->right = des(v, key, max);
+	}
+ 
+        return root;
+    }
 
 }*Root;
 
@@ -297,6 +375,26 @@ int main(int argc, char *argv[]) {
     Root->insert(40);
     Root->insert(35);
 
+    cout<<"Is Binary Search Tree "<<Root->isBst(Root)<<endl;
+    BinaryTree* lca;
+	
+    int low = 9; int high = 9;
+    lca = Root->findLca(Root, low, high);
+    printf("Lca between %d and %d is %d \n", low, high, lca->getValue());
+
+    low = 9; high = 35;
+    lca = Root->findLca(Root, low, high);
+    printf("Lca between %d and %d is %d \n", low, high, lca->getValue());
+	
+    low = 10; high = 11;
+    lca = Root->findLca(Root, low, high);
+    printf("Lca between %d and %d is %d \n", low, high, lca->getValue());
+
+    low = 9; high = 11;
+    printf("Print values in range %d and %d : ", low, high);
+    Root->printValuesInRange(Root, low, high);
+    cout<<endl;
+	
     cout<<"Kth inorder ";
     int K = 3;
     int cur = 0;
@@ -336,13 +434,17 @@ int main(int argc, char *argv[]) {
         cout<<*it<<' ';
     cout<<endl;
 
-    /* */
+    
     BinaryTree *newBt = NULL;
-    newBt = new BinaryTree(v.front());
-    v.pop_front();
-    cout<<"Calling deserialize"<<endl;
+    /* 
+    cout<<"Calling deserialize ";
     Root->deserialize(v, newBt);
-    cout<<"Printing binary tree after deserialize"<<endl;
+    */
+    
+    newBt = Root->des(v, 9, 40);
+
+    
+    cout<<"Printing binary tree after deserialize";
     Root->inorderTraverse(newBt);
     /* */
 
