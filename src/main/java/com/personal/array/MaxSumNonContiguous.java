@@ -55,6 +55,29 @@ public class MaxSumNonContiguous {
 		System.out.println(String.format("Max sum = %d From index: %d to index: %d", maxSofar, maxStart, maxEnd));
 		
 	}
+	
+	void countOfIncreasingElements(int[] arr) {
+		
+		int curStart = 0, curEnd = 0, totalCount = 0;
+		for (int i = 1; i < arr.length; i++) {
+			
+			if(arr[i] > arr[i - 1]) {
+				curEnd = i;
+				
+				int diff = curEnd - curStart;
+				totalCount += diff;
+				
+			}
+			else {
+				curStart = i;
+				curEnd = i;
+			}
+			
+
+		}
+		System.out.printf("Total count of increasing subsets %d \n", totalCount);
+		
+	}
 
 	/**
 	 * @param args
@@ -66,6 +89,9 @@ public class MaxSumNonContiguous {
 		
 		int arr1[] = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
 		main.kadaneAlgorithm(arr1);
+		
+		int arr2[] = {1, 2, 3, 4, 5, 2, 3, 4};
+		main.countOfIncreasingElements(arr2);
 	}
 
 }
