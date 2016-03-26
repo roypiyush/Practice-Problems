@@ -26,10 +26,13 @@ public class Permutation {
 	public static void main(String[] args) {
 
 		Permutation permutation = new Permutation();
-		String string = "cdefghmnopqrstuvw";
+		String string = "123456789";
 		char[] str = string.toCharArray();
 
+		long start = System.currentTimeMillis();
 		permutation.permute(str, 0);
+		System.out.println("Time elasped " + (System.currentTimeMillis() - start) + " ms" + " Factorial 9! = " + (1*2*3*4*5*6*7*8*9));
+		
 	}
 
 }
