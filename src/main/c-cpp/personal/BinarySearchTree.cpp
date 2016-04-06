@@ -362,6 +362,32 @@ public:
  
         return root;
     }
+    
+    
+    void addGreaterValues(BinaryTree *node, int* sum) {
+    
+    	if(node == NULL)
+    		return;
+    		
+    	addGreaterValues(node->right, sum);
+    	node->value += *sum;
+    	*sum = node->value;
+    	return addGreaterValues(node->left, sum);
+    
+    }
+    
+    void greaterSumTree(BinaryTree *node, int* sum) {
+    
+    	if(node == NULL)
+    		return;
+    		
+    	greaterSumTree(node->right, sum);
+    	int temp = node->value;
+    	node->value = *sum;
+    	*sum = temp + *sum;
+    	return greaterSumTree(node->left, sum);
+    
+    }
 
 }*Root;
 
@@ -453,6 +479,14 @@ int main(int argc, char *argv[]) {
     printf("Inorder   Traverse   ");
     Root->inorderTraverse(Root);
     cout<<endl;
-
+    cout<<"Add Greater values     ";
+    int x = 0;
+	Root->addGreaterValues(Root, &x);
+	Root->inorderTraverse(Root);
+	cout<<"\nGreater Sum Tree     ";
+	x = 0;
+	Root->greaterSumTree(Root, &x);
+	Root->inorderTraverse(Root);
+	cout<<endl;
     return 0;
 }

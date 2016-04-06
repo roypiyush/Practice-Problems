@@ -1,5 +1,7 @@
 package com.personal.array;
 
+import java.util.Arrays;
+
 public class BinarySearchMain {
 
 	/**
@@ -76,7 +78,7 @@ public class BinarySearchMain {
 				17, 18, 19, 20 };
 
 		BinarySearchMain main = new BinarySearchMain();
-		
+		System.out.println(Arrays.toString(arr));
 		int index = 0;
 		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 10)) != -1 ? "Element found at " + index : "Element not Found!");
 		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 100)) != -1 ? "Element found at " + index : "Element not Found!");

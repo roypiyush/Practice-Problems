@@ -47,7 +47,7 @@ public class Fibonnaci {
 
 	/** Main function **/
 	public static void main(String[] args) {
-		long n = 10;
+		long n = 30000;
 		long start = System.currentTimeMillis();
 		Fibonnaci fg = new Fibonnaci();
 		fg.genFib(n - 1);

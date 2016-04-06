@@ -1,17 +1,21 @@
 package com.personal.backtracking;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Permutation {
 
 	private int seqNo = 1;
 
-	void permute(char[] str, int i) {
+	void permute(char[] str, int i, Set<String> set) {
 		if (i == str.length - 1) {
 			System.out.print(seqNo++ + " : ");
+			set.add(new String(str));
 			System.out.println(str);
 		} else {
 			for (int j = i; j < str.length; j++) {
 				swap(str, i, j);
-				permute(str, i + 1);
+				permute(str, i + 1, set);
 				swap(str, i, j);
 			}
 		}
@@ -26,12 +30,14 @@ public class Permutation {
 	public static void main(String[] args) {
 
 		Permutation permutation = new Permutation();
-		String string = "123456789";
+		String string = "1233";
 		char[] str = string.toCharArray();
 
 		long start = System.currentTimeMillis();
-		permutation.permute(str, 0);
-		System.out.println("Time elasped " + (System.currentTimeMillis() - start) + " ms" + " Factorial 9! = " + (1*2*3*4*5*6*7*8*9));
+		Set<String> set = new HashSet<>();
+		permutation.permute(str, 0, set);
+		System.out.println("Time elasped " + (System.currentTimeMillis() - start) + " ms");
+		System.out.println(set);
 		
 	}
 
