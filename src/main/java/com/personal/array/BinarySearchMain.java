@@ -6,7 +6,7 @@ public class BinarySearchMain {
 
 	/**
 	 * 
-	 * Basic algorithm for binary search
+	 * Basic recursive algorithm for binary search
 	 * 
 	 * @param arr
 	 * @param min
@@ -14,7 +14,7 @@ public class BinarySearchMain {
 	 * @param key
 	 * @return index if element exists otherwise -1
 	 */
-	int binarySearch(int arr[], int min, int max, int key) {
+	int binarySearchRecursive(int arr[], int min, int max, int key) {
 
 		if (max < min)
 			return -1;
@@ -22,14 +22,48 @@ public class BinarySearchMain {
 		int mid = (min + max) >> 1;
 
 		if (key < arr[mid])
-			return binarySearch(arr, min, mid - 1, key);
+			return binarySearchRecursive(arr, min, mid - 1, key);
 		else if (key > arr[mid])
-			return binarySearch(arr, mid + 1, max, key);
+			return binarySearchRecursive(arr, mid + 1, max, key);
 		else
 			return mid;
 
 	}
 	
+	/**
+	 * 
+	 * Basic iterative algorithm for binary search
+	 * 
+	 * @param arr
+	 * @param min
+	 * @param max
+	 * @param key
+	 * @return index if element exists otherwise -1
+	 */
+	int binarySearchIterative(int arr[], int min, int max, int key) {
+
+		if (max < min)
+			return -1;
+
+		while (min <= max) {
+			int mid = (min + max) >> 1;
+			if (key < arr[mid])
+				max = mid - 1;
+			else if (key > arr[mid])
+				min = mid + 1;
+			else
+				return mid;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Minimum index which is greater than key
+	 * 
+	 * @param arr
+	 * @param key
+	 * @return
+	 */
 	int upperBound(int arr[], int key) {
 		
 		int low = 0; int high = arr.length - 1; int mid = 0;
@@ -37,10 +71,10 @@ public class BinarySearchMain {
 		while(low <= high) {
 			mid = (low + high) >> 1;
 			
-			if(arr[mid] > key && (mid == 1 || arr[mid - 1] <= key)) {
+			if(key < arr[mid] && (mid == 0 || arr[mid - 1] <= key)) {
 				return mid;
 			}
-			else if(arr[mid] > key) {
+			else if(key < arr[mid]) {
 				high = mid - 1;
 			}
 			else {
@@ -51,6 +85,13 @@ public class BinarySearchMain {
 		return mid;
 	}
 	
+	/**
+	 * Maximum index which is lesser than or equal to key
+	 * 
+	 * @param arr
+	 * @param key
+	 * @return
+	 */
 	int lowerBound(int arr[], int key) {
 		
 		int low = 0; int high = arr.length - 1; int mid = 0;
@@ -58,10 +99,10 @@ public class BinarySearchMain {
 		while(low <= high) {
 			mid = (low + high) >> 1;
 			
-			if(arr[mid] >= key && (mid == 1 || arr[mid - 1] < key)) {
+			if(key <= arr[mid] && (mid == 0 || arr[mid - 1] < key)) {
 				return mid;
 			}
-			else if(arr[mid] >= key) {
+			else if(key <= arr[mid]) {
 				high = mid - 1;
 			}
 			else {
@@ -80,13 +121,25 @@ public class BinarySearchMain {
 		BinarySearchMain main = new BinarySearchMain();
 		System.out.println(Arrays.toString(arr));
 		int index = 0;
-		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 10)) != -1 ? "Element found at " + index : "Element not Found!");
-		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 100)) != -1 ? "Element found at " + index : "Element not Found!");
-		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 0)) != -1 ? "Element found at " + index : "Element not Found!");
-		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 1)) != -1 ? "Element found at " + index : "Element not Found!");
-		System.out.println((index = main.binarySearch(arr, 0, arr.length - 1, 20)) != -1 ? "Element found at " + index : "Element not Found!");
 		
-		int upperBound = 1;
+		System.out.println("####################################################");
+		System.out.println("Running recursive binary search");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 10)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 100)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 0)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 1)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 20)) != -1 ? "Element found at " + index : "Element not Found!");
+		
+		System.out.println("Running iterative binary search");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 10)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 100)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 0)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 1)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println((index = main.binarySearchRecursive(arr, 0, arr.length - 1, 20)) != -1 ? "Element found at " + index : "Element not Found!");
+		System.out.println("####################################################");
+		
+		
+		int upperBound = -1;
 		index = main.upperBound(arr, upperBound);
 		System.out.println(String.format("Upper bound found for key:%d at index:%d element:%d", upperBound, index, arr[index]));
 		
