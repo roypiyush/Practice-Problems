@@ -9,10 +9,12 @@ package com.personal.dynamicprogramming;
  */
 public class KadaneAlgorithms {
 
-	public static void maxSum() {
+	public static void maxSumContiguous() {
+		
 		int[] arr = {8, -17, 6 , 4, -5, 2 , -1, 3, 8, -9};
 		int maxEnding = arr[0];
 		int maxSoFar = arr[0];
+		
 		for (int i = 1; i < arr.length; i++) {
 
 			maxEnding = Math.max(arr[i], maxEnding + arr[i]);
@@ -65,7 +67,7 @@ public class KadaneAlgorithms {
 	 */
 	public static void main(String[] args) {
 		
-		maxSum();
+		maxSumContiguous();
 		maxSumNonContiguous();
 		maxContinuosIncreasing();
 	}
