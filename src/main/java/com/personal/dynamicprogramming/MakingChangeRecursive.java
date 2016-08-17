@@ -12,7 +12,7 @@ public class MakingChangeRecursive {
 		
 		long start = System.currentTimeMillis();
 		int changeCount = makingChange(A, Sum);
-		System.out.println("Minimum coins: " + changeCount);
+		System.out.println("Minimum coins Without DP: " + changeCount);
 		long end = System.currentTimeMillis();
 		
 		System.out.println(end-start);
@@ -28,7 +28,7 @@ public class MakingChangeRecursive {
 		
 		start = System.currentTimeMillis();
 		changeCount = makingChangeWithDP(A, Sum, R);
-		System.out.println("Minimum coins: " + changeCount);
+		System.out.println("Minimum coins With DP: " + changeCount);
 		end = System.currentTimeMillis();
 		
 		System.out.println(end-start);
@@ -62,16 +62,18 @@ public class MakingChangeRecursive {
 
 	private static int makingChange(int[] a, int sum) {
 		
-		if(sum == 0)
-			return sum;
+		/*if(sum == 0)
+			return sum;*/
 		
 		int min = sum;
 		
 		for(int i = 0; i < a.length; i++) {
 			
-			if(sum - a[i] >= 0)
+			if(sum - a[i] > 0)
 			
 			min = Math.min(min, makingChange(a, sum - a[i]));
+			if(sum - a[i] == 0)
+				break;
 		}
 		
 		

@@ -42,7 +42,7 @@ public class KnapsackProblem {
 		for (int i = 0; i < val.length; i++) {
 
 			if (w - wt[i] > 0) {
-				value = Math.max(value, val[i] + knapsackWithDP(val, wt, w - wt[i],r));
+				value = Math.max(value, val[i] + knapsackWithDP(val, wt, w - wt[i], r));
 			} else if (w - wt[i] == 0) {
 				value = val[i];
 			}
@@ -61,7 +61,7 @@ public class KnapsackProblem {
 
 		for (int i = 0; i < val.length; i++) {
 
-			if (w - wt[i] >= 0) {
+			if (w - wt[i] > 0) {
 				value = Math.max(value, val[i] + knapsack(val, wt, w - wt[i]));
 			} else if (w - wt[i] == 0) {
 				value = val[i];
