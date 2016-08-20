@@ -13,7 +13,7 @@ public class Factorial {
 	
 	public static void main(String[] args) {
 		
-		System.out.println(getFactorial(50));
+		System.out.println(getFactorial(15));
 	}
 
 }
