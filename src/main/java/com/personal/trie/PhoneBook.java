@@ -1,20 +1,17 @@
 package com.personal.trie;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 class Node {
 	
-	private Node parent;
 	private char c;
 	private boolean isWord = false;
-	private boolean isUpperCase = false;
-	private boolean isLowerCase = false;
 	
-	private Map<Character, Node> children;
+	private Map<Character, Node> children = new HashMap<>(1);
 	
 	public Node(char c) {
 		this.c = c;
@@ -32,14 +29,6 @@ class Node {
 		this.children = children;
 	}
 	
-	public Node getParent() {
-		return parent;
-	}
-
-	public void setParent(Node parent) {
-		this.parent = parent;
-	}
-
 	public boolean isWord() {
 		return isWord;
 	}
@@ -48,60 +37,53 @@ class Node {
 		this.isWord = isWord;
 	}
 
-	public boolean isUpperCase() {
-		return isUpperCase;
-	}
-
-	public void setUpperCase(boolean isUpperCase) {
-		this.isUpperCase = isUpperCase;
-	}
-
-	public boolean isLowerCase() {
-		return isLowerCase;
-	}
-
-	public void setLowerCase(boolean isLowerCase) {
-		this.isLowerCase = isLowerCase;
-	}
-
 	@Override
 	public String toString() {
-		return Character.toString(c);
+		return "node=" + Character.toString(c);
 	}
 }
 
 class Dictionary {
 
-	private Map<Character, Node> children;
+	private Map<Character, Node> firstnames;
+	private Map<Character, Node> lastnames;
 	
 	public Dictionary() {
-		children = new HashMap<>();
+		firstnames = new HashMap<>();
+		lastnames = new HashMap<>();
 	}
 	
 	public void add(String data) {
 		
-		Node node = children.get(data.charAt(0));
-		if(node == null) {
-			node = new Node(data.charAt(0));
-			children.put(data.charAt(0), node);
+		String[] name = data.split(" ");
+		
+		String lastFirst = name.length == 2 ? (name[1] + " " + name[0]) : "";
+		
+		Node first = firstnames.get(data.charAt(0));
+		if(first == null) {
+			first = new Node(data.charAt(0));
+			firstnames.put(data.charAt(0), first);
+		}
+		internalAdd(first, 1, data, data.length());
+		
+		Node last = null;
+		if(!lastFirst.isEmpty()) {
+			last = lastnames.get(lastFirst.charAt(0));
+			if(last == null) {
+				last = new Node(lastFirst.charAt(0));
+				lastnames.put(lastFirst.charAt(0), last);
+			}
+			internalAdd(last, 1, lastFirst, lastFirst.length());
 		}
 		
-		internalAdd(node, 1, data, data.length());
 	}
 	
 	private void internalAdd(Node node, int i, String data, int size) {
 		
-		if(i == size)
-			return;
-		
 		char character = data.charAt(i);
 		Map<Character, Node> children = node.getChildren();
-		if(children == null) {
-			children = new HashMap<>();
-			node.setChildren(children);
-		}
-		
 		Node n = children.get(character);
+		
 		if(n == null) {
 			n = new Node(character);
 			children.put(character, n);
@@ -117,54 +99,94 @@ class Dictionary {
 
 	public List<String> search(String data) {
 		
-		List<String> result = new ArrayList<>();
+		List<String> result = new LinkedList<>();
+		List<String> list1 = searchByFirstNames(data);
+		List<String> list2 = searchByLastNames(data);
 		
-		Node node = null;
+		result.addAll(list1);
+		result.addAll(list2);
 		
-		for(Entry<Character, Node> entry : children.entrySet()) {
-			if(entry.getKey() == data.charAt(0))
-			node = internalSearch(entry.getValue(), data, 1, data.length());
-		}
+		return result;
+	}
+	
+	
+	
+	public List<String> searchByFirstNames(String data) {
 		
-		findWords(data, result, node);
+		List<String> result = new LinkedList<>();
+		
+		char charAt = data.charAt(0);
+		boolean isLowerCase = Character.isLowerCase(charAt);
+		Node node1 = firstnames.get(charAt);
+		Node node2 = firstnames.get(isLowerCase ? (char) (charAt - ' ') : (char) (charAt + ' '));
+		
+		if(node1 != null)
+			internalSearch(node1.getLetter() + "", node1, data, 1, data.length(), result, false);
+		
+		if(node2 != null)
+			internalSearch(node1.getLetter() + "", node2, data, 1, data.length(), result, false);
+		
+		return result;
+	}
+	
+	public List<String> searchByLastNames(String data) {
+		
+		List<String> result = new LinkedList<>();
+		
+		char charAt = data.charAt(0);
+		boolean isLowerCase = Character.isLowerCase(charAt);
+		Node node1 = lastnames.get(charAt);
+		Node node2 = lastnames.get(isLowerCase ? (char) (charAt - ' ') : (char) (charAt + ' '));
+		
+		if(node1 != null)
+			internalSearch(node1.getLetter() + "", node1, data, 1, data.length(), result, true);
+		
+		if(node2 != null)
+			internalSearch(node1.getLetter() + "", node2, data, 1, data.length(), result, true);
 		
 		return result;
 	}
 
-	private Node internalSearch(Node node, String data, int k, int length) {
-
-		if(k == length || node == null) {
-			return node;
-		}
-		
-		
-		Node n = null;
-		Map<Character, Node> children = node.getChildren();
-		Node node2 = children.get(data.charAt(k));
-		
-		if(node2 == null)
-			return node;
-		
-		n = internalSearch(node2, data, k + 1, data.length());
-		
-		return n;
-	}
 	
-	private void findWords(String prefix, List<String> result, Node node) {
-		
-		if(node == null) return;
-		
-		if(node.isWord()) {
-			result.add(prefix); 
+	private void internalSearch(String prefix, Node node, String data, int k, int length, List<String> result, boolean isSearchByLastName) {
+
+		if(node == null) {
+			return;
 		}
 		
-		
-		Map<Character, Node> children = node.getChildren();
-		if(children != null)
-			for (Entry<Character, Node> entry : children.entrySet()) {
-				findWords(prefix + entry.getValue().getLetter(), result, entry.getValue());
+		if(node.isWord() && k == length) {
+			if(isSearchByLastName) {
+				String[] name = prefix.split(" ");
+				result.add((name.length == 2 ? name[1] + " " : "") + name[0]);
 			}
+			else 
+				result.add(prefix);
+		}
 		
+		Map<Character, Node> children2 = node.getChildren();
+		
+		if(children2 == null)
+			return;
+		
+		if(k == length) {
+			// End of data, now we can go with searching words only
+			Collection<Node> values = children2.values();
+			for (Node n : values) {
+				internalSearch(prefix + n.getLetter(), n, data, k, length, result, isSearchByLastName);
+			}
+		}
+		else {
+			char c = data.charAt(k);
+			Node node2 = children2.get(c);
+			if(node2 != null) // Case of Exact Match
+				internalSearch(prefix + node2.getLetter(), node2, data, k + 1, length, result, isSearchByLastName);
+			
+			boolean isLowerCase = Character.isLowerCase(c);
+			Node node3 = children2.get(isLowerCase ? (char) (c - ' ') : (char) (c + ' '));
+			if(node3 != null)
+				internalSearch(prefix + node3.getLetter(), node3, data, k + 1, length, result, isSearchByLastName);
+			
+		}
 	}
 	
 }
@@ -176,9 +198,12 @@ public class PhoneBook {
 		
 		Dictionary dictionary = new Dictionary();
 		dictionary.add("piyush");
-		dictionary.add("piyushroy");
-		dictionary.add("piyusu");
-		System.out.println(dictionary.search("piyush"));
+		dictionary.add("piYush");
+		dictionary.add("piyush roy");
+		dictionary.add("piYUsh Roy");
+		dictionary.add("roypiYush");
+		
+		System.out.println(dictionary.search("roy"));
 	}
 
 }
