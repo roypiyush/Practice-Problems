@@ -246,25 +246,33 @@ public:
             printf("%d th element in Binary Tree is %d\n", K, node->getValue());
         inorderTraverseK(node->right, k, K);
     }
-    
-    
-    bool isBst(BinaryTree *node) {
-    
-    	if(node == NULL)
-    	    return true;
 
-	if(node->left != NULL && node->left->getValue() > node->getValue()) {
-	    return false;
-	}
-	if(node->right != NULL && node->right->getValue() < node->getValue()) {
-	    return false;
-	}
-	if(!isBst(node->left) || !isBst(node->right)) {
-	    return false;
-	}
-	return true;
-    }
     
+    bool check(BinaryTree* root, int min, int max) {
+    
+        if(root == NULL)
+            return true;
+        
+        if(root->getValue() <= min || root->getValue() >= max)
+            return false;
+        
+        if(root->left != NULL && root->left->getValue() > root->getValue())
+            return false;
+        
+        if(root->right != NULL && root->right->getValue() < root->getValue())
+            return false;
+        
+        return check(root->left, min, root->getValue()) && check(root->right, root->getValue(), max);
+        
+    }
+
+    bool isBst(BinaryTree* root) {
+
+        int MIN = -1;
+        int MAX = 10001;
+        return check(root, MIN, MAX);
+    }
+
     BinaryTree* findLca(BinaryTree* node, int i, int j) {
     	
     	if(i == j) {
