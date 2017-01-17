@@ -34,19 +34,15 @@ public class KnapsackProblem {
 
 	private static int knapsackWithDP(int[] val, int[] wt, int w, int[] r) {
 		
+		if(w < 0) return Integer.MIN_VALUE;
+		
 		if(r[w] >= 0)
 			return r[w];
 		
 		int value = 0;
 
 		for (int i = 0; i < val.length; i++) {
-
-			if (w - wt[i] > 0) {
-				value = Math.max(value, val[i] + knapsackWithDP(val, wt, w - wt[i], r));
-			} else if (w - wt[i] == 0) {
-				value = val[i];
-			}
-
+			value = Math.max(value, val[i] + knapsackWithDP(val, wt, w - wt[i], r));
 		}
 
 		r[w] = value;
@@ -56,17 +52,14 @@ public class KnapsackProblem {
 
 	private static int knapsack(int[] val, int[] wt, int w) {
 
+		if(w == 0) return 0;
+		
+		if(w < 0) return Integer.MIN_VALUE;
 
 		int value = 0;
 
 		for (int i = 0; i < val.length; i++) {
-
-			if (w - wt[i] > 0) {
-				value = Math.max(value, val[i] + knapsack(val, wt, w - wt[i]));
-			} else if (w - wt[i] == 0) {
-				value = val[i];
-			}
-
+			value = Math.max(value, val[i] + knapsack(val, wt, w - wt[i]));
 		}
 
 		return value;
