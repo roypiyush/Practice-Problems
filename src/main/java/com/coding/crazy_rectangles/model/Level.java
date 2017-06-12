@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.coding.problem.model;
+package com.coding.crazy_rectangles.model;
 
 import java.util.List;
 

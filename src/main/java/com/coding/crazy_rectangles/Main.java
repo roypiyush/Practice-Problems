@@ -1,15 +1,15 @@
 /**
  * 
  */
-package com.coding.problem;
+package com.coding.crazy_rectangles;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.coding.problem.model.Level;
-import com.coding.problem.model.Point;
-import com.coding.problem.model.Rectangle;
+import com.coding.crazy_rectangles.model.Level;
+import com.coding.crazy_rectangles.model.Point;
+import com.coding.crazy_rectangles.model.Rectangle;
 
 /**
  * @author piyush
