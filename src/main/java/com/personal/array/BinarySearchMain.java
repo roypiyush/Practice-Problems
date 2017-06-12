@@ -102,12 +102,15 @@ public class BinarySearchMain {
 			if(key <= arr[mid] && (mid == 0 || arr[mid - 1] < key)) {
 				return mid;
 			}
-			else if(key <= arr[mid]) {
+			else if(key < arr[mid]) {
 				high = mid - 1;
 			}
 			else {
 				low = mid + 1;
 			}
+			
+			if(mid + 1 == arr.length || (arr[mid] < key && arr[mid + 1] > key))
+				break;
 		}
 		
 		return mid;

@@ -4,7 +4,7 @@ package com.topcoder.dp;
  * 
  Little Fox Jiro has a rectangular board. On the board there is a row of N unit cells. The cells are numbered 0 through N-1 
  from the left to the right. Initially, the cells are not colored. Jiro must color each of the cells red, green, or blue.
- You are given a String desiredColor with N characters. For each i, character i of desiredColor represents the color Jiro
+ You are given a String desiredColor with N nodes. For each i, character i of desiredColor represents the color Jiro
  must use for cell i. If a character is one of 'R' (as red), 'G' (as green), and 'B' (as blue), it means that Jiro must use 
  that particular color. If a character is '*', Jiro may use any of the three colors for the particular cell.
  You are also given the ints stampCost and pushCost that describe the cost of the coloring process. The coloring process 
@@ -21,7 +21,7 @@ package com.topcoder.dp;
  Return the smallest possible total cost of coloring all the cells using the above process.
  
  Constraints
--	desiredColor will contain between 1 and 50 characters, inclusive.
+-	desiredColor will contain between 1 and 50 nodes, inclusive.
 -	Each character of desiredColor will be either 'R' or 'G' or 'B' or '*'.
 -	stampCost will be between 1 and 100,000, inclusive.
 -	pushCost will be between 1 and 100,000, inclusive.
