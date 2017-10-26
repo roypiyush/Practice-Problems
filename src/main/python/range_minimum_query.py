@@ -3,7 +3,7 @@ import random
 
 class SegmentTree:
     def __init__(self):
-        self.value = 0
+        self.value = 103
         self.left = None
         self.right = None
 
@@ -22,7 +22,7 @@ def fill_items(root, array, l, r):
             root = SegmentTree()
         root.left = fill_items(root.left, array, l, mid)
         root.right = fill_items(root.right, array, mid + 1, r)
-        root.value = root.left.value + root.right.value
+        root.value = min(root.left.value, root.right.value)
         return root
 
 
@@ -30,17 +30,17 @@ def build_segment_tree(array):
     return fill_items(None, array, 0, len(array) - 1)
 
 
-def get_sum(node, ci, cj, i, j):
+def get_min(node, ci, cj, i, j):
     if ci < i and cj < i:
-        return 0
+        return MAX
     if ci > j and cj > j:
-        return 0
+        return MAX
     if i <= ci and cj <= j:
         return node.value
     mid = (ci + cj) / 2
-    p1 = get_sum(node.left, ci, mid, i, j)
-    p2 = get_sum(node.right, mid + 1, cj, i, j)
-    return p1 + p2
+    p1 = get_min(node.left, ci, mid, i, j)
+    p2 = get_min(node.right, mid + 1, cj, i, j)
+    return min(p1, p2)
 
 
 def update(root, l, r, index_to_update, increase_by):
@@ -53,28 +53,29 @@ def update(root, l, r, index_to_update, increase_by):
     mid = (l + r) / 2
     if l <= index_to_update <= mid:
         update(root.left, l, mid, index_to_update, increase_by)
-        root.value = root.left.value + root.right.value
+        root.value = min(root.left.value, root.right.value)
     elif mid < index_to_update <= r:
         update(root.right, mid + 1, r, index_to_update, increase_by)
-        root.value = root.left.value + root.right.value
+        root.value = min(root.left.value, root.right.value)
 
 
 if __name__ == '__main__':
 
-    array = map(lambda x: random.randint(1, 100), range(100))
+    MAX = 101
+    array = map(lambda x: random.randint(80, MAX - 1), range(200))
     size = len(array)
     ci, cj = 0, size - 1
-    i, j = 1, 88
+    i, j = 55, 150
     tree = build_segment_tree(array)
-    print reduce(lambda x, y: x + y, array[i:j + 1])
-    print get_sum(tree, ci, cj, i, j)
+    print min(array[i:j + 1])
+    print get_min(tree, ci, cj, i, j)
 
-    index_to_update = 50
-    increase_value_by = 17
-
+    index_to_update = 65
+    increase_value_by = -40
     array[index_to_update] = array[index_to_update] + increase_value_by
     update(tree, ci, cj, index_to_update, increase_value_by)
 
-    print reduce(lambda x, y: x + y, array[i:j + 1])
-    print get_sum(tree, ci, cj, i, j)
+    print array[index_to_update]
+    print reduce(lambda x, y: min(x, y), array[i:j + 1])
+    print get_min(tree, ci, cj, i, j)
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python3.5
 
 import copy
 
@@ -27,6 +27,5 @@ if __name__ == '__main__':
             jj = i
             max_so_far = max_sum
 
-    print ("Result: ", darr[ii - 1: jj + 1])
-
-    print max_so_far
+    print ("Result: {}".format(darr[ii - 1: jj + 1]))
+    print (max_so_far)
