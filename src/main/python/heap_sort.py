@@ -51,9 +51,7 @@ def main():
     start = datetime.now()
     heap_sort(array)
     done = datetime.now()
-    if __name__ == '__main__':
-        print array
-    print "Time taken %d ms" % (int((done - start).microseconds)/1000)
+    print ("Time taken %d ms" % (int((done - start).microseconds)/1000))
 
 
 if __name__ == '__main__':

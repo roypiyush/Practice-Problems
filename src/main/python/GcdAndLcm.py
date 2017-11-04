@@ -2,10 +2,10 @@
 
 
 def gcd(m, n):
-  if(n > m):
+  if n > m:
     m, n = n, m
 
-  while(n != 0):
+  while n != 0:
     r = m % n
     m = n
     n = r
@@ -15,5 +15,5 @@ def gcd(m, n):
 m = 50
 n = 120
 
-print "Finding GCD of ", m, n, gcd(m, n)
-print "Finding LCM of ", m, n, (m * n) /gcd(m, n)
+print ("Finding GCD of ", m, n, gcd(m, n))
+print ("Finding LCM of ", m, n, (m * n) /gcd(m, n))
