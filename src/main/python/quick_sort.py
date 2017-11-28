@@ -8,12 +8,12 @@ def quick_sort(array, p, r):
     """
 
     if p < r:
-        q = __partition(array, p, r)
+        q = _partition(array, p, r)
         quick_sort(array, p, q - 1)  # Sort items to the left side of partition q
         quick_sort(array, q + 1, r)  # Sort items to the right side of partition q
 
 
-def __partition(array, p, r):
+def _partition(array, p, r):
 
     i = p - 1  # from 0 till i have elements which are less than pivot
     j = p
@@ -38,8 +38,8 @@ def main():
     quick_sort(array, 0, len(array) - 1)
     done = datetime.now()
     if __name__ == '__main__':
-        print array
-        print "Time taken %d ms" % (int((done - start).microseconds) / 1000)
+        print (array)
+        print ("Time taken %d ms" % (int((done - start).microseconds) / 1000))
 
 
 if __name__ == '__main__':
