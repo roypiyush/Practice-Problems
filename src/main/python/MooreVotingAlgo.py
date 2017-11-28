@@ -10,7 +10,7 @@ def find_candidate(arr):
             count = count - 1
         
         if count == 0:
-            majority =  i
+            majority = i
             count = 1
         
     return majority
