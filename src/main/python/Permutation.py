@@ -1,23 +1,34 @@
 #!/usr/bin/python3
 
-def toString(List):
-    return ''.join(List)
 
-# Function to print permutations of string
-# This function takes three parameters:
-# 1. String
-# 2. Starting index of the string
-# 3. Ending index of the string.
-def permute(a, l, r):
-    if l==r:
-        print toString(a)
+def to_string(items):
+    return ''.join(items)
+
+
+def permute(a, left, right):
+    """
+    Function to print permutations of string
+    This function takes three parameters:
+    1. String
+    2. Starting index of the string
+    3. Ending index of the string.
+
+    :param a:
+    :param left:
+    :param right:
+    :return:
+    """
+    if left == right:
+        print (to_string(a))
     else:
-        for i in xrange(l,r+1):
-            a[l], a[i] = a[i], a[l]
-            permute(a, l+1, r)
-            a[l], a[i] = a[i], a[l] # backtrack
+        for i in range(left, right+1):
+            a[left], a[i] = a[i], a[left]
+            permute(a, left + 1, right)
+            a[left], a[i] = a[i], a[left] # backtrack
 
-string = "ABCDEFGHIJKLMN"
-n = len(string)
-a = list(string)
-permute(a, 0, n-1)
+
+if __name__ == '__main__':
+    string = "ABCDEFGHIJKLMN"
+    n = len(string)
+    array = list(string)
+    permute(array, 0, n-1)
