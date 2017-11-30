@@ -1,11 +1,15 @@
 #!/usr/bin/python3.4
 
 # -*- coding: utf-8 -*-
+
+import sys
+
 """
 Created on Sat Jan 14 21:19:09 2017
 
 @author: piyush
 """
+
 
 class Node:
     def __init__(self, val):
@@ -14,12 +18,12 @@ class Node:
         self.right = None
 
 
-def inorder(Node):
-    if(Node == None):
-        return;
-    inorder(Node.left);
-    print(str(Node.val) + " ", end="")
-    inorder(Node.right)
+def in_order(nd):
+    if nd is None:
+        return
+    in_order(nd.left)
+    sys.stdout.write(str(nd.val) + " ")
+    in_order(nd.right)
         
 
 node = Node(10)
@@ -30,5 +34,5 @@ node.left.right = Node(8)
 node.right.left = Node(12)
 node.right.right = Node(17)
 
-inorder(node)
+in_order(node)
 print("")
