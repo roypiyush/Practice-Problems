@@ -1,7 +1,11 @@
 import random
+from functools import reduce
 
 
 class SegmentTree:
+    """
+    This is an example of SUM Tree using segment tree.
+    """
     def __init__(self):
         self.value = 0
         self.left = None
@@ -66,8 +70,8 @@ if __name__ == '__main__':
     ci, cj = 0, size - 1
     i, j = 1, 88
     tree = build_segment_tree(array)
-    print reduce(lambda x, y: x + y, array[i:j + 1])
-    print get_sum(tree, ci, cj, i, j)
+    print (reduce(lambda x, y: x + y, array[i:j + 1]))
+    print (get_sum(tree, ci, cj, i, j))
 
     index_to_update = 50
     increase_value_by = 17
@@ -75,6 +79,5 @@ if __name__ == '__main__':
     array[index_to_update] = array[index_to_update] + increase_value_by
     update(tree, ci, cj, index_to_update, increase_value_by)
 
-    print reduce(lambda x, y: x + y, array[i:j + 1])
-    print get_sum(tree, ci, cj, i, j)
-
+    print (reduce(lambda x, y: x + y, array[i:j + 1]))
+    print (get_sum(tree, ci, cj, i, j))
