@@ -2,18 +2,19 @@
 
 
 def gcd(m, n):
-  if n > m:
-    m, n = n, m
+    if n > m:
+        m, n = n, m
 
-  while n != 0:
-    r = m % n
-    m = n
-    n = r
+    while n != 0:
+        m, n = n, m % n
 
-  return m;
+    return m
 
-m = 50
-n = 120
 
-print ("Finding GCD of ", m, n, gcd(m, n))
-print ("Finding LCM of ", m, n, (m * n) /gcd(m, n))
+if __name__ == '__main__':
+
+    value1 = 50
+    value2 = 120
+
+    print ("Finding GCD of ", value1, value2, gcd(value1, value2))
+    print ("Finding LCM of ", value1, value2, (value1 * value2) / gcd(value1, value2))

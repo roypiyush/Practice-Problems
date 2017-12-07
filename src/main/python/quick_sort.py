@@ -1,4 +1,6 @@
 
+import random
+
 
 def quick_sort(array, p, r):
 
@@ -29,10 +31,7 @@ def _partition(array, p, r):
 
 def main():
     limit = 1000
-    array = []
-    for i in range(0, limit):
-        import random
-        array.append(random.randint(1, limit * 100))
+    array = map(lambda x: random.randint(1, limit * 100), range(0, limit))
     from datetime import datetime
     start = datetime.now()
     quick_sort(array, 0, len(array) - 1)

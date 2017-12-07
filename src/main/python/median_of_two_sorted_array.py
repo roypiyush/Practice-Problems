@@ -1,3 +1,6 @@
+#!/usr/bin/python
+
+
 import random
 
 
@@ -20,42 +23,47 @@ def median_four(a, b, c, d):
     return (a + b + c + d - max(a, max(b, max(c, d))) - min(a, min(b, min(c, d)))) / 2.0
 
 
-def median_of_two_sorted_array(arr1, i, j, arr2, k, l):
+def median_of_two_sorted_array(arr1, i, j, arr2, k, ll):
     while True:
         print ("")
 
         m1 = median(arr1, i, j)
-        m2 = median(arr2, k, l)
+        m2 = median(arr2, k, ll)
         print ("Median1=%s i=%d j=%d %s" % (m1, i, j, arr1[i: j + 1]))
-        print ("Median2=%s k=%d l=%d %s" % (m2, k, l, arr2[k: l + 1]))
+        print ("Median2=%s k=%d l=%d %s" % (m2, k, ll, arr2[k: ll + 1]))
 
-        if j - i == 1 and l - k == 0:
+        if j - i == 1 and ll - k == 0:
             return median_three(arr1[i], arr1[j], arr2[k])
 
-        elif j - i == 0 and l - k == 1:
-            return median_three(arr1[i], arr2[k], arr2[l])
+        elif j - i == 0 and ll - k == 1:
+            return median_three(arr1[i], arr2[k], arr2[ll])
 
-        elif j - i == 1 and l - k == 1:
-            return median_four(arr1[i], arr1[j], arr2[k], arr2[l])
+        elif j - i == 1 and ll - k == 1:
+            return median_four(arr1[i], arr1[j], arr2[k], arr2[ll])
 
         else:
-            if j - i == 0 and l - k == 0:
+            if j - i == 0 and ll - k == 0:
                 return float((arr1[j] + arr2[k]) / 2)
             if m1 < m2:
                 i = (i + j) / 2
-                l = (k + l) / 2
+                ll = (k + ll) / 2
             elif m1 > m2:
                 j = (i + j) / 2
-                k = (k + l) / 2
+                k = (k + ll) / 2
             else:
                 return m1
+
+
+def number_generator(size):
+    for i in range(1, size):
+        yield i * random.randint(1, 100)
 
 
 def __main__():
     array1_size, array2_size = 5, 6
 
-    array1 = sorted(random.randint(1, 100) for i in range(array1_size))
-    array2 = sorted(random.randint(1, 100) for i in range(array2_size))
+    array1 = sorted(number_generator(array1_size))
+    array2 = sorted(number_generator(array2_size))
     array3 = sorted(array1 + array2)
 
     expected_median = median(array3, 0, len(array3) - 1)
