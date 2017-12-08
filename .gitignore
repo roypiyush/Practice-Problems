@@ -5,3 +5,4 @@ target
 .idea
 practice-problem.iml
 .idea/workspace.xml
+*.pyc

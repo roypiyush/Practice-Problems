@@ -29,7 +29,7 @@ def upper_bound(array, i, j, key):
     while i <= j:
         mid = (i + j) / 2
 
-        if mid == 0 or (array[mid - 1] < key <= array[mid]):
+        if key < array[mid] and (mid == 0 or array[mid - 1] <= key):
             return mid
         elif key > array[mid]:
             i = mid + 1
@@ -52,7 +52,7 @@ def lower_bound(array, i, j, key):
     while i <= j:
         mid = (i + j) / 2
 
-        if mid == len(array) - 1 or (array[mid] <= key < array[mid + 1]):
+        if array[mid] < key and (mid == (len(array) - 1) or array[mid + 1] >= key):
             print ("Found Lower Bound Element %s" % array[mid])
             return mid
         elif key > array[mid]:

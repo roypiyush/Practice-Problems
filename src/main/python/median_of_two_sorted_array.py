@@ -2,6 +2,7 @@
 
 
 import random
+import binary_search_variants as bsv
 
 
 def median(arr, i, j):
@@ -15,57 +16,79 @@ def median(arr, i, j):
     return arr[mid]
 
 
-def median_three(a, b, c):
-    return a + b + c - max(a, max(b, c)) - min(a, min(b, c))
-
-
-def median_four(a, b, c, d):
-    return (a + b + c + d - max(a, max(b, max(c, d))) - min(a, min(b, min(c, d)))) / 2.0
-
-
-def median_of_two_sorted_array(arr1, i, j, arr2, k, ll):
-    while True:
-        print ("")
-
-        m1 = median(arr1, i, j)
-        m2 = median(arr2, k, ll)
-        print ("Median1=%s i=%d j=%d %s" % (m1, i, j, arr1[i: j + 1]))
-        print ("Median2=%s k=%d l=%d %s" % (m2, k, ll, arr2[k: ll + 1]))
-
-        if j - i == 1 and ll - k == 0:
-            return median_three(arr1[i], arr1[j], arr2[k])
-
-        elif j - i == 0 and ll - k == 1:
-            return median_three(arr1[i], arr2[k], arr2[ll])
-
-        elif j - i == 1 and ll - k == 1:
-            return median_four(arr1[i], arr1[j], arr2[k], arr2[ll])
-
-        else:
-            if j - i == 0 and ll - k == 0:
-                return float((arr1[j] + arr2[k]) / 2)
-            if m1 < m2:
-                i = (i + j) / 2
-                ll = (k + ll) / 2
-            elif m1 > m2:
-                j = (i + j) / 2
-                k = (k + ll) / 2
-            else:
-                return m1
-
-
 def number_generator(size):
     for i in range(1, size):
         yield i * random.randint(1, 100)
 
 
+def median_of_two_sorted_array(arr1, s1, e1, arr2, s2, e2):
+    m1 = median(arr1, s1, e1)
+    m2 = median(arr2, s2, e2)
+    if m1 < m2:
+        return median_of_arrays(arr1, s1, e1, arr2, s2, e2)
+    elif m2 < m1:
+        return median_of_arrays(arr2, s2, e2, arr1, s1, e1)
+    else:
+        return m1
+
+
+def median_of_arrays(arr1, s1, e1, arr2, s2, e2):
+    """
+    Here it is assumed that first array is medianly lower than second array
+
+    :param arr1: First Array
+    :param s1: Start index of arr1
+    :param e1: End index of arr1
+    :param arr2: Second Array
+    :param s2: Start index of arr2
+    :param e2: End index of arr2
+    :return: Median of two arrays
+    """
+
+    total_size = e1 - s1 + 1 + e2 - s2 + 1
+    is_odd = total_size % 2 == 1
+
+    m1 = median(arr1, s1, e1)
+    m2 = median(arr2, s2, e2)
+
+    lb = bsv.lower_bound(arr1, s1, e1, m2)
+    ub = bsv.upper_bound(arr2, s2, e2, m1)
+    if lb == e1 and m2 != lb and ub == s2 and m1 != ub:
+        # There is no overlapping
+        if is_odd:
+            element = total_size / 2
+            return arr1[element] if element <= e1 else arr2[element - (e1 + 1)]
+        else:
+            first = total_size / 2 - 1
+            second = total_size / 2
+
+            element1 = arr1[first] if first <= e1 else arr2[first - (e1 + 1)]
+            element2 = arr1[second] if second <= e1 else arr2[second - (e2 + 1)]
+            return (element1 + element2) / 2
+        pass
+    else:
+
+        number_of_left_elements = lb + ub
+        number_of_right_elements = e1 - lb + e2 - ub
+        if is_odd:
+            if number_of_left_elements > number_of_right_elements:
+                return min(arr1[lb], arr2[ub])
+            else:
+                return max(arr1[lb], arr2[ub])
+        else:
+            return (arr1[lb] + arr2[ub]) / 2
+
+
 def __main__():
     array1_size, array2_size = 5, 6
 
-    array1 = sorted(number_generator(array1_size))
-    array2 = sorted(number_generator(array2_size))
-    array3 = sorted(array1 + array2)
+    array1 = [55, 142, 285, 300, 340]  # sorted(number_generator(array1_size + 1))
+    array2 = [11, 18, 120, 150, 260, 288]  # sorted(number_generator(array2_size + 1))
 
+    print ("Array 1 >>> %s" % array1)
+    print ("Array 2 >>> %s" % array2)
+
+    array3 = sorted(array1 + array2)
     expected_median = median(array3, 0, len(array3) - 1)
     result = median_of_two_sorted_array(array1, 0, len(array1) - 1, array2, 0, len(array2) - 1)
     print ("\nMedian of two sorted arrays : %s" % result)
