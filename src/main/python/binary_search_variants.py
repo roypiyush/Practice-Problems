@@ -10,7 +10,6 @@ def number_generator(size):
 
 
 def binary_search(array, i, j, key):
-    print ("Binary Search >>> Looking for key: %s" % key)
 
     while i <= j:
         mid = (i + j) / 2
@@ -21,7 +20,6 @@ def binary_search(array, i, j, key):
             i = mid + 1
         else:
             j = mid - 1
-    print ("Element Not Found")
     return -1
 
 
@@ -29,9 +27,9 @@ def upper_bound(array, i, j, key):
     while i <= j:
         mid = (i + j) / 2
 
-        if key < array[mid] and (mid == 0 or array[mid - 1] <= key):
+        if key < array[mid] and (mid == i or array[mid - 1] <= key):
             return mid
-        elif key > array[mid]:
+        elif key >= array[mid]:
             i = mid + 1
         else:
             j = mid - 1
@@ -39,21 +37,11 @@ def upper_bound(array, i, j, key):
     return -1
 
 
-def upper_bound_util(array, i, j, key):
-    print ("Binary Search Verify Upper Bound >>> Looking for key: %s" % key)
-    index = upper_bound(array, i, j, key)
-    index_next = upper_bound(array, i, j, array[index] + 1)
-    print ("Binary Search Verify Upper Bound >>> Result: %s at index: %s" % (array[index_next - 1], index_next - 1))
-    return index_next - 1
-
-
 def lower_bound(array, i, j, key):
-    print ("Binary Search Lower Bound >>> Looking for key: %s" % key)
     while i <= j:
         mid = (i + j) / 2
 
-        if array[mid] < key and (mid == (len(array) - 1) or array[mid + 1] >= key):
-            print ("Found Lower Bound Element %s" % array[mid])
+        if array[mid] <= key and (mid == j or array[mid + 1] >= key):
             return mid
         elif key > array[mid]:
             i = mid + 1
@@ -64,8 +52,17 @@ def lower_bound(array, i, j, key):
 
 
 if __name__ == '__main__':
-    array1 = sorted(number_generator(10))
+    array1 = [27, 54, 60, 88, 148, 150, 207, 484, 576, 584, 616, 630] # sorted(number_generator(10))
     print ("Array >>> %s" % array1)
-    binary_search(array1, 0, len(array1) - 1, random.randint(1, 100))
-    upper_bound_util(array1, 0, len(array1) - 1, random.randint(1, 100))
-    lower_bound(array1, 0, len(array1) - 1, random.randint(1, 100))
+    k = 3330 # random.randint(1, 100)
+    print ("Searching for Key: %s" % k)
+    if binary_search(array1, 0, len(array1) - 1, k) == -1:
+        ub = upper_bound(array1, 0, len(array1) - 1, k)
+        lb = lower_bound(array1, 0, len(array1) - 1, k)
+        print ("Element is NOT found. Lower Bound=%s and Upper Bound=%s" % (array1[lb], array1[ub]))
+    else:
+        print ("Element is found. Upper bound=%s" % array1[upper_bound(array1, 0, len(array1) - 1, k)])
+
+    i, j = 2, 7,
+    lb_index, ub_index = lower_bound(array1, i, j, 616), upper_bound(array1, i, j, 616)
+    print ("Lower and Upper bound between indices i=%d and j=%d is %s, %s and %s, %s respectively." % (i, j, lb_index, array1[lb_index], ub_index, array1[ub_index]))
