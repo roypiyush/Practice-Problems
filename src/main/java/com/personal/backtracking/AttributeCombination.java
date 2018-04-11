@@ -6,51 +6,51 @@ import java.util.List;
 
 public class AttributeCombination {
 
-	public void printCombinations(HashMap<String, List<String>> map,
-			String[] attributes) {
+    public static void main(String[] args) {
 
-		int attributeIndex = 0;
+        String color = "red blue green violet";
+        String size = "X ML";
+        String brand = "Spykar Levis Lee";
+        String[] attributes = "brand color size".split(" ");
 
-		formCombinationString(map, attributes, attributeIndex, "");
+        HashMap<String, List<String>> map = new HashMap<String, List<String>>();
+        map.put("color", Arrays.asList(color.split(" ")));
+        map.put("size", Arrays.asList(size.split(" ")));
+        map.put("brand", Arrays.asList(brand.split(" ")));
 
-	}
+        long startTime = System.currentTimeMillis();
+        new AttributeCombination().printCombinations(map, attributes);
+        long endTime = System.currentTimeMillis();
+        System.out.println(String.format("Time required: %s",
+                (endTime - startTime)));
 
-	private void formCombinationString(HashMap<String, List<String>> map,
-			String[] attributes, int attributeIndex, String combination) {
+    }
 
-		if (attributeIndex >= attributes.length) {
-			System.out.println(combination.trim());
-			return;
-		}
+    public void printCombinations(HashMap<String, List<String>> map,
+                                  String[] attributes) {
 
-		// Size of values of particular attributeIndex
-		int size = map.get(attributes[attributeIndex]).size();
-		for (int i = 0; i < size; i++) {
-			String str = combination + " "
-					+ map.get(attributes[attributeIndex]).get(i);
-			formCombinationString(map, attributes, attributeIndex + 1, str);
-		}
+        int attributeIndex = 0;
 
-	}
+        formCombinationString(map, attributes, attributeIndex, "");
 
-	public static void main(String[] args) {
+    }
 
-		String color = "red blue green violet";
-		String size = "X ML";
-		String brand = "Spykar Levis Lee";
-		String[] attributes = "brand color size".split(" ");
+    private void formCombinationString(HashMap<String, List<String>> map,
+                                       String[] attributes, int attributeIndex, String combination) {
 
-		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
-		map.put("color", Arrays.asList(color.split(" ")));
-		map.put("size", Arrays.asList(size.split(" ")));
-		map.put("brand", Arrays.asList(brand.split(" ")));
+        if (attributeIndex >= attributes.length) {
+            System.out.println(combination.trim());
+            return;
+        }
 
-		long startTime = System.currentTimeMillis();
-		new AttributeCombination().printCombinations(map, attributes);
-		long endTime = System.currentTimeMillis();
-		System.out.println(String.format("Time required: %s",
-				(endTime - startTime)));
+        // Size of values of particular attributeIndex
+        int size = map.get(attributes[attributeIndex]).size();
+        for (int i = 0; i < size; i++) {
+            String str = combination + " "
+                    + map.get(attributes[attributeIndex]).get(i);
+            formCombinationString(map, attributes, attributeIndex + 1, str);
+        }
 
-	}
+    }
 
 }

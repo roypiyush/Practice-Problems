@@ -6,82 +6,82 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Earthland {
-	
-	public static void main(String[] args) {
-		
-		Scanner sc = null;
-		BufferedInputStream br = null;
-		try {
-			br = new BufferedInputStream(System.in);
-			sc = new Scanner(br);
-			
-			int T = sc.nextInt();
-			
-			while(T-- > 0) {
-				int numberOfRooms = sc.nextInt();
-				int numberOfEdges = sc.nextInt();
-				
-				boolean graph[][] = new boolean[numberOfRooms][numberOfRooms];
-				
-				for (int i = 0; i < numberOfEdges; i++) {
-					int v1 = sc.nextInt() - 1;
-					int v2 = sc.nextInt() - 1;
-				
-					
- 					graph[v1][v2] = true;
-				}
 
-				int[] parent = new int[numberOfRooms];
-				boolean[] visited = new boolean[numberOfRooms];
-				
-				Arrays.fill(parent, -1);
-				int count = 0;
-				for (int i = 0; i < parent.length; i++) {
-					visited = new boolean[numberOfRooms];
-					if(!checkPath(graph, parent, visited, i)) {
-						count++;
-					}
-				}
-				System.out.println(count - 1);
-				
-			}
-			
+    public static void main(String[] args) {
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null)
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			if (sc != null) {
-				sc.close();
-			}
-		}
+        Scanner sc = null;
+        BufferedInputStream br = null;
+        try {
+            br = new BufferedInputStream(System.in);
+            sc = new Scanner(br);
 
-	}
-	
+            int T = sc.nextInt();
 
-	static boolean checkPath(boolean graph[][], int[] parent, boolean[] visited, int v) {
-		
-		boolean[] adjList = graph[v];
-		for (int u = 0; u < adjList.length; u++) {
-			if(adjList[u]) {
-				if(!visited[u]) {
-					visited[u] = true;
-					if (parent[u] < 0 || checkPath(graph, parent, visited, parent[u])) {
-						parent[u] = v;
-						return true;
-					}
-				}
-			}
-			
-		}
-		return false;
-		
-	}
+            while (T-- > 0) {
+                int numberOfRooms = sc.nextInt();
+                int numberOfEdges = sc.nextInt();
+
+                boolean graph[][] = new boolean[numberOfRooms][numberOfRooms];
+
+                for (int i = 0; i < numberOfEdges; i++) {
+                    int v1 = sc.nextInt() - 1;
+                    int v2 = sc.nextInt() - 1;
+
+
+                    graph[v1][v2] = true;
+                }
+
+                int[] parent = new int[numberOfRooms];
+                boolean[] visited = new boolean[numberOfRooms];
+
+                Arrays.fill(parent, -1);
+                int count = 0;
+                for (int i = 0; i < parent.length; i++) {
+                    visited = new boolean[numberOfRooms];
+                    if (!checkPath(graph, parent, visited, i)) {
+                        count++;
+                    }
+                }
+                System.out.println(count - 1);
+
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null)
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            if (sc != null) {
+                sc.close();
+            }
+        }
+
+    }
+
+
+    static boolean checkPath(boolean graph[][], int[] parent, boolean[] visited, int v) {
+
+        boolean[] adjList = graph[v];
+        for (int u = 0; u < adjList.length; u++) {
+            if (adjList[u]) {
+                if (!visited[u]) {
+                    visited[u] = true;
+                    if (parent[u] < 0 || checkPath(graph, parent, visited, parent[u])) {
+                        parent[u] = v;
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
+
+    }
 
 }
 

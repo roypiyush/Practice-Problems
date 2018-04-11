@@ -4,25 +4,19 @@ import java.util.LinkedList;
 
 public class BinaryTree {
 
+    static int max = 0;
     int value;
     int level;
     BinaryTree left;
     BinaryTree right;
 
-    @Override
-    public String toString() {
-        return value + "";
-    }
-
     BinaryTree(int value) {
         this.value = value;
     }
 
-    static int max = 0;
-
     static void levelOrder(LinkedList<BinaryTree> queue) {
         int cur = 1;
-        while(queue.size() != 0) {
+        while (queue.size() != 0) {
             BinaryTree item = queue.poll();
             if (item.level > cur) {
                 cur = item.level;
@@ -44,7 +38,7 @@ public class BinaryTree {
         int cur = 1;
         LinkedList<BinaryTree> even = new LinkedList<>();
         LinkedList<BinaryTree> odd = new LinkedList<>();
-        while(queue.size() != 0) {
+        while (queue.size() != 0) {
             BinaryTree item = queue.poll();
             if (item.level > cur) {
                 cur = item.level;
@@ -52,8 +46,7 @@ public class BinaryTree {
             }
             if (item.level % 2 != 0) {
                 System.out.print(item.value + " ");
-            }
-            else {
+            } else {
                 System.out.print(even.pop().value + " ");
             }
             if (item.left != null) {
@@ -152,5 +145,10 @@ public class BinaryTree {
         inorder.clear();
         inorder(newTree, inorder);
         System.out.println(inorder);
+    }
+
+    @Override
+    public String toString() {
+        return value + "";
     }
 }

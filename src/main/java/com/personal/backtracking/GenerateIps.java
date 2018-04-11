@@ -29,37 +29,37 @@ input
 
 public class GenerateIps {
 
-	void generateIps(String string, String prefix, int index, int size, int remaining) {
-		if(remaining == 0 && index == size) {
-			System.out.println(prefix);
-			return;
-		}
-			
+    public static void main(String... args) {
+        Scanner scanner = new Scanner(System.in);
 
-		for(int i = 1; i <= 3 && (index + i <= size); i++) {
-			String p = string.substring(index, index + i);
-			int prefixValid = isPrefixValid(p);
-			if(prefixValid != -1) {
-				generateIps(string, prefix + prefixValid + (index + i == size ? "" : "."), index + i, size, remaining - 1);
-			}
-			
-		}
-	}
-	
-	private int isPrefixValid(String p) {
-		int i = Integer.parseInt(p);
-		if(i >= 0 && i <= 255) {
-			return i;
-		}
-		return -1;
-	}
+        String string = scanner.next();
+        String inputString = Integer.parseInt(string) + "";
+        new GenerateIps().generateIps(inputString, "", 0, inputString.length(), 4);
+        scanner.close();
+    }
 
-	public static void main(String... args) {
-		Scanner scanner = new Scanner(System.in);
-		
-		String string = scanner.next();
-		String inputString = Integer.parseInt(string) + "";
-		new GenerateIps().generateIps(inputString, "", 0, inputString.length(), 4);
-		scanner.close();
-	}
+    void generateIps(String string, String prefix, int index, int size, int remaining) {
+        if (remaining == 0 && index == size) {
+            System.out.println(prefix);
+            return;
+        }
+
+
+        for (int i = 1; i <= 3 && (index + i <= size); i++) {
+            String p = string.substring(index, index + i);
+            int prefixValid = isPrefixValid(p);
+            if (prefixValid != -1) {
+                generateIps(string, prefix + prefixValid + (index + i == size ? "" : "."), index + i, size, remaining - 1);
+            }
+
+        }
+    }
+
+    private int isPrefixValid(String p) {
+        int i = Integer.parseInt(p);
+        if (i >= 0 && i <= 255) {
+            return i;
+        }
+        return -1;
+    }
 }

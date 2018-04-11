@@ -11,7 +11,7 @@ class GraphSearch {
 
     public void addEdge(String node1, String node2) {
         LinkedHashSet<String> adjacent = map.get(node1);
-        if(adjacent==null) {
+        if (adjacent == null) {
             adjacent = new LinkedHashSet<String>();
             map.put(node1, adjacent);
         }
@@ -25,7 +25,7 @@ class GraphSearch {
 
     public boolean isConnected(String node1, String node2) {
         Set<String> adjacent = map.get(node1);
-        if(adjacent==null) {
+        if (adjacent == null) {
             return false;
         }
         return adjacent.contains(node2);
@@ -33,7 +33,7 @@ class GraphSearch {
 
     public LinkedList<String> adjacentNodes(String last) {
         LinkedHashSet<String> adjacent = map.get(last);
-        if(adjacent==null) {
+        if (adjacent == null) {
             return new LinkedList<String>();
         }
         return new LinkedList<String>(adjacent);
@@ -42,32 +42,32 @@ class GraphSearch {
 
 public class Search {
 
-	private static String START;
+    private static String START;
     private static String END;
 
     public static void main(String[] args) {
         findRoutes("Bangalore", "Mumbai");
     }
 
-	private static void findRoutes(String source, String destination) {
-		
-		START = source;
-		END = destination;
-	    
-		GraphSearch graph = new GraphSearch();
-		graph.addEdge("Bangalore", "Mumbai");
-		graph.addEdge("Bangalore", "Pune");
-		graph.addEdge("Pune", "Mumbai");
-		graph.addEdge("Bangalore", "Chennai");
-		graph.addEdge("Chennai", "Pune");
-		graph.addEdge("Pune", "Bangalore");
-		
+    private static void findRoutes(String source, String destination) {
+
+        START = source;
+        END = destination;
+
+        GraphSearch graph = new GraphSearch();
+        graph.addEdge("Bangalore", "Mumbai");
+        graph.addEdge("Bangalore", "Pune");
+        graph.addEdge("Pune", "Mumbai");
+        graph.addEdge("Bangalore", "Chennai");
+        graph.addEdge("Chennai", "Pune");
+        graph.addEdge("Pune", "Bangalore");
+
         LinkedList<String> visited = new LinkedList<String>();
         visited.add(START);
         System.out.print("[");
         new Search().breadthFirst(graph, visited);
         System.out.print("]\n");
-	}
+    }
 
     private void breadthFirst(GraphSearch graph, LinkedList<String> visited) {
         LinkedList<String> nodes = graph.adjacentNodes(visited.getLast());
@@ -96,14 +96,14 @@ public class Search {
     }
 
     private String printPath(LinkedList<String> visited) {
-    	int size = visited.size();
+        int size = visited.size();
         int i = 0;
-        
+
         String result = "";
         for (String node : visited) {
-            
+
             result += node;
-            if(i != size - 1) {
+            if (i != size - 1) {
                 result += "->";
             }
             i++;
