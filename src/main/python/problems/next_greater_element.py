@@ -35,25 +35,23 @@ class Stack:
         return self.items.__str__()
 
 
-def calculate_span(prices):
-
+def next_greater_element(array):
+    n = len(array)
     stack = Stack()
-    n = len(prices)
-    stack.push(0)
-    s = [0] * len(prices)
-    s[0] = 1
-
-    for i in range(1, n):
-        while stack.is_not_empty() and prices[stack.peek()] <= prices[i]:
+    for i in range(n - 1, -1, -1):
+        key = array[i]
+        while stack.is_not_empty() and stack.peek() < key:
             stack.pop()
 
-        s[i] = i + 1 if stack.is_empty() else i - stack.peek()
-        stack.push(i)
+        if stack.is_empty():
+            array[i] = -1
+        elif stack.peek() > key:
+            array[i] = stack.peek()
+        stack.push(key)
+    for i in range(n - 1, -1, -1):
+        print(array[i], end=' ')
 
-    return s
 
-
-if '__main__' == __name__:
-    price_list = [100, 80, 60, 70, 60, 75, 85]
-    span = calculate_span(price_list)
-    print(span)
+if __name__ == '__main__':
+    elements = [15, 14, 13, 7, 6, 12]
+    next_greater_element(elements)
