@@ -1,6 +1,4 @@
-import merge_sort
-import quick_sort
-import heap_sort
+from basic import merge_sort, quick_sort, heap_sort
 
 from datetime import datetime
 import random

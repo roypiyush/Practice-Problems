@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import random
-import binary_search_variants as bsv
+from basic import binary_search_variants as bsv
 
 
 def ubound(arr, i, j, key):

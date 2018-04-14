@@ -1,5 +1,11 @@
-from constants import Color
+from enum import Enum
 from termcolor import colored
+
+
+class Color(Enum):
+    WHITE = 1
+    GRAY = 2
+    BLACK = 3
 
 
 class Vertex:
@@ -34,7 +40,7 @@ class Graph:
         queue.append(vertex)
         while len(queue) != 0:
             v = queue.pop(0)
-            print colored("travering {}".format(v), 'green')
+            print(colored("Traversing {}".format(v), 'green'))
 
             if v.color == Color.WHITE:
                 v.color = Color.GRAY
@@ -42,7 +48,7 @@ class Graph:
                     queue.append(u)
                     u.parent = v
                     u.distance = v.distance + 1
-                    print colored("{} ".format(u), 'magenta')
+                    print(colored("{} ".format(u), 'magenta'))
             v.color = Color.BLACK
 
 
@@ -65,8 +71,7 @@ if __name__ == '__main__':
     v6.adj_list = [v9]
     v7.adj_list = [v10]
 
-    vtxs = dict({1: v1, 2: v2, 3: v3, 4: v4, 5: v5, 6: v6, 7: v7, 8: v8, 9: v9, 10: v10})
+    vertices_main = dict({1: v1, 2: v2, 3: v3, 4: v4, 5: v5, 6: v6, 7: v7, 8: v8, 9: v9, 10: v10})
 
-    graph = Graph(vtxs)
+    graph = Graph(vertices_main)
     graph.bfs_traversal(1)
-
