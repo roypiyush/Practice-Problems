@@ -45,8 +45,8 @@ def main():
     merge_sort(array, 0, len(array) - 1)
     done = datetime.now()
     if __name__ == '__main__':
-        print array
-    print "Time taken %d ms" % (int((done - start).microseconds)/1000)
+        print('sorted array', array)
+        print("Time taken %d ms" % (int((done - start).microseconds)/1000))
 
 
 if __name__ == '__main__':

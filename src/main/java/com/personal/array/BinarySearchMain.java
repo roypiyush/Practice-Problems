@@ -6,12 +6,12 @@ public class BinarySearchMain {
 
     public static void main(String[] args) {
 
-        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16,
+        int[] arr = {1, 2, 3, 4, 5, 5, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16,
                 17, 18, 19, 20};
 
         BinarySearchMain main = new BinarySearchMain();
         System.out.println(Arrays.toString(arr));
-        int index = 0;
+        int index;
 
         System.out.println("####################################################");
         System.out.println("Running recursive binary search");
@@ -30,11 +30,11 @@ public class BinarySearchMain {
         System.out.println("####################################################");
 
 
-        int upperBound = -1;
+        int upperBound = 5;
         index = main.upperBound(arr, upperBound);
         System.out.println(String.format("Upper bound found for key:%d at index:%d element:%d", upperBound, index, arr[index]));
 
-        int lowerBound = 13;
+        int lowerBound = 5;
         index = main.lowerBound(arr, lowerBound);
         System.out.println(String.format("Lower bound found for key:%d at index:%d element:%d", lowerBound, index, arr[index]));
 
@@ -55,7 +55,7 @@ public class BinarySearchMain {
      * @param min
      * @param max
      * @param key
-     * @return index if element exists otherwise -1
+     * @return
      */
     int binarySearchRecursive(int arr[], int min, int max, int key) {
 
@@ -146,9 +146,6 @@ public class BinarySearchMain {
             } else {
                 low = mid + 1;
             }
-
-            if (mid + 1 == arr.length || (arr[mid] < key && arr[mid + 1] > key))
-                break;
         }
 
         return mid;

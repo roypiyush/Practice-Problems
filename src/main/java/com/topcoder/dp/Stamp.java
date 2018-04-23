@@ -18,7 +18,7 @@ package com.topcoder.dp;
  3) Jiro pushes the stamp onto the chosen segment of cells. All the cells now have color C.
  Each use of the stamp costs pushCost.
  
- Return the smallest possible total cost of coloring all the cells using the above process.
+ Return the smallest possible total cost of coloring all the        cells using the above process.
  
  Constraints
 -	desiredColor will contain between 1 and 50 nodes, inclusive.

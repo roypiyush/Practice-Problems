@@ -1,6 +1,4 @@
 
-import random
-
 
 def quick_sort(array, p, r):
 
@@ -13,6 +11,13 @@ def quick_sort(array, p, r):
         q = _partition(array, p, r)
         quick_sort(array, p, q - 1)  # Sort items to the left side of partition q
         quick_sort(array, q + 1, r)  # Sort items to the right side of partition q
+
+
+def tail_recursive_quick_sort(array, p, r):
+    while p < r:
+        q = _partition(array, p, r)
+        quick_sort(array, p, q - 1)
+        p = q + 1
 
 
 def _partition(array, p, r):
@@ -31,14 +36,18 @@ def _partition(array, p, r):
 
 def main():
     limit = 1000
-    array = map(lambda x: random.randint(1, limit * 100), range(0, limit))
+    array = []
+    for i in range(0, limit):
+        import random
+        array.append(random.randint(1, limit * 100))
     from datetime import datetime
     start = datetime.now()
-    quick_sort(array, 0, len(array) - 1)
+    size = len(array) - 1
+    quick_sort(array, 0, size)
     done = datetime.now()
     if __name__ == '__main__':
-        print (array)
-        print ("Time taken %d ms" % (int((done - start).microseconds) / 1000))
+        print(array)
+        print("Time taken %d ms" % (int((done - start).microseconds) / 1000))
 
 
 if __name__ == '__main__':

@@ -1,5 +1,4 @@
 #!/usr/bin/python3.4
-from __future__ import print_function
 
 
 def prime_factors(n):
@@ -11,10 +10,11 @@ def prime_factors(n):
         p = n % i
         if p == 0:
             n = n / i
-            print (str(i) + " ", end='')
+            print(str(i), end=' ')
             continue
         i = i + 1
-    print ()
+    print('')
 
 
-prime_factors(8255520000)
+if __name__ == '__main__':
+    prime_factors(8255520000)

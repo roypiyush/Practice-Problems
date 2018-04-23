@@ -72,13 +72,13 @@ if __name__ == '__main__':
     ci, cj = 0, size - 1
     i, j = 55, 90
     tree = build_segment_tree(array)
-    print (min(array[i:j + 1]))
-    print (get_min(tree, ci, cj, i, j))
+    print(min(array[i:j + 1]))
+    print(get_min(tree, ci, cj, i, j))
 
     index_to_update = 65
     increase_value_by = -40
     array[index_to_update] = array[index_to_update] + increase_value_by
     update(tree, ci, cj, index_to_update, increase_value_by)
-    print (array[index_to_update])
-    print (reduce(lambda x, y: min(x, y), array[i:j + 1]))
-    print (get_min(tree, ci, cj, i, j))
+    print(array[index_to_update])
+    print(reduce(lambda x, y: min(x, y), array[i:j + 1]))
+    print(get_min(tree, ci, cj, i, j))
