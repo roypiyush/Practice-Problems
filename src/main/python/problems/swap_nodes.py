@@ -189,10 +189,10 @@ def main():
     queue = []
     tree = Tree(1)
     queue.append(tree)
-    t = int(raw_input())
+    t = int(input())
 
     for i in range(0, t):
-        children = map(lambda x: int(x), raw_input().split(' '))
+        children = map(lambda x: int(x), input().split(' '))
         node = queue.pop(0)
         if children[0] != -1:
             node.left = Tree(children[0])
@@ -202,12 +202,12 @@ def main():
             queue.append(node.right)
 
     current_depth = 1
-    n = int(raw_input())
+    n = int(input())
     for i in range(0, n):
-        depth = int(raw_input())
+        depth = int(input())
         swap(tree, current_depth, depth, 1)
         inorder(tree)
-        print
+        print()
 
 if __name__ == '__main__':
     main()
