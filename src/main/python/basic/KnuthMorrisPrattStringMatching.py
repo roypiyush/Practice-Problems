@@ -1,4 +1,4 @@
-from termcolor import colored, COLORS
+from termcolor import colored
 
 
 def compute_prefix_function(pattern):
