@@ -1,4 +1,4 @@
-import numpy as np
+from termcolor import colored, COLORS
 
 
 def compute_prefix_function(pattern):
@@ -22,7 +22,7 @@ def compute_prefix_function(pattern):
     return lps
 
 
-def kmp(pattern, text):
+def kmp_first_match(pattern, text):
     """
 
     :param pattern:
@@ -48,10 +48,60 @@ def kmp(pattern, text):
     return -1
 
 
-if __name__ == '__main__':
+def kmp_all_match(pattern, text):
+    """
+
+    :param pattern:
+    :param text:
+    :return: index of pattern or -1 if pattern not found
+    """
+    index = 0
+    pattern_index = 0
+    lps = compute_prefix_function(pattern)
+    positions = list()
+    while index < len(text):
+        if pattern[pattern_index] == text[index]:
+            index += 1
+            pattern_index += 1
+            if pattern_index == len(pattern):
+                # Found match now return
+                found_index = index - pattern_index
+                positions.append(found_index)
+                pattern_index = lps[pattern_index - 1]
+                if pattern_index == -1:
+                    pattern_index = 0
+        else:
+            if pattern_index - 1 < 0:
+                pattern_index = 0
+                index += 1
+            pattern_index = lps[pattern_index - 1]
+
+    return positions
+
+
+def print_matched(pattern, text, start_index):
+    if start_index == -1:
+        print('Pattern not present')
+        return
+
+    size = len(pattern)
+    matched_pattern = colored(pattern, 'grey', attrs=['bold', 'underline'])
+    print("Matched Pattern at index {} -> {}{}{}".format(start_index, text[0: start_index], matched_pattern, text[start_index + size:]))
+
+
+def __main__():
     text = "ACXACACXACACAGT"
-    pattern = 'ACACAGT'
+    pattern = 'ACX'
     lps = compute_prefix_function(pattern)
     print(lps)
-    result = kmp(pattern, text)
-    print(result)
+    start_index = kmp_first_match(pattern, text)
+    print_matched(pattern, text, start_index)
+
+    positions = kmp_all_match(pattern, text)
+    for p in positions:
+        print_matched(pattern, text, p)
+
+
+if __name__ == '__main__':
+    __main__()
+
