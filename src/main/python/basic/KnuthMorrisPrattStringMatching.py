@@ -22,33 +22,7 @@ def compute_prefix_function(pattern):
     return lps
 
 
-def kmp_first_match(pattern, text):
-    """
-
-    :param pattern:
-    :param text:
-    :return: index of pattern or -1 if pattern not found
-    """
-    index = 0
-    pattern_index = 0
-    lps = compute_prefix_function(pattern)
-    while index < len(text):
-        if pattern[pattern_index] == text[index]:
-            index += 1
-            pattern_index += 1
-            if pattern_index == len(pattern):
-                # Found match now return
-                return index - pattern_index
-        else:
-            if pattern_index - 1 < 0:
-                pattern_index = 0
-                index += 1
-            pattern_index = lps[pattern_index - 1]
-
-    return -1
-
-
-def kmp_all_match(pattern, text):
+def kmp(pattern, text):
     """
 
     :param pattern:
@@ -61,20 +35,16 @@ def kmp_all_match(pattern, text):
     positions = list()
     while index < len(text):
         if pattern[pattern_index] == text[index]:
-            index += 1
-            pattern_index += 1
+            pattern_index = pattern_index + 1
+            index = index + 1
             if pattern_index == len(pattern):
-                # Found match now return
-                found_index = index - pattern_index
-                positions.append(found_index)
-                pattern_index = lps[pattern_index - 1]
-                if pattern_index == -1:
-                    pattern_index = 0
+                positions.append(index - pattern_index)
+                pattern_index = 0
         else:
-            if pattern_index - 1 < 0:
+            pattern_index = lps[pattern_index]
+            if pattern_index < 0:
                 pattern_index = 0
                 index += 1
-            pattern_index = lps[pattern_index - 1]
 
     return positions
 
@@ -86,22 +56,18 @@ def print_matched(pattern, text, start_index):
 
     size = len(pattern)
     matched_pattern = colored(pattern, 'grey', attrs=['bold', 'underline'])
-    print("Matched Pattern at index {} -> {}{}{}".format(start_index, text[0: start_index], matched_pattern, text[start_index + size:]))
+    print("Matched Pattern at index %2d -> %s%s%s" % (
+        start_index, text[0: start_index], matched_pattern, text[start_index + size:]))
 
 
 def __main__():
-    text = "ACXACACXACACAGT"
-    pattern = 'ACX'
-    lps = compute_prefix_function(pattern)
-    print(lps)
-    start_index = kmp_first_match(pattern, text)
-    print_matched(pattern, text, start_index)
+    text = "ACXACACXACACAGTAAAA"
+    pattern = 'ACA'
 
-    positions = kmp_all_match(pattern, text)
+    positions = kmp(pattern, text)
     for p in positions:
         print_matched(pattern, text, p)
 
 
 if __name__ == '__main__':
     __main__()
-
