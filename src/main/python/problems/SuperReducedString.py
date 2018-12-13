@@ -6,7 +6,7 @@ Created on Sat Jan 14 16:34:49 2017
 """
 import sys
 
-var = raw_input()
+var = input()
 size = len(var)
 
 list = [""]
@@ -24,4 +24,4 @@ for i in range(1, size):
 size = len(list)
 for i in range(0, size):
     sys.stdout.write(list[i])
-print ""
+print("")

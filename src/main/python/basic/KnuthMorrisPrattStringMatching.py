@@ -33,12 +33,12 @@ def kmp(pattern, text):
     pattern_index = 0
     lps = compute_prefix_function(pattern)
     while index < len(text):
-        if pattern_index == len(pattern):
-            # Found match now return
-            return index - pattern_index
-        elif pattern[pattern_index] == text[index]:
+        if pattern[pattern_index] == text[index]:
             index += 1
             pattern_index += 1
+            if pattern_index == len(pattern):
+                # Found match now return
+                return index - pattern_index
         else:
             if pattern_index - 1 < 0:
                 pattern_index = 0
