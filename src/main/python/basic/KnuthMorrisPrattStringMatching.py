@@ -4,22 +4,22 @@ from termcolor import colored
 def compute_prefix_function(pattern):
     """
     Create an array where 'substring' has suffix same
-    as prefix
+    as prefix. -1 in table denotes no further backtracking possible
 
     :param pattern:
     :return suffix-prefix array:
     """
-    size = len(pattern)
-    lps = [0] * size
-    lps[0] = -1
-    i = 0
-    for j in range(1, size):
-        if pattern[i] == pattern[j]:
-            lps[j] = lps[j - 1] + 1
-            i += 1
-        else:
-            i = 0
-    return lps
+    m = len(pattern)
+    pi = [0] * m
+    pi[0] = -1
+    k = -1
+    for i in range(1, m):
+        while k > -1 and pattern[k + 1] != pattern[i]:
+            k = pi[k]
+        if pattern[k + 1] == pattern[i]:
+            k = k + 1
+        pi[i] = 0 if k == -1 else k
+    return pi
 
 
 def kmp(pattern, text):
@@ -29,23 +29,21 @@ def kmp(pattern, text):
     :param text:
     :return: index of pattern or -1 if pattern not found
     """
-    index = 0
-    pattern_index = 0
-    lps = compute_prefix_function(pattern)
     positions = list()
-    while index < len(text):
-        if pattern[pattern_index] == text[index]:
-            pattern_index = pattern_index + 1
-            index = index + 1
-            if pattern_index == len(pattern):
-                positions.append(index - pattern_index)
-                pattern_index = 0
-        else:
-            pattern_index = lps[pattern_index]
-            if pattern_index < 0:
-                pattern_index = 0
-                index += 1
-
+    pi = compute_prefix_function(pattern)
+    m = len(pattern)
+    n = len(text)
+    k = 0
+    for i in range(0, n):
+        while k != -1 and text[i] != pattern[k]:
+            k = pi[k]   # Find backtrack position
+        if k == -1:
+            k = 0
+        if text[i] == pattern[k]:
+            k = k + 1
+        if k == m:
+            positions.append(i - m + 1)
+            k = pi[k - 1]
     return positions
 
 
