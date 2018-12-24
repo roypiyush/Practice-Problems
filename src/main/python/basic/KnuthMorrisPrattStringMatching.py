@@ -59,8 +59,8 @@ def print_matched(pattern, text, start_index):
 
 
 def __main__():
-    text = "ACXACACXACACAGTAAAA"
-    pattern = 'ACA'
+    text = "ACXAACACXAACAACAGTAAAA"
+    pattern = 'AACA'
 
     positions = kmp(pattern, text)
     for p in positions:
