@@ -27,7 +27,7 @@ def kmp(pattern, text):
 
     :param pattern:
     :param text:
-    :return: index of pattern or -1 if pattern not found
+    :return: array of found index position. Empty
     """
     positions = list()
     pi = compute_prefix_function(pattern)
@@ -63,6 +63,9 @@ def __main__():
     pattern = 'AACA'
 
     positions = kmp(pattern, text)
+    if len(positions) == 0:
+        print('Pattern not found...')
+        return
     for p in positions:
         print_matched(pattern, text, p)
 
