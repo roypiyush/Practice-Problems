@@ -25,16 +25,33 @@ class Node:
         return 'Value: {} Level: {}'.format(self.val, self.level)
 
 
-def in_order(nd):
+def inorder(nd):
     if nd is None:
         return
-    in_order(nd.left)
+    inorder(nd.left)
     sys.stdout.write(str(nd.val) + " ")
-    in_order(nd.right)
+    inorder(nd.right)
+
+
+def inorder_iterative_using_stack(nd):
+    if nd is None:
+        return
+    stack = []
+    current_node = nd
+    stack.append(current_node)
+    current_node = current_node.left
+    while len(stack) > 0 or current_node is not None:
+        if current_node is not None:
+            stack.append(current_node)
+            current_node = current_node.left
+        else:
+            current_node = None if len(stack) == 0 else stack.pop()
+            if current_node is not None:
+                sys.stdout.write(str(current_node.val) + " ")
+                current_node = current_node.right
 
 
 def find_diameter(root):
-
     if root is None:
         return 0, 0
 
@@ -67,8 +84,7 @@ def level_order_traversal(root, queue, cur, max_level):
     level_order_traversal(item.right, queue, cur + 1, max_level)
 
 
-if __name__ == '__main__':
-
+def __main__():
     node = Node(10)
     node.left = Node(5)
     node.right = Node(15)
@@ -80,11 +96,24 @@ if __name__ == '__main__':
     node.left.right.left = Node(28)
     node.left.right.right = Node(38)
     node.left.right.right.right = Node(58)
+    node.right.left = Node(-100)
+    node.right.right = Node(-50)
+    node.right.left.left = Node(-125)
+    node.right.left.right = Node(-25)
+    node.right.right.left = Node(-10)
+    node.right.right.right = Node(0)
 
-    in_order(node)
+
+    inorder(node)
+    print()
+    inorder_iterative_using_stack(node)
     print("")
     print(find_diameter(node))
     queue = list()
     queue.append(node)
     max_level = 0
     level_order_traversal(node, queue, 1, max_level)
+
+
+if __name__ == '__main__':
+    __main__()
