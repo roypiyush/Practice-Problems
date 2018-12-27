@@ -75,6 +75,9 @@ class Graph:
         for v in self.vertices.values():
             print(v)
 
+    def topological_sort(self):
+        return sorted(self.vertices.values(), key=lambda vx: vx.end_time)
+
 
 def __main__():
     v1 = Vertex(1)
@@ -100,6 +103,9 @@ def __main__():
         v.color = Color.WHITE
     graph.depth_first_search()
     graph.print_vertices()
+    print("\nPrint vertices as it finishes dfs")
+    for v in graph.topological_sort():
+        print(v)
 
 
 if __name__ == '__main__':
