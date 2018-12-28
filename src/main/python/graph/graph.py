@@ -35,6 +35,7 @@ class Graph:
             raise TypeError(colored("Graph expected to be dictionary of vertices", 'blue'))
         self.vertices = vertices
         self.time = 0
+        self.topological_sort_order = []
 
     def breath_first_search(self, start_key):
         queue = []
@@ -70,13 +71,14 @@ class Graph:
         self.time += 1
         vertex.end_time = self.time
         vertex.color = Color.BLACK
+        self.topological_sort_order.insert(0, vertex)
 
     def print_vertices(self):
         for v in self.vertices.values():
             print(v)
 
     def topological_sort(self):
-        return sorted(self.vertices.values(), key=lambda vx: vx.end_time)
+        return self.topological_sort_order
 
 
 def __main__():
@@ -103,10 +105,37 @@ def __main__():
         v.color = Color.WHITE
     graph.depth_first_search()
     graph.print_vertices()
-    print("\nPrint vertices as it finishes dfs")
-    for v in graph.topological_sort():
-        print(v)
+
+
+def topological_sort():
+    print('\nTopological Sorted order')
+    shirt = Vertex('shirt')
+    tie = Vertex('tie')
+    jacket = Vertex('jacket')
+    belt = Vertex('belt')
+    pants = Vertex('pants')
+    undershots = Vertex('undershots')
+    socks = Vertex('socks')
+    shoes = Vertex('shoes')
+    watch = Vertex('watch')
+
+    shirt.adj_list = [tie, belt]
+    tie.adj_list = [jacket]
+    belt.adj_list = [jacket]
+    pants.adj_list = [belt, shoes]
+    undershots.adj_list = [pants, shoes]
+    socks.adj_list = [shoes]
+
+    vertices = dict({'shirt': shirt, 'tie': tie, 'jacket': jacket, 'belt': belt, 'pants': pants,
+                    'undershorts': undershots, 'socks': socks, 'shoes': shoes, 'watch': watch})
+    graph = Graph(vertices)
+    graph.depth_first_search()
+    ordered = graph.topological_sort()
+    for v in ordered:
+        print(v.key, end=' -> ')
+    print('Done')
 
 
 if __name__ == '__main__':
     __main__()
+    topological_sort()
