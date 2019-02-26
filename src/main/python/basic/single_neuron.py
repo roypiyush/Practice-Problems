@@ -7,8 +7,7 @@ from numpy import array, random, dot, tanh
 class NeuralNetwork(object):
 
     def __init__(self):
-        # Using seed to make sure it'll
-        # generate same weights in every run
+        # Using seed to make sure it'll generate same weights in every run
         random.seed(1)
 
         # 3x1 Weight matrix
@@ -39,11 +38,19 @@ class NeuralNetwork(object):
         :param inputs:
         :return:
         """
-        return self.tanh(dot(inputs, self.weight_matrix))
+        dot_product = dot(inputs, self.weight_matrix)
+        return self.tanh(dot_product)
 
-    # training the neural network.
     def train(self, train_inputs, train_outputs,
               num_train_iterations):
+        """
+        training the neural network.
+        :param train_inputs:
+        :param train_outputs:
+        :param num_train_iterations:
+        :return:
+        """
+
         # Number of iterations we want to
         # perform for this set of input.
         for iteration in range(num_train_iterations):
@@ -60,21 +67,20 @@ class NeuralNetwork(object):
             # Adjust the weight matrix
             self.weight_matrix += adjustment
 
-        # Driver Code
-
 
 def main():
     neural_network = NeuralNetwork()
-    print('Random weights at the start of training')
-    print(neural_network.weight_matrix)
-    train_inputs = array([[0, 0, 1], [1, 1, 1], [1, 0, 1], [0, 1, 1]])
+    train_inputs = array([[0, 1, 1], [1, 0, 0], [1, 0, 1], [0, 1, 1]])
     train_outputs = array([[0, 1, 1, 0]]).T
+    print('Initial Weights {}'.format(neural_network.weight_matrix.T))
+
     neural_network.train(train_inputs, train_outputs, 10000)
-    print('New weights after training')
-    print(neural_network.weight_matrix)
+    print('Final Weights {}'.format(neural_network.weight_matrix.T))
+
     # Test the neural network with a new situation.
-    print("Testing network on new examples ->")
-    print(neural_network.forward_propagation(array([1, 0, 0])))
+    new_input = array([1, 0, 0])
+    result = neural_network.forward_propagation(new_input)
+    print("New input after training {}, Result {}".format(new_input, result))
 
 
 if __name__ == "__main__":
