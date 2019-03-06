@@ -78,9 +78,17 @@ def main():
     print('Final Weights {}'.format(neural_network.weight_matrix.T))
 
     # Test the neural network with a new situation.
-    new_input = array([1, 0, 0])
-    result = neural_network.forward_propagation(new_input)
-    print("New input after training {}, Result {}".format(new_input, result))
+    new_input1 = array([1, 0, 0])
+    result = neural_network.forward_propagation(new_input1)
+    print("New input1 after training {}, Result {}".format(new_input1, result))
+
+    new_input2 = array([0, 0, 1])
+    result = neural_network.forward_propagation(new_input2)
+    print("New input2 after training {}, Result {}".format(new_input2, result))
+
+    new_input3 = array([0, 1, 1])
+    result = neural_network.forward_propagation(new_input3)
+    print("New input3 after training {}, Result {}".format(new_input3, result))
 
 
 if __name__ == "__main__":
