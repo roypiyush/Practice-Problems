@@ -1,3 +1,5 @@
+import sys
+
 
 def left(i):
     return i * 2 + 1
@@ -5,6 +7,10 @@ def left(i):
 
 def right(i):
     return i * 2 + 2
+
+
+def parent(i):
+    return int(i/2)
 
 
 def max_heapify(array, i, heap_size):
@@ -37,19 +43,53 @@ def heap_sort(array):
         max_heapify(array, 0, heap_size)
 
 
-def main():
-    limit = 1000
-    array = []
-    for i in range(0, limit):
-        import random
-        array.append(random.randint(1, limit * 100))
+def heap_increase_key(array, index, key):
+    if key <= array[index]:
+        raise ValueError('key {} should be greater than element being increased'.format(key))
+    array[index] = key
+    while index >= 0 and parent(index) >= 0 and array[parent(index)] < array[index]:
+        array[parent(index)], array[index] = array[index], array[parent(index)]
+        index = parent(index)
+
+
+def max_heap_insert(array, key, heap_size):
+    array[heap_size - 1] = -10000000000000
+    heap_increase_key(array, heap_size - 1, key)
+
+
+def build_max_heap_prime(array, heap_size):
+    for i in range(1, len(array)):
+        heap_size += 1
+        max_heap_insert(array, array[i], heap_size)
+
+
+def heap_sort_2(array):
+    heap_size = len(array)
+    build_max_heap_prime(array, 1)
+    i = heap_size - 1
+    hs = heap_size
+    while i > 0:
+        array[hs - 1], array[0] = array[0], array[hs - 1]
+        hs -= 1
+        max_heapify(array, 0, hs)
+        i -= 1
+
+
+def main(heap_function, array):
     from datetime import datetime
     start = datetime.now()
-    heap_sort(array)
+    heap_function(array)
     done = datetime.now()
     print('sorted array', array)
     print("Time taken %d ms" % (int((done - start).microseconds)/1000))
 
 
 if __name__ == '__main__':
-    main()
+    limit = 1000
+    unsorted_array = []
+    for k in range(0, limit):
+        import random
+        unsorted_array.append(random.randint(1, limit * 100))
+    old_array = unsorted_array.copy()
+    main(getattr(sys.modules[__name__], 'heap_sort'), unsorted_array)
+    main(getattr(sys.modules[__name__], 'heap_sort_2'), old_array)
