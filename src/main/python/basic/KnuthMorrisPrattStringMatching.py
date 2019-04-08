@@ -1,5 +1,36 @@
 from termcolor import colored
 
+"""
+Psuedo Code for KMP Algorithm
+
+kmp_matcher(T, P):
+    n = T.length
+    m = P.length
+    q = 0
+    𝚷 = COMPUTE_PREFIX_FUNCTION(P)
+    for i  1 to n:
+        while q > 0 and P[q + 1] != T[i]:
+            q = 𝚷[q]
+        if P[q + 1] == T[i]:
+            q = q + 1
+        if q == m:
+            print "Match found at " i - m
+            q = 𝚷[q]
+
+compute_prefix_function(P)
+    m = P.length
+    𝚷 = new array of size m
+    𝚷[1] = 0
+    k = 0
+    for q  1 to m:
+        while k > 0 and P[k + 1] != P[q]
+            k = 𝚷[k]
+        if P[k + 1] == P[q]
+            k = k + 1
+        𝚷[q] = k
+    return 𝚷
+"""
+
 
 def compute_prefix_function(pattern):
     """
