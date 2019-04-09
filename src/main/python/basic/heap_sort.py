@@ -77,15 +77,16 @@ def heap_sort_2(array):
 
 def main(heap_function, array):
     from datetime import datetime
+    import asserter as a
     start = datetime.now()
     heap_function(array)
-    done = datetime.now()
-    print('sorted array', array)
-    print("Time taken %d ms" % (int((done - start).microseconds)/1000))
+    end = datetime.now()
+    print("Time taken %s seconds" % str((end - start).seconds))
+    a.assert_sorted(array)
 
 
 if __name__ == '__main__':
-    limit = 1000
+    limit = 1000000
     unsorted_array = []
     for k in range(0, limit):
         import random

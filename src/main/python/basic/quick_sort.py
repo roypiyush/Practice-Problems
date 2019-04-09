@@ -35,7 +35,7 @@ def _partition(array, p, r):
 
 
 def main():
-    limit = 1000
+    limit = 1000000
     array = []
     for i in range(0, limit):
         import random
@@ -46,8 +46,10 @@ def main():
     quick_sort(array, 0, size)
     done = datetime.now()
     if __name__ == '__main__':
-        print(array)
-        print("Time taken %d ms" % (int((done - start).microseconds) / 1000))
+        print('sorted array', array)
+        print("Time taken %s seconds" % str((done - start).seconds))
+    import asserter as a
+    a.assert_sorted(array)
 
 
 if __name__ == '__main__':
