@@ -49,7 +49,13 @@ def compute_prefix_function(pattern):
             k = pi[k]
         if pattern[k + 1] == pattern[i]:
             k = k + 1
-        pi[i] = 0 if k == -1 else k
+        if k == -1:
+            """
+            This condition is added because first value of pi array = -1
+            """
+            pi[i] = 0
+        else:
+            pi[i] = k
     return pi
 
 
@@ -64,17 +70,17 @@ def kmp(pattern, text):
     pi = compute_prefix_function(pattern)
     m = len(pattern)
     n = len(text)
-    k = 0
-    for i in range(0, n):
-        while k != -1 and text[i] != pattern[k]:
+    k = -1
+    i = 0
+    while i < n:
+        while k > -1 and text[i] != pattern[k + 1]:
             k = pi[k]   # Find backtrack position
-        if k == -1:
-            k = 0
-        if text[i] == pattern[k]:
+        if text[i] == pattern[k + 1]:
             k = k + 1
-        if k == m:
+        if k + 1 == m:
             positions.append(i - m + 1)
-            k = pi[k - 1]
+            k = pi[k]
+        i += 1
     return positions
 
 
