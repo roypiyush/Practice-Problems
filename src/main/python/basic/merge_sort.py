@@ -38,32 +38,19 @@ def merge_sort(array, i, j):
     return 0
 
 
-def naive_inversion_counting(array):
-    count = 0
-    for i in range(0, len(array)):
-        key = array[i]
-        j = i - 1
-        while j > -1:
-            if key < array[j]:
-                count += 1
-            j = j - 1
-    return count
-
-
 def main():
     limit = 1000000
     unsorted_array = []
     for i in range(0, limit):
         import random
         unsorted_array.append(random.randint(1, limit * 100))
-    naive_inversions = naive_inversion_counting(unsorted_array)
     from datetime import datetime
     start = datetime.now()
     inversions = merge_sort(unsorted_array, 0, len(unsorted_array) - 1)
     done = datetime.now()
     import asserter as a
     a.assert_sorted(unsorted_array)
-    print("Naive Inversion {}\nMerge Inversion {} ".format(naive_inversions, inversions))
+    print("Inversions {} ".format(inversions))
     print("Time taken for merge sort %s seconds" % str((done - start).total_seconds()))
 
 

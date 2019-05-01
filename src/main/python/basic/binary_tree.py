@@ -11,7 +11,7 @@ Created on Sat Jan 14 21:19:09 2017
 """
 
 
-class Node:
+class Node(object):
     def __init__(self, val):
         self.val = val
         self.left = None
@@ -25,15 +25,15 @@ class Node:
         return 'Value: {} Level: {}'.format(self.val, self.level)
 
 
-def inorder(nd):
+def in_order(nd):
     if nd is None:
         return
-    inorder(nd.left)
+    in_order(nd.left)
     sys.stdout.write(str(nd.val) + " ")
-    inorder(nd.right)
+    in_order(nd.right)
 
 
-def inorder_iterative_using_stack(nd):
+def in_order_iterative_using_stack(nd):
     if nd is None:
         return
     stack = []
@@ -55,10 +55,10 @@ def find_diameter(root):
     if root is None:
         return 0, 0
 
-    lh, maxl = find_diameter(root.left)
-    rh, maxr = find_diameter(root.right)
+    lh, max_left = find_diameter(root.left)
+    rh, max_right = find_diameter(root.right)
 
-    max_result = max(lh + rh + 1, max(maxl, maxr))
+    max_result = max(lh + rh + 1, max(max_left, max_right))
     return max(lh, rh) + 1, max_result
 
 
@@ -103,10 +103,9 @@ def __main__():
     node.right.right.left = Node(-10)
     node.right.right.right = Node(0)
 
-
-    inorder(node)
+    in_order(node)
     print()
-    inorder_iterative_using_stack(node)
+    in_order_iterative_using_stack(node)
     print("")
     print(find_diameter(node))
     queue = list()
