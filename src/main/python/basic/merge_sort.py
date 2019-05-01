@@ -51,7 +51,7 @@ def naive_inversion_counting(array):
 
 
 def main():
-    limit = 1000
+    limit = 1000000
     unsorted_array = []
     for i in range(0, limit):
         import random
@@ -61,10 +61,10 @@ def main():
     start = datetime.now()
     inversions = merge_sort(unsorted_array, 0, len(unsorted_array) - 1)
     done = datetime.now()
-    print("Naive Inversion {}\nMerge Inversion {} ".format(naive_inversions, inversions))
-    print("Time taken for merge sort %s seconds" % str((done - start).total_seconds()))
     import asserter as a
     a.assert_sorted(unsorted_array)
+    print("Naive Inversion {}\nMerge Inversion {} ".format(naive_inversions, inversions))
+    print("Time taken for merge sort %s seconds" % str((done - start).total_seconds()))
 
 
 if __name__ == '__main__':

@@ -45,11 +45,9 @@ def main():
     size = len(array) - 1
     quick_sort(array, 0, size)
     done = datetime.now()
-    if __name__ == '__main__':
-        print('sorted array', array)
-        print("Time taken %s seconds" % str((done - start).seconds))
     import asserter as a
     a.assert_sorted(array)
+    print("Time taken %s seconds" % str((done - start).total_seconds()))
 
 
 if __name__ == '__main__':
