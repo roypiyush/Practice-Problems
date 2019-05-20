@@ -2,29 +2,45 @@ package com.personal;
 
 enum Color {
     RED,
-    BLACK;
+    BLACK
 }
 
 class RBNode {
-    public int key;
+    public Integer key;
     public Color color;
     public RBNode left;
     public RBNode right;
     public RBNode parent;
+    public String toString() {
+        return key == null ? "NIL" : String.format("%s %s", key, color);
+    }
 }
 
+/**
+ * Properties of Red Black Tree.
+ * <ol>
+ *     <li>Every node is either black or red</li>
+ *     <li>Root is always black</li>
+ *     <li>Every leaf node is NIL and BLACK</li>
+ *     <li>If a node is red, then both its children are black</li>
+ *     <li>For each node, all simple paths from the node to descendant leaves have same number of black nodes</li>
+ * </ol>
+ */
 public class RedBlackTree {
     private static final RBNode NIL = new RBNode();
     private RBNode ROOT;
 
-    public RedBlackTree() {
+    private RedBlackTree() {
         NIL.color = Color.BLACK;
         ROOT = NIL;
     }
 
-    private void leftRotate(RBNode node) { // TODO Verify Correctness
+    private RBNode leftRotate(RBNode node) {
         RBNode right = node.right;
         node.right = right.left;
+        if (right.left != NIL) {
+            right.left.parent = node;
+        }
         right.parent = node.parent;
         if (node.parent == NIL) {
             ROOT = right;
@@ -32,14 +48,18 @@ public class RedBlackTree {
             node.parent.left = right;
         } else {
             node.parent.right = right;
-            right.left = node;
-            node.parent = right;
         }
+        right.left = node;
+        node.parent = right;
+        return right;
     }
 
-    private void rightRotate(RBNode node) { // TODO Verify Correctness
+    private RBNode rightRotate(RBNode node) {
         RBNode left = node.left;
         node.left = left.right;
+        if (left.right != NIL) {
+            left.right.parent = node;
+        }
         left.parent = node.parent;
         if (node.parent == NIL) {
             ROOT = left;
@@ -47,9 +67,10 @@ public class RedBlackTree {
             node.parent.right = left;
         } else {
             node.parent.left = left;
-            left.left = node;
-            node.parent = left;
         }
+        left.left = node;
+        node.parent = left;
+        return left;
     }
 
 
@@ -67,7 +88,7 @@ public class RedBlackTree {
         newNode.parent = parent;
         if (parent == NIL) {
             ROOT = newNode;
-        } else if (newNode.key < currentNode.key) {
+        } else if (newNode.key < parent.key) {
             parent.left = newNode;
         } else {
             parent.right = newNode;
@@ -78,45 +99,55 @@ public class RedBlackTree {
         fixInsert(newNode);
     }
 
-    private void fixInsert(RBNode z) {
-        while (z.color == Color.RED) {
-            if (z.parent.parent.left == z.parent) { // If z's parent is left child
-                RBNode uncle = z.parent.parent.right;
-                if (uncle.color == Color.RED) { // Case 1
-                    // Change color of z's parent, uncle, grandparent
+    private void fixInsert(RBNode newNode) {
+        while (newNode.color == Color.RED) {
+            if (newNode.parent.parent == null) { // Need to handle explicitly
+                break;
+            }
+            if (newNode.parent.parent.left == newNode.parent) { // If newNode's parent is left child
+                RBNode uncle = newNode.parent.parent.right;
+                if (uncle == null) { // Need to handle explicitly
+                    break;
+                } else if (uncle.color == Color.RED) { // Case 1
+                    // Change color of newNode's parent, uncle, grandparent
                     uncle.color = Color.BLACK;
-                    z.parent.color = Color.BLACK;
-                    z.parent.parent.color = Color.RED;
+                    newNode.parent.color = Color.BLACK;
+                    newNode.parent.parent.color = Color.RED;
+                    newNode = newNode.parent.parent;
                 } else {
-                    if (z.parent.right == z) {
-                        z = z.parent; // Move the pointer up
-                        leftRotate(z);
+                    if (newNode.parent.right == newNode) {
+                        newNode = newNode.parent; // Move the pointer up
+                        newNode = leftRotate(newNode);
                     }
-                    z.parent.color = Color.BLACK;
-                    z.parent.parent.color = Color.RED;
-                    rightRotate(z.parent.parent);
+                    newNode.parent.color = Color.BLACK;
+                    newNode.parent.parent.color = Color.RED;
+                    newNode = rightRotate(newNode.parent.parent);
                 }
-            } else { // If z's parent is right child
-                RBNode uncle = z.parent.parent.left;
-                if (uncle.color == Color.RED) { // Case 1
-                    // Change color of z's parent, uncle, grandparent
+            } else { // If newNode's parent is right child
+                RBNode uncle = newNode.parent.parent.left;
+                if (uncle == null) { // Need to handle explicitly
+                    break;
+                } else if (uncle.color == Color.RED) { // Case 1
+                    // Change color of newNode's parent, uncle, grandparent
                     uncle.color = Color.BLACK;
-                    z.parent.color = Color.BLACK;
-                    z.parent.parent.color = Color.RED;
+                    newNode.parent.color = Color.BLACK;
+                    newNode.parent.parent.color = Color.RED;
+                    newNode = newNode.parent.parent;
                 } else {
-                    if (z.parent.left == z) {
-                        z = z.parent; // Move the pointer up
-                        rightRotate(z);
+                    if (newNode.parent.left == newNode) {
+                        newNode = newNode.parent; // Move the pointer up
+                        newNode = rightRotate(newNode);
                     }
-                    z.parent.color = Color.BLACK;
-                    z.parent.parent.color = Color.RED;
-                    leftRotate(z.parent.parent);
+                    newNode.parent.color = Color.BLACK;
+                    newNode.parent.parent.color = Color.RED;
+                    newNode = leftRotate(newNode.parent.parent);
                 }
             }
         }
         ROOT.color = Color.BLACK;
     }
 
+    @SuppressWarnings("unused")
     private void transplant(RBNode u, RBNode v) {
         if (u.parent == NIL) {
             ROOT = v;
@@ -130,4 +161,20 @@ public class RedBlackTree {
         }
     }
 
+    private static RBNode buildNewNode(int key) {
+        RBNode node = new RBNode();
+        node.key = key;
+        node.color = Color.RED;
+        node.left = NIL;
+        node.right = NIL;
+        node.parent = NIL;
+        return node;
+    }
+
+    public static void main(String[] args) {
+        RedBlackTree tree = new RedBlackTree();
+        for (int i = 1; i <= 10; i++)
+            tree.insert(buildNewNode(i));
+        System.out.println();
+    }
 }

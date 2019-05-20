@@ -67,8 +67,8 @@ def update(root, l, r, index_to_update, increase_by):
 if __name__ == '__main__':
 
     MAX = 101
-    array = map(lambda x: random.randint(80, MAX - 1), range(200))
-    size = len(array)
+    size = 100
+    array = list(map(lambda x: random.randint(80, MAX - 1), range(size)))
     ci, cj = 0, size - 1
     i, j = 55, 90
     tree = build_segment_tree(array)
