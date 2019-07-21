@@ -34,7 +34,7 @@ def _partition(array, p, r):
     return i + 1
 
 
-def main():
+def main(algorithm):
     limit = 1000000
     array = []
     for i in range(0, limit):
@@ -43,7 +43,12 @@ def main():
     from datetime import datetime
     start = datetime.now()
     size = len(array) - 1
-    quick_sort(array, 0, size)
+    if algorithm == 'r':
+        print('Calling Recursive Tails \v')
+        tail_recursive_quick_sort(array, 0, size)
+    else:
+        print('Calling Simple \v')
+        quick_sort(array, 0, size)
     done = datetime.now()
     import asserter as a
     a.assert_sorted(array)
@@ -51,4 +56,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main('s')
+    main('r')
