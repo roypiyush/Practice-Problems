@@ -114,7 +114,7 @@ def topological_sort():
     jacket = Vertex('jacket')
     belt = Vertex('belt')
     pants = Vertex('pants')
-    undershots = Vertex('undershots')
+    undershorts = Vertex('undershorts')
     socks = Vertex('socks')
     shoes = Vertex('shoes')
     watch = Vertex('watch')
@@ -123,11 +123,11 @@ def topological_sort():
     tie.adj_list = [jacket]
     belt.adj_list = [jacket]
     pants.adj_list = [belt, shoes]
-    undershots.adj_list = [pants, shoes]
+    undershorts.adj_list = [pants, shoes]
     socks.adj_list = [shoes]
 
     vertices = dict({'shirt': shirt, 'tie': tie, 'jacket': jacket, 'belt': belt, 'pants': pants,
-                    'undershorts': undershots, 'socks': socks, 'shoes': shoes, 'watch': watch})
+                    'undershorts': undershorts, 'socks': socks, 'shoes': shoes, 'watch': watch})
     graph = Graph(vertices)
     graph.depth_first_search()
     ordered = graph.topological_sort()
