@@ -16,7 +16,7 @@ def longest_parenthesis_pair(string):
 
 
 def main():
-    global string
+
     string = '((()()'
     print(longest_parenthesis_pair(string))
     string = '()(()))))'
