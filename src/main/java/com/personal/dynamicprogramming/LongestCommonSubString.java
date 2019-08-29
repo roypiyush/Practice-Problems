@@ -24,8 +24,6 @@ public class LongestCommonSubString {
             for (int j = 1; j <= y; j++) {
                 if (X.charAt(i - 1) == Y.charAt(j - 1))
                     c[i][j] = c[i - 1][j - 1] + 1;
-                else
-                    c[i][j] = 0;
 
                 if (c[i][j] > max) {
                     max = c[i][j];
