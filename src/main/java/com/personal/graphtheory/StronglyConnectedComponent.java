@@ -1,14 +1,10 @@
 package com.personal.graphtheory;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 
 class SortVertex implements Comparator<Vertex> {
-
-
     public int compare(Vertex v1, Vertex v2) {
         return v2.getEndTime() - v1.getEndTime();
     }
@@ -19,7 +15,7 @@ public class StronglyConnectedComponent {
     private int time = 0;
 
     public static void main(String[] args) {
-        String[] adjMatrix = {
+        String[] adjMatrix1 = {
                 "01000000",
                 "00101100",
                 "00010010",
@@ -28,11 +24,13 @@ public class StronglyConnectedComponent {
                 "00000010",
                 "00000101",
                 "00000001"};
+        stronglyConnectedComponents(adjMatrix1);
+    }
 
+    private static void stronglyConnectedComponents(String[] adjMatrix) {
+        System.out.println("***** Strongly connected component ******");
         StronglyConnectedComponent scc = new StronglyConnectedComponent();
-
         Graph graph = new Graph();
-
         for (int i = 0; i < adjMatrix.length; i++) {
             Vertex vertex = new Vertex();
             vertex.setId(i);
@@ -47,24 +45,20 @@ public class StronglyConnectedComponent {
             graph.getV().get(i).setColor(Color.WHITE);
         }
 
-        Collections.sort(graph.getV(), new SortVertex());
+        graph.getV().sort(new SortVertex());
         scc.depthFirstSearch(graph, adjMatrix, true);
     }
 
     private void depthFirstSearch(Graph graph, String[] adjMatrix, boolean isTranspose) {
 
-        List<Vertex> vertexs = graph.getV();
-
-        for (Iterator<Vertex> iterator = vertexs.iterator(); iterator.hasNext(); ) {
-            Vertex vertex = (Vertex) iterator.next();
+        List<Vertex> vertices = graph.getV();
+        for (Vertex vertex : vertices) {
             if (vertex.getColor() == Color.WHITE) {
                 depthFirstSearchVisit(graph, vertex, adjMatrix, isTranspose);
 
-                if (isTranspose)
-                    System.out.println();
+                if (isTranspose) System.out.println();
             }
         }
-
     }
 
     private void depthFirstSearchVisit(Graph graph, Vertex vertex, String[] adjMatrix, boolean isTranspose) {
@@ -81,9 +75,7 @@ public class StronglyConnectedComponent {
         for (int i = 0; i < adjList.length(); i++) {
             // Check color
             if (adjList.charAt(i) == '1') {
-                Iterator<Vertex> iterator = graph.getV().iterator();
-                while (iterator.hasNext()) {
-                    Vertex temp = iterator.next();
+                for (Vertex temp : graph.getV()) {
                     if (temp.getId() == i && temp.getColor() == Color.WHITE) {
                         depthFirstSearchVisit(graph, temp, adjMatrix, isTranspose);
                     }
