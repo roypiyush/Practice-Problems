@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 class GraphSearch {
-    private Map<String, LinkedHashSet<String>> map = new HashMap<String, LinkedHashSet<String>>();
+    private Map<String, LinkedHashSet<String>> map = new HashMap<>();
 
     public void addEdge(String node1, String node2) {
         LinkedHashSet<String> adjacent = map.get(node1);

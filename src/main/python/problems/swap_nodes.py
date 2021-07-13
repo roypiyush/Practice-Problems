@@ -39,7 +39,7 @@ import sys
 # where h ∈ [K, 2K, 3K,...].
 #
 # You are given a tree of N nodes where nodes are indexed from [1..N] and it is rooted at 1. You have to perform T swap
-# operations on it, and after each swap operation print the inorder traversal of the current state of the tree.
+# operations on it, and after each swap operation print the inorder traversal of the current puzzleNode of the tree.
 #
 # Input Format
 # First line of input contains N, number of nodes in tree. Then N lines follow. Here each of ith line (1 <= i <= N)
@@ -48,7 +48,7 @@ import sys
 # Next line contain an integer, T. Then again T lines follows. Each of these line contains an integer K.
 #
 # Output Format
-# For each K, perform swap operation as mentioned above and print the inorder traversal of the current state of tree.
+# For each K, perform swap operation as mentioned above and print the inorder traversal of the current puzzleNode of tree.
 #
 # Constraints
 # 1 <= N <= 1024
