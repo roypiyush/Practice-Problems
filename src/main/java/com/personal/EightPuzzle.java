@@ -1,7 +1,10 @@
 package com.personal;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 class PuzzleNode {
     private int emptySquare;
@@ -34,29 +37,31 @@ class PuzzleNode {
         return this.getParentNode() != null;
     }
 
-    public int depth() {
-        PuzzleNode currentNode = this;
-        int depth = 0;
-        while (currentNode != null) {
-            currentNode = currentNode.parentNode;
-            depth++;
+    public int hammingDistance() {
+        int cost = 0;
+        for (int i = 0; i < getPuzzle().length; i++) {
+            if (getPuzzle()[i] != i + 1) {
+                cost++;
+            }
         }
-        return depth;
+        return cost;
     }
 
-    public int estimatedCost() {
+    public int manhattanDistance() {
         int cost = 0;
         for (int i = 0; i < getPuzzle().length; i++) {
             final int finalPosition = getPuzzle()[i] - 1;
             final int currentPosition = i;
             final int diff = Math.abs(finalPosition - currentPosition);
-            cost += diff%3 + diff/3;
+            final double size = Math.sqrt(getPuzzle().length);
+            cost += Math.ceil(Math.sqrt(Math.pow(diff % size, 2) + Math.pow(diff / size, 2)));
+            // cost += diff%3 + diff/3; // Doesn't perform better
         }
         return cost;
     }
 
     public int heuristic() {
-        return depth() + estimatedCost();
+        return hammingDistance() + manhattanDistance();
     }
 
     public String toString() {
@@ -123,7 +128,6 @@ class Action {
 }
 
 class Utility {
-    public static int[] GOAL_STATE = new int[] {1, 2, 3, 4, 5, 6, 7, 8, 0};
 
     public static void printSolution(PuzzleNode solutionNode) {
         if (solutionNode.hasParent()) {
@@ -141,15 +145,24 @@ class Utility {
     }
 
     public static boolean isGoalReached(final PuzzleNode currentNode) {
-        return Arrays.deepEquals(new Object[] {GOAL_STATE}, new Object[] {currentNode.getPuzzle()});
+        for (int i = 0; i < currentNode.getPuzzle().length; i++) {
+            if (i + 1 == currentNode.getPuzzle().length) {
+                continue;
+            }
+            if (currentNode.getPuzzle()[i] != (i + 1)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public static PuzzleNode search(final PuzzleNode currentNode) {
+    public static PuzzleNode search(final PuzzleNode currentNode, final AtomicInteger statesGenerated) {
         if (Utility.isGoalReached(currentNode)) {
             return currentNode;
         }
         final List<PuzzleNode> queue = new LinkedList<>();
         final List<PuzzleNode> nextStates = getNextStates(currentNode);
+        statesGenerated.addAndGet(nextStates.size());
         if (!nextStates.isEmpty()) {
             queue.addAll(nextStates);
         }
@@ -159,6 +172,7 @@ class Utility {
                 return current;
             }
             final List<PuzzleNode> nodes = getNextStates(current);
+            statesGenerated.addAndGet(nodes.size());
             for (PuzzleNode p : nodes) {
                 if (p == null) {
                     continue;
@@ -180,12 +194,7 @@ class Utility {
                 nextStates.add(e);
             }
         }
-        Collections.sort(nextStates, new Comparator<PuzzleNode>() {
-            @Override
-            public int compare(PuzzleNode o1, PuzzleNode o2) {
-                return o2.heuristic() - o1.heuristic();
-            }
-        });
+        Collections.sort(nextStates, (o1, o2) -> o2.heuristic() - o1.heuristic());
         return nextStates;
     }
 }
@@ -193,13 +202,16 @@ class Utility {
 public class EightPuzzle {
     public static void main(String[] args) {
         final long start = System.currentTimeMillis();
-        final PuzzleNode initialPuzzleNode = new PuzzleNode(new int[] {3, 0, 6, 7, 8, 1, 2, 4, 5}, null);
-        PuzzleNode current = Utility.search(initialPuzzleNode);
+        final int[] puzzle = new int[] {3, 0, 6, 7, 8, 1, 2, 4, 5};
+        final PuzzleNode initialPuzzleNode = new PuzzleNode(puzzle, null);
+        AtomicInteger statesGenerated = new AtomicInteger(0);
+        PuzzleNode current = Utility.search(initialPuzzleNode, statesGenerated);
         if (current == null) {
             System.out.println("No solution found");
             return;
         }
         Utility.printSolution(current);
+        System.out.println("States generated " + statesGenerated.get());
         System.out.printf("Solution found in %s ms\n", System.currentTimeMillis() - start);
     }
 }
