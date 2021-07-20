@@ -1,9 +1,6 @@
 package com.personal;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class PuzzleNode {
@@ -37,6 +34,10 @@ class PuzzleNode {
         return this.getParentNode() != null;
     }
 
+    /**
+     * Number of displaced items
+     * @return
+     */
     public int hammingDistance() {
         int cost = 0;
         for (int i = 0; i < getPuzzle().length; i++) {
@@ -156,46 +157,38 @@ class Utility {
         return true;
     }
 
-    public static PuzzleNode search(final PuzzleNode currentNode, final AtomicInteger statesGenerated) {
+    public static PuzzleNode search(final PuzzleNode currentNode, final AtomicInteger statesGenerated, final Comparator<PuzzleNode> comparator) {
         if (Utility.isGoalReached(currentNode)) {
             return currentNode;
         }
-        final List<PuzzleNode> queue = new LinkedList<>();
-        final List<PuzzleNode> nextStates = getNextStates(currentNode);
-        statesGenerated.addAndGet(nextStates.size());
-        if (!nextStates.isEmpty()) {
-            queue.addAll(nextStates);
-        }
-        while (!queue.isEmpty()) {
-            final PuzzleNode current = queue.remove(0);
+        final TreeSet<PuzzleNode> states = new TreeSet<>(comparator);
+        states.add(currentNode);
+
+        while (!states.isEmpty()) {
+            final PuzzleNode current = states.pollFirst();
             if (Utility.isGoalReached(current)) {
                 return current;
             }
-            final List<PuzzleNode> nodes = getNextStates(current);
-            statesGenerated.addAndGet(nodes.size());
-            for (PuzzleNode p : nodes) {
-                if (p == null) {
-                    continue;
-                }
-                queue.add(p);
-            }
+            populateNextStates(current, states);
+            statesGenerated.addAndGet(states.size());
+            states.addAll(states);
         }
         return null;
     }
 
-    private static List<PuzzleNode> getNextStates(final PuzzleNode currentNode) {
-        final List<PuzzleNode> nextStates = new LinkedList<>();
+    private static void populateNextStates(final PuzzleNode currentNode, final TreeSet<PuzzleNode> nextStates) {
         final Action action = new Action();
         final int[] neighbors = action.getNeighbors(currentNode.getEmptySquare());
         for (int i = 0; i < neighbors.length; i++) {
             final int a = neighbors[i] - currentNode.getEmptySquare();
             final PuzzleNode e = action.doAction(currentNode, a);
+            if (currentNode.hasParent() && Arrays.deepEquals(new Object[] {currentNode.getParentNode().getPuzzle()}, new Object[] {e.getPuzzle()})) {
+                continue;
+            }
             if (action.isValidAction(e)) {
                 nextStates.add(e);
             }
         }
-        Collections.sort(nextStates, (o1, o2) -> o2.heuristic() - o1.heuristic());
-        return nextStates;
     }
 }
 
@@ -205,7 +198,8 @@ public class EightPuzzle {
         final int[] puzzle = new int[] {3, 0, 6, 7, 8, 1, 2, 4, 5};
         final PuzzleNode initialPuzzleNode = new PuzzleNode(puzzle, null);
         AtomicInteger statesGenerated = new AtomicInteger(0);
-        PuzzleNode current = Utility.search(initialPuzzleNode, statesGenerated);
+        final Comparator<PuzzleNode> aStar = Comparator.comparingInt(PuzzleNode::heuristic);
+        PuzzleNode current = Utility.search(initialPuzzleNode, statesGenerated, aStar);
         if (current == null) {
             System.out.println("No solution found");
             return;
