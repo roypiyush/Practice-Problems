@@ -157,7 +157,9 @@ class Utility {
         return true;
     }
 
-    public static PuzzleNode search(final PuzzleNode currentNode, final AtomicInteger statesGenerated, final Comparator<PuzzleNode> comparator) {
+    public static PuzzleNode aStar(final PuzzleNode currentNode, final AtomicInteger statesGenerated) {
+        statesGenerated.set(1);
+        final Comparator<PuzzleNode> comparator = Comparator.comparingInt(PuzzleNode::heuristic);
         if (Utility.isGoalReached(currentNode)) {
             return currentNode;
         }
@@ -169,14 +171,16 @@ class Utility {
             if (Utility.isGoalReached(current)) {
                 return current;
             }
-            populateNextStates(current, states);
+            final TreeSet<PuzzleNode> nextStates = populateNextStates(current, comparator);
+            states.addAll(nextStates);
             statesGenerated.addAndGet(states.size());
             states.addAll(states);
         }
         return null;
     }
 
-    private static void populateNextStates(final PuzzleNode currentNode, final TreeSet<PuzzleNode> nextStates) {
+    private static TreeSet<PuzzleNode> populateNextStates(final PuzzleNode currentNode, final Comparator<PuzzleNode> comparator) {
+        final TreeSet<PuzzleNode> nextStates = new TreeSet<>(comparator);
         final Action action = new Action();
         final int[] neighbors = action.getNeighbors(currentNode.getEmptySquare());
         for (int i = 0; i < neighbors.length; i++) {
@@ -189,7 +193,36 @@ class Utility {
                 nextStates.add(e);
             }
         }
+        return nextStates;
     }
+
+    /*public static PuzzleNode hillClimbing(final PuzzleNode currentNode, final AtomicInteger statesGenerated) {
+        final Set<PuzzleNode> seen = new HashSet<>();
+        statesGenerated.set(1);
+        if (Utility.isGoalReached(currentNode)) {
+            return currentNode;
+        }
+        final Comparator<PuzzleNode> comparator = Comparator.comparingInt(PuzzleNode::hammingDistance);
+
+        final TreeSet<PuzzleNode> states = new TreeSet<>(comparator);
+        states.add(currentNode);
+
+        while (!states.isEmpty()) {
+            final PuzzleNode current = states.pollFirst();
+            seen.add(current);
+            if (Utility.isGoalReached(current)) {
+                return current;
+            }
+            final TreeSet<PuzzleNode> nextStates = populateNextStates(current, comparator);
+            for (PuzzleNode n : nextStates) {
+                if (!seen.contains(n)) {
+                    states.add(n);
+                }
+            }
+            statesGenerated.addAndGet(states.size());
+        }
+        return null;
+    }*/
 }
 
 public class EightPuzzle {
@@ -198,8 +231,8 @@ public class EightPuzzle {
         final int[] puzzle = new int[] {3, 0, 6, 7, 8, 1, 2, 4, 5};
         final PuzzleNode initialPuzzleNode = new PuzzleNode(puzzle, null);
         AtomicInteger statesGenerated = new AtomicInteger(0);
-        final Comparator<PuzzleNode> aStar = Comparator.comparingInt(PuzzleNode::heuristic);
-        PuzzleNode current = Utility.search(initialPuzzleNode, statesGenerated, aStar);
+
+        PuzzleNode current = Utility.aStar(initialPuzzleNode, statesGenerated);
         if (current == null) {
             System.out.println("No solution found");
             return;
